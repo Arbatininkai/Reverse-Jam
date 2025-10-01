@@ -15,37 +15,6 @@ namespace API.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly string jwtKey = "tavo_labai_slaptas_raktas_turi_buti_ilgesnis_32_bytes!"; // kolkas demo tiesiog
-
-    [HttpPost("register")] //endpointas registracijai
-    public IActionResult Register([FromBody] User? user)
-    {
-        if (user == null)
-            return BadRequest("User data is required");
-
-        if (UserStore.Users.Any(u => u.Email == user.Email))
-            return BadRequest("User already exists");
-
-        user.Id = UserStore.Users.Count > 0 ? UserStore.Users.Max(u => u.Id) + 1 : 1; //suteikiam id
-        user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-
-        UserStore.Users.Add(user);
-        return Ok("User registered successfully");
-    }
-
-    [HttpPost("login")] 
-    public IActionResult Login([FromBody] User? user)
-    {
-        if (user == null)
-            return BadRequest("User data is required");
-
-        var existingUser = UserStore.Users.FirstOrDefault(u => u.Email == user.Email);
-        if (existingUser == null || !BCrypt.Net.BCrypt.Verify(user.Password, existingUser.Password)) //verify tikrina hasha ar slaptazodis teisingas
-            return Unauthorized("Invalid credentials");
-
-        var token = GenerateJwtToken(existingUser);
-        return Ok(new { token }); //sukuria ir grazina prisijungimo bilieta, kad serveris paskui zinotu kad autentifikuotas zmogus 
-    }
-
     private static async Task<IEnumerable<SecurityKey>> GetGoogleKeysAsync()
     {
         using var http = new HttpClient();
