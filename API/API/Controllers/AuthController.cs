@@ -7,6 +7,11 @@ using Microsoft.IdentityModel.Tokens; //jwt
 using System.IdentityModel.Tokens.Jwt; //jwt
 using System.Security.Claims; //vartotojo duomenims i tokena
 using System.Text; //tekstu kodavimui (raktas i baitus)
+//sql
+using Microsoft.EntityFrameworkCore;
+using API.Data;
+using System.Data.SqlClient;
+
 
 namespace API.Controllers;
 
@@ -15,6 +20,12 @@ namespace API.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly string jwtKey = "tavo_labai_slaptas_raktas_turi_buti_ilgesnis_32_bytes!"; // kolkas demo tiesiog
+    private readonly string _connectionString;
+
+    public AuthController(IConfiguration configuration)
+    {
+        _connectionString = configuration.GetConnectionString("DefaultConnection");
+    }
     private static async Task<IEnumerable<SecurityKey>> GetGoogleKeysAsync()
     {
         using var http = new HttpClient();
@@ -41,15 +52,39 @@ public class AuthController : ControllerBase
                 IssuerSigningKeys = await GetGoogleKeysAsync()
             };
 
+            
             tokenHandler.ValidateToken(idToken, validationParameters, out var validatedToken); //patikrina ar gautas idToken yra tinkamas google token
 
             var jwtToken = (JwtSecurityToken)validatedToken;
             var email = jwtToken.Claims.First(c => c.Type == "email").Value; //gauna email
             var name = jwtToken.Claims.First(c => c.Type == "name").Value; //gauna varda
             var photoUrl = jwtToken.Claims.First(c => c.Type == "picture").Value; //gauna nuotrauka
-
+            
+            
+            
+            
+            //sql connection
+            using var conn = new SqlConnection(_connectionString);
+            conn.Open();
+            
+            /*
+            //TEST
+            var email = "alicess@example.com";
+            var name = "test";
+            var photoUrl = "test";
+            */
+            
+            
+            
+            string query = "SELECT COUNT(*) FROM users WHERE email = @email";
+            using var cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@email", email);
+            
+            
+            int count = (int)cmd.ExecuteScalar();
+            
             var user = UserStore.Users.FirstOrDefault(u => u.Email == email); //jei tokio nera tai sukuriam
-            if (user == null)
+            if (count == 0)
             {
                 user = new User
                 {
@@ -59,6 +94,18 @@ public class AuthController : ControllerBase
                     PholoUrl = photoUrl,
                 };
                 UserStore.Users.Add(user);
+                string query2 = "INSERT INTO users(email, name, photourl, gid) VALUES(@email, @name, @photourl, @gid)";
+                using var cmd2 = new SqlCommand(query2, conn);
+                cmd2.Parameters.AddWithValue("@email", user.Email);
+                cmd2.Parameters.AddWithValue("@name", user.Name);
+                cmd2.Parameters.AddWithValue("@photourl", user.PholoUrl);
+                cmd2.Parameters.AddWithValue("@gid", user.Id);
+                
+                cmd2.ExecuteScalar();
+            }
+            else
+            {
+                //User exist
             }
 
             var token = GenerateJwtToken(user);

@@ -1,9 +1,17 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.
-IdentityModel.Tokens;
+using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
+using Microsoft.EntityFrameworkCore;
+using API.Data;
+using System.Data.SqlClient; 
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+//Get sql connection string
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -17,12 +25,18 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
+    
 });
 
+//Sql context
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(connectionString));
 
 
-// JWT konfigûracija
-var key = Encoding.ASCII.GetBytes("tavo_labai_slaptas_raktas"); // pakeisk á saugø
+
+
+// JWT konfigï¿½racija
+var key = Encoding.ASCII.GetBytes("tavo_labai_slaptas_raktas"); // pakeisk ï¿½ saugï¿½
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -39,6 +53,7 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(key)
     };
 });
+
 
 var app = builder.Build();
 
