@@ -1,10 +1,10 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-
-using Microsoft.EntityFrameworkCore;
 using API.Data;
+using API.Hubs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Data.SqlClient; 
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,10 +33,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 
-
-
 // JWT konfig�racija
-var key = Encoding.ASCII.GetBytes("tavo_labai_slaptas_raktas"); // pakeisk � saug�
+var key = Encoding.ASCII.GetBytes("tavo_labai_slaptas_raktas_turi_buti_ilgesnis_32_bytes!"); // pakeisk � saug�
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -64,6 +62,10 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 }
 
 
+// SignalR configuration
+builder.Services.AddSignalR();
+
+app.MapHub<LobbyHub>("/lobbyHub");
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
