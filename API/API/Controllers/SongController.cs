@@ -16,7 +16,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{random}")]
-        public IActionResult GetSong(string name)
+        public IActionResult GetSong()
         {
             if (SongStore.Songs == null || SongStore.Songs.Count == 0)
                 return NotFound("No songs available");

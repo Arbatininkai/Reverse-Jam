@@ -4,6 +4,7 @@
     {
         public string Name { get; set; } = string.Empty;
         public string Url { get; set; } = string.Empty;    // Azure blob URL
-        public string? Artist { get; set; } 
+        public string? Artist { get; set; }
+        public string? CoverUrl { get; set; }
     }
 }
