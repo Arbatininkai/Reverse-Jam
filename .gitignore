@@ -1,0 +1,17 @@
+# Visual Studio
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.db
+*.log
+
+# Publish / VS publish profiles
+Properties/PublishProfiles/
+*.pubxml
+*.publishsettings
+
+# Editor dirs
+.vscode/
+.idea/
