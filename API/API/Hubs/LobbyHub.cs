@@ -37,6 +37,12 @@ namespace API.Hubs
                     return;
                 }
 
+                if (lobby.hasGameStarted)
+                {
+                    await Clients.Caller.SendAsync("Error", "Lobby game has started. No more ability to join");
+                    return;
+                }
+
                 if (!lobby.Players.Any(p => p.Id == user.Id))
                     lobby.Players.Add(user);
 
@@ -48,7 +54,7 @@ namespace API.Hubs
 
             // If no lobby code was provided, auto-match to best available or create new
             var availableLobbies = LobbyStore.Lobbies
-                .Where(l => !l.Private && l.Players.Count < l.MaxPlayers)
+                .Where(l => !l.Private && l.Players.Count < l.MaxPlayers && l.hasGameStarted != true)
                 .ToList();
 
             if (availableLobbies.Count == 0)
@@ -57,7 +63,8 @@ namespace API.Hubs
                 {
                     Id = LobbyStore.Lobbies.Count > 0 ? LobbyStore.Lobbies.Max(l => l.Id) + 1 : 1,
                     Private = false,
-                    MaxPlayers = 4
+                    MaxPlayers = 4,
+                    ownerId = user.Id
                 };
                 newLobby.Players.Add(user);
                 LobbyStore.Lobbies.Add(newLobby);
@@ -83,6 +90,33 @@ namespace API.Hubs
             await Clients.Caller.SendAsync("JoinedLobby", chosenLobby);
         }
 
+        public async Task StartGame(int lobbyId)
+        {
+            var userId = Context.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = UserStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+            if (user == null)
+            {
+                await Clients.Caller.SendAsync("Error", "User is not found");
+                return;
+            }
+
+            var lobby = LobbyStore.Lobbies.FirstOrDefault(l => l.Id == lobbyId);
+            if (lobby == null)
+            {
+                await Clients.Caller.SendAsync("Error", "No lobby found");
+                return;
+            }
+
+            if (lobby.Players.FirstOrDefault()?.Id != user.Id)
+            {
+                await Clients.Caller.SendAsync("Error", "User is not the owner");
+                return;
+            }
+            lobby.hasGameStarted = true;
+            // TODO: Call random song slector endpoint and get the song from cloud
+            await Clients.Group(lobby.LobbyCode).SendAsync("GameStarted", lobby.Id);
+        }
+
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
             var userId = Context.User?.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -101,5 +135,34 @@ namespace API.Hubs
 
             await base.OnDisconnectedAsync(exception);
         }
+
+        public async Task LeaveLobby(int lobbyId)
+        {
+            var userId = Context.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = UserStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+            if (user == null)
+            {
+                await Clients.Caller.SendAsync("Error", "User is not found");
+                return;
+            }
+
+            var lobby = LobbyStore.Lobbies.FirstOrDefault(l => l.Id == lobbyId);
+            if (lobby == null)
+            {
+                await Clients.Caller.SendAsync("Error", "No lobby found");
+                return;
+            }
+
+            // If the owner leaves, make the first person the new onwer
+            if (lobby.ownerId == user.Id)
+            {
+                lobby.ownerId = lobby.Players.First().Id;
+            }
+            lobby.Players.RemoveAll(p => p.Id == user.Id);
+
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, lobby.LobbyCode);
+            await Clients.Group(lobby.LobbyCode).SendAsync("PlayerLeft", user, lobby.ownerId);
+        }
+
     }
 }

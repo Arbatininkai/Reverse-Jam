@@ -1,8 +1,11 @@
-﻿using API.Models;
+﻿using API.Hubs;
+using API.Models;
 using API.Stores;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 namespace API.Controllers
 {
@@ -10,6 +13,13 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class LobbyController : ControllerBase
     {
+        private readonly IHubContext<LobbyHub> _hubContext;
+
+        public LobbyController(IHubContext<LobbyHub> hubContext)
+        {
+            _hubContext = hubContext;
+        }
+
         [Authorize] // tik prisijungę per Google gali kurti lobby
         [HttpPost("create")]
         public IActionResult CreateLobby([FromBody] Lobby? options)
@@ -22,12 +32,18 @@ namespace API.Controllers
             var email = User.FindFirstValue(ClaimTypes.Email);
             var creator = UserStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
 
+            if (creator == null)
+            {
+                return BadRequest("User does not exist");
+            }
+
             var newLobby = new Lobby
             {
                 Id = LobbyStore.Lobbies.Count > 0 ? LobbyStore.Lobbies.Max(l => l.Id) + 1 : 1,
                 Private = options.Private, //is frontendo gaunamos reiksmes
                 AiRate = options.AiRate,
-                HumanRate = options.HumanRate
+                HumanRate = options.HumanRate,
+                ownerId = creator.Id
             };
 
             if (creator != null)
@@ -92,6 +108,23 @@ namespace API.Controllers
                 chosenLobby.Players.Add(user);
 
             return Ok(chosenLobby);
+        }
+
+        [Authorize]
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeleteLobby([FromBody] int lobbyId)
+        {
+            var lobby = LobbyStore.Lobbies.FirstOrDefault(l => l.Id == lobbyId);
+            if (lobby == null)
+                return NotFound("Lobby not found");
+
+            // Notify all players that the lobby is deleted
+            await _hubContext.Clients.Group(lobby.LobbyCode).SendAsync("LobbyDeleted");
+
+            // Remove the lobby
+            LobbyStore.Lobbies.Remove(lobby);
+
+            return Ok(new { message = "Lobby deleted successfully" });
         }
     }
 }

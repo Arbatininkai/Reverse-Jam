@@ -11,6 +11,8 @@
         public bool HumanRate { get; set; } = true;
 
         public int MaxPlayers { get; set; } = 4;
+        public bool hasGameStarted { get; set; } = false;
+        public int ownerId { get; set; }
         public List<User> Players { get; set; } = new List<User>();
     }
 }

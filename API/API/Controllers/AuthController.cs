@@ -52,37 +52,37 @@ public class AuthController : ControllerBase
                 IssuerSigningKeys = await GetGoogleKeysAsync()
             };
 
-            
+
             tokenHandler.ValidateToken(idToken, validationParameters, out var validatedToken); //patikrina ar gautas idToken yra tinkamas google token
 
             var jwtToken = (JwtSecurityToken)validatedToken;
             var email = jwtToken.Claims.First(c => c.Type == "email").Value; //gauna email
             var name = jwtToken.Claims.First(c => c.Type == "name").Value; //gauna varda
             var photoUrl = jwtToken.Claims.First(c => c.Type == "picture").Value; //gauna nuotrauka
-            
-            
-            
-            
+
+
+
+
             //sql connection
             using var conn = new SqlConnection(_connectionString);
             conn.Open();
-            
+
             /*
             //TEST
             var email = "alicess@example.com";
             var name = "test";
             var photoUrl = "test";
             */
-            
-            
-            
+
+
+
             string query = "SELECT COUNT(*) FROM users WHERE email = @email";
             using var cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@email", email);
-            
-            
+
+
             int count = (int)cmd.ExecuteScalar();
-            
+
             var user = UserStore.Users.FirstOrDefault(u => u.Email == email); //jei tokio nera tai sukuriam
             if (count == 0)
             {
@@ -100,12 +100,30 @@ public class AuthController : ControllerBase
                 cmd2.Parameters.AddWithValue("@name", user.Name);
                 cmd2.Parameters.AddWithValue("@photourl", user.PholoUrl);
                 cmd2.Parameters.AddWithValue("@gid", user.Id);
-                
+
                 cmd2.ExecuteScalar();
             }
             else
             {
                 //User exist
+                string query3 = "SELECT TOP 1 gid, email, name, photourl FROM users WHERE email = @email";
+                using var cmd3 = new SqlCommand(query3, conn);
+                cmd3.Parameters.AddWithValue("@email", email);
+
+                using var reader = cmd3.ExecuteReader();
+                if (reader.Read())
+                {
+                    user = new User
+                    {
+                        Id = int.Parse(reader.GetString(0)),
+                        Email = reader.GetString(1),
+                        Name = reader.GetString(2),
+                        PholoUrl = reader.GetString(3)
+                    };
+
+                    if (!UserStore.Users.Any(u => u.Email == email))
+                        UserStore.Users.Add(user);
+                }
             }
 
             var token = GenerateJwtToken(user);
@@ -115,9 +133,9 @@ public class AuthController : ControllerBase
                 user
             });
         }
-        catch
+        catch (Exception ex)
         {
-            return BadRequest(new { message = "Invalid Google token" });
+            return BadRequest(new { message = "Invalid Google token" + ex.Message });
         }
     }
     private string GenerateJwtToken(User user)
