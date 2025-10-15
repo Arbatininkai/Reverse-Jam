@@ -12,8 +12,11 @@
         
         public string Token { get; set;}
 
-        public int MaxPlayers { get; set; } = 4;
+        public static int MaxPlayers { get; set; } = 4;
         public List<User> Players { get; set; } = new List<User>();
+        
+        public String Creator { get; set; }
         public List<String> PlayersTokens { get; set; } = new List<String>();
     }
+    
 }

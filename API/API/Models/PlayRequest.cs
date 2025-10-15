@@ -3,5 +3,7 @@
     public class PlayRequest
     {
         public string? LobbyCode { get; set; } // jeigu null tai deda i random
+        
+        public string Token  { get; set; }
     }
 }
