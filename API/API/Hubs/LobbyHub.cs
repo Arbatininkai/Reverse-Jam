@@ -37,7 +37,7 @@ namespace API.Hubs
                     return;
                 }
 
-                if (lobby.hasGameStarted)
+                if (lobby.HasGameStarted)
                 {
                     await Clients.Caller.SendAsync("Error", "Lobby game has started. No more ability to join");
                     return;
@@ -54,7 +54,7 @@ namespace API.Hubs
 
             // If no lobby code was provided, auto-match to best available or create new
             var availableLobbies = LobbyStore.Lobbies
-                .Where(l => !l.Private && l.Players.Count < l.MaxPlayers && l.hasGameStarted != true)
+                .Where(l => !l.Private && l.Players.Count < l.MaxPlayers && l.HasGameStarted != true)
                 .ToList();
 
             if (availableLobbies.Count == 0)
@@ -64,7 +64,7 @@ namespace API.Hubs
                     Id = LobbyStore.Lobbies.Count > 0 ? LobbyStore.Lobbies.Max(l => l.Id) + 1 : 1,
                     Private = false,
                     MaxPlayers = 4,
-                    ownerId = user.Id
+                    OwnerId = user.Id
                 };
                 newLobby.Players.Add(user);
                 LobbyStore.Lobbies.Add(newLobby);
@@ -112,28 +112,14 @@ namespace API.Hubs
                 await Clients.Caller.SendAsync("Error", "User is not the owner");
                 return;
             }
-            lobby.hasGameStarted = true;
-            // TODO: Call random song slector endpoint and get the song from cloud
-            await Clients.Group(lobby.LobbyCode).SendAsync("GameStarted", lobby.Id);
-        }
+            lobby.HasGameStarted = true;
 
-        public override async Task OnDisconnectedAsync(Exception? exception)
-        {
-            var userId = Context.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = UserStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+            // Make the server select a random song for all players to repeat
+            var songs = SongStore.Songs;
+            var random = new Random();
+            var selectedSong = songs[random.Next(songs.Count)];
 
-            if (user != null)
-            {
-                // Remove user from all lobbies
-                var lobby = LobbyStore.Lobbies.FirstOrDefault(l => l.Players.Any(p => p.Id == user.Id));
-                if (lobby != null)
-                {
-                    lobby.Players.RemoveAll(p => p.Id == user.Id);
-                    await Clients.Group(lobby.LobbyCode).SendAsync("PlayerLeft", user);
-                }
-            }
-
-            await base.OnDisconnectedAsync(exception);
+            await Clients.Group(lobby.LobbyCode).SendAsync("GameStarted", lobby.Id, selectedSong);
         }
 
         public async Task LeaveLobby(int lobbyId)
@@ -154,14 +140,14 @@ namespace API.Hubs
             }
 
             // If the owner leaves, make the first person the new onwer
-            if (lobby.ownerId == user.Id)
+            if (lobby.OwnerId == user.Id)
             {
-                lobby.ownerId = lobby.Players.First().Id;
+                lobby.OwnerId = lobby.Players.First().Id;
             }
             lobby.Players.RemoveAll(p => p.Id == user.Id);
 
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, lobby.LobbyCode);
-            await Clients.Group(lobby.LobbyCode).SendAsync("PlayerLeft", user, lobby.ownerId);
+            await Clients.Group(lobby.LobbyCode).SendAsync("PlayerLeft", user, lobby.OwnerId);
         }
 
     }

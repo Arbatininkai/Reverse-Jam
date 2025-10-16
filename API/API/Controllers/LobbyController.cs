@@ -43,7 +43,7 @@ namespace API.Controllers
                 Private = options.Private, //is frontendo gaunamos reiksmes
                 AiRate = options.AiRate,
                 HumanRate = options.HumanRate,
-                ownerId = creator.Id
+                OwnerId = creator.Id
             };
 
             if (creator != null)
@@ -53,6 +53,16 @@ namespace API.Controllers
 
             return Ok(newLobby);
         }
+
+        [HttpGet("exists/{code}")]
+        public IActionResult LobbyExists(string code)
+        {
+            var exists = LobbyStore.Lobbies.Any(l =>
+                l.LobbyCode.Equals(code, StringComparison.OrdinalIgnoreCase));
+            if (!exists) return NotFound("Lobby not found");
+            return Ok();
+        }
+
 
         [Authorize]
         [HttpPost("play")]

@@ -158,6 +158,61 @@ public class AuthController : ControllerBase
         return tokenHandler.WriteToken(token); //sukuria galutini jwt stringa
     }
 
+    [Authorize]
+    [HttpGet("userinfo")]
+    public async Task<IActionResult> GetUserInfo()
+    {
+        try
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var email = User.FindFirstValue(ClaimTypes.Email);
+
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized(new { message = "User ID missing in token" });
+
+            using var conn = new SqlConnection(_connectionString);
+            await conn.OpenAsync();
+
+            string query = "SELECT gid, email, name, photourl FROM users WHERE email = @Email";
+            using var cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@Email", email);
+
+            using var reader = await cmd.ExecuteReaderAsync();
+            if (await reader.ReadAsync())
+            {
+                var user = new User
+                {
+                    Id = int.Parse(reader["gid"].ToString() ?? "0"),
+                    Email = reader["email"].ToString() ?? "",
+                    Name = reader["name"].ToString() ?? "",
+                    PholoUrl = reader["photourl"].ToString() ?? ""
+                };
+
+                // Make sure UserStore has latest data
+                var existing = UserStore.Users.FirstOrDefault(u => u.Id == user.Id);
+                if (existing != null)
+                {
+                    existing.Email = user.Email;
+                    existing.Name = user.Name;
+                    existing.PholoUrl = user.PholoUrl;
+                }
+                else
+                {
+                    UserStore.Users.Add(user);
+                }
+
+                return Ok(user);
+            }
+
+            return NotFound(new { message = "User not found" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Error fetching user info", error = ex.Message });
+        }
+    }
+
+
     [Authorize] //leidzia vykdyt dalykus jeigu yra galiojantis jwt
     [HttpGet("me")] // patikrina prisijungima
     public IActionResult Me()
