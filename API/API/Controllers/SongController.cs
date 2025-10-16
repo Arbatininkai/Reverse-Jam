@@ -15,7 +15,7 @@ namespace API.Controllers
             return Ok(SongStore.Songs);
         }
 
-        [HttpGet("{random}")]
+        [HttpGet("random")]
         public IActionResult GetSong()
         {
             if (SongStore.Songs == null || SongStore.Songs.Count == 0)
