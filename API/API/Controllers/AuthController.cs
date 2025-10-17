@@ -94,11 +94,12 @@ public class AuthController : ControllerBase
                     PholoUrl = photoUrl,
                 };
                 UserStore.Users.Add(user);
-                string query2 = "INSERT INTO users(email, name, photourl, gid) VALUES(@email, @name, @photourl, @gid)";
+                string query2 = "INSERT INTO users(email, name, photourl, emoji, gid) VALUES(@email, @name, @photourl, @emoji, @gid)";
                 using var cmd2 = new SqlCommand(query2, conn);
                 cmd2.Parameters.AddWithValue("@email", user.Email);
                 cmd2.Parameters.AddWithValue("@name", user.Name);
                 cmd2.Parameters.AddWithValue("@photourl", user.PholoUrl);
+                cmd2.Parameters.AddWithValue("@emoji", "1F600");
                 cmd2.Parameters.AddWithValue("@gid", user.Id);
                 
                 cmd2.ExecuteScalar();
