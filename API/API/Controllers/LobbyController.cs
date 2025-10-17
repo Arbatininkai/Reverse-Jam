@@ -181,64 +181,42 @@ namespace API.Controllers
 
                 return Ok(lobby);
             }
+            
+            var findLobbyQuery = "SELECT TOP 1 id, lobbyCode, isPrivate, isAiRate, isHumanRate, creator, players " +
+                                 "FROM lobby WHERE LEN(players) - LEN(REPLACE(players, ',', '')) + 1 < @maxPlayers";
+            var findLobbyCmd = new SqlCommand(findLobbyQuery, conn);
+            findLobbyCmd.Parameters.AddWithValue("@maxPlayers", Lobby.MaxPlayers);
+            var lobReader = findLobbyCmd.ExecuteReader();
 
-            
-            //TODO: Pakeisti su sql random gavima
-            var randLobQuery = "SELECT id, lobbyCode, isPrivate, isAiRate, isHumanRate, creator, players FROM lobby WHERE players < 4";
-            var randLobCmd = new SqlCommand(randLobQuery, conn);
-            
-            var Lobreader =  randLobCmd.ExecuteReader();
-            Lobby randLobby = new Lobby();
-            if (Lobreader.Read())
+            Lobby lobbyRand = new Lobby();
+            if (lobReader.Read())
             {
-                randLobby.Id = Lobreader.GetInt32(Lobreader.GetOrdinal("id"));
-                randLobby.LobbyCode = Lobreader.GetInt32(Lobreader.GetOrdinal("lobbyCode"));
-                randLobby.Private = Lobreader.GetBoolean(Lobreader.GetOrdinal("isPrivate")).Equals(1);
-                randLobby.AiRate = Lobreader.GetBoolean(Lobreader.GetOrdinal("isAiRate")).Equals(1);
-                randLobby.HumanRate = Lobreader.GetBoolean(Lobreader.GetOrdinal("isHumanRate")).Equals(1);
-                randLobby.Creator = Lobreader.GetString(Lobreader.GetOrdinal("creator"));
-                var players = Lobreader.GetString(Lobreader.GetOrdinal("players")); 
-                randLobby.PlayersTokens =  (players.Split(',', StringSplitOptions.RemoveEmptyEntries)).ToList();
+                lobbyRand.Id = lobReader.GetInt32(lobReader.GetOrdinal("id"));
+                lobbyRand.LobbyCode = lobReader.GetInt32(lobReader.GetOrdinal("lobbyCode"));
+                lobbyRand.Private = lobReader.GetInt32(lobReader.GetOrdinal("isPrivate")).Equals(1);
+                lobbyRand.AiRate = lobReader.GetInt32(lobReader.GetOrdinal("isAiRate")).Equals(1);
+                lobbyRand.HumanRate = lobReader.GetInt32(lobReader.GetOrdinal("isHumanRate")).Equals(1);
+                lobbyRand.Creator = lobReader.GetString(lobReader.GetOrdinal("creator"));
+                lobbyRand.PlayersTokens = lobReader.GetString(lobReader.GetOrdinal("players")).Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
             }
-            Lobreader.Close();
-            
-            randLobby.PlayersTokens.Add(token);
-            
-            var insertRandQuery = "UPDATE lobby SET players = @players WHERE id = @id";
-            var insertRandCmd = new SqlCommand(insertRandQuery, conn);
-            var playersRandStr = string.Join(",", randLobby.PlayersTokens);
-            insertRandCmd.Parameters.AddWithValue("@players", playersRandStr);
-            insertRandCmd.Parameters.AddWithValue("@id", randLobby.Id);
-            insertRandCmd.ExecuteScalar();
-            
-            return Ok(randLobby);
-            //TODO: Padaryti kad tas pats zmogus negaletu joininti i ta pati lobby 2 kartus t.y. returninti lobby bet neupdeitinti db
-            
-            
-            //TODO: Sugalvoti kaip padaryti sita
-            /*if (availableLobbies.Count == 0)
+            lobReader.Close();
+
+            if (lobbyRand.Id == 0)
             {
-                var newLobby = new Lobby
-                {
-                    Id = LobbyStore.Lobbies.Count > 0 ? LobbyStore.Lobbies.Max(l => l.Id) + 1 : 1,
-                    Private = false,
-                    MaxPlayers = 4
-                };
-                newLobby.Players.Add(user);
-                LobbyStore.Lobbies.Add(newLobby);
-                return Ok(newLobby);
+                return NotFound("Empty lobby not found");// TODO: Frontend should react to this response and show user a create lobby screen
+            }
+            
+            if (!lobbyRand.PlayersTokens.Contains(token))
+            {
+                lobbyRand.PlayersTokens.Add(token);
+                var updateQuery = "UPDATE lobby SET players = @players WHERE id = @id";
+                using var updateCmd = new SqlCommand(updateQuery, conn);
+                updateCmd.Parameters.AddWithValue("@players", string.Join(",", lobbyRand.PlayersTokens));
+                updateCmd.Parameters.AddWithValue("@id", lobbyRand.Id);
+                updateCmd.ExecuteNonQuery();
             }
 
-            int maxPlayersNow = availableLobbies.Max(l => l.Players.Count);
-            var bestLobbies = availableLobbies.Where(l => l.Players.Count == maxPlayersNow).ToList(); //randam labiausiai uzpildyta lobby
-
-            var random = new Random();
-            var chosenLobby = bestLobbies[random.Next(bestLobbies.Count)]; //isrenkam random jei yra keli
-
-            if (!chosenLobby.Players.Any(p => p.Id == user.Id)) //apsauga jeigu tas pats useris bando i ta pati lobby eiti
-                chosenLobby.Players.Add(user);
-
-            return Ok(chosenLobby);*/
+            return Ok(lobbyRand);
         }
     }
 }
