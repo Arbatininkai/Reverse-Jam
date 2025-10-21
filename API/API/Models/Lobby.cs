@@ -10,13 +10,13 @@
         public bool AiRate { get; set; } = true;
         public bool HumanRate { get; set; } = true;
         
-        public string Token { get; set;}
+        //public string Token { get; set;}
 
         public static int MaxPlayers { get; set; } = 4;
         public List<User> Players { get; set; } = new List<User>();
         
-        public String Creator { get; set; }
-        public List<String> PlayersTokens { get; set; } = new List<String>();
+        public String CreatorId { get; set; }
+        public List<String> PlayersIds { get; set; } = new List<String>();
     }
     
 }

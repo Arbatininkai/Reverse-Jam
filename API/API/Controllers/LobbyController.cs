@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using API.Data;
 using System.Data.SqlClient;
 
-using System.Text.Json;
+using Google.Apis.Auth;
 
 namespace API.Controllers
 {
@@ -25,56 +25,76 @@ namespace API.Controllers
             _connString = configuration.GetConnectionString("DefaultConnection");
         }
         
-        //[Authorize] // tik prisijungę per Google gali kurti lobby
+        [Authorize] // tik prisijungę per Google gali kurti lobby
         [HttpPost("create")]
         public IActionResult CreateLobby([FromBody] Lobby? options)
         {
             if (options == null)
                 return BadRequest("Options required");
 
-            if (options.Token == "")
+            /*if (options.Token == "")
             {
                 return Unauthorized("Token required");
-            }
+            }*/
             
             if (string.IsNullOrEmpty(_connString))
             {
                 return BadRequest("Connection string is missing!");
             }
-
-            //Paimam tokena
-            var token = options.Token;
             
             //Sql connectionas
             using var conn = new SqlConnection(_connString);
             conn.Open();
+
+            //NEBEREIKIA
+            //Paimam tokena
+            //var token = options.Token;
             
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            
+            if (userEmail == null)
+            {
+                conn.Close();
+                return BadRequest("Authentication token is missing!");
+            }
+            
+            var idQuery = "SELECT id FROM users WHERE email = @email";
+            using var idCmd = new SqlCommand(idQuery, conn);
+            idCmd.Parameters.AddWithValue("@email", userEmail);
+
+            string userID = null;
+            object tempID = idCmd.ExecuteScalar();
+
+            if (tempID != null)
+            {
+                userID = Convert.ToString(tempID);
+            }
+            
+            
+            //NEBEREIKIA
             //Patikrinam ar tokenas valid
-            var tokenQuery = "SELECT 1 FROM users WHERE gid = @token";
+            /*var tokenQuery = "SELECT 1 FROM users WHERE gid = @token";
             using var tokenCmd = new SqlCommand(tokenQuery, conn);
             tokenCmd.Parameters.AddWithValue("@token", token);
 
             if (tokenCmd.ExecuteScalar() == null)
             {
                 return Unauthorized("User authentication failed");
-            }
+            }*/
             
-            Random rnd = new Random();
-            var lobCode = 0;
-            
-            
-
             var newLobby = new Lobby
             {
                 Id = LobbyStore.Lobbies.Count > 0 ? LobbyStore.Lobbies.Max(l => l.Id) + 1 : 1,
                 Private = options.Private, //is frontendo gaunamos reiksmes
                 AiRate = options.AiRate,
-                HumanRate = options.HumanRate,
-                LobbyCode = lobCode
+                HumanRate = options.HumanRate
             };
             
-            newLobby.PlayersTokens.Add(token);
+            newLobby.PlayersIds.Add(userID);
 
+            //Lobby code generavimas
+            Random rnd = new Random();
+            var lobCode = 0;
             while (true)
             {
                 lobCode = rnd.Next(1000, 9999);
@@ -95,13 +115,14 @@ namespace API.Controllers
             createCmd.Parameters.AddWithValue("@isPrivate", newLobby.Private);
             createCmd.Parameters.AddWithValue("@isAiRate", newLobby.AiRate);
             createCmd.Parameters.AddWithValue("@isHumanRate", newLobby.HumanRate);
-            createCmd.Parameters.AddWithValue("@creator", token);
-            createCmd.Parameters.AddWithValue("@players", token);
+            createCmd.Parameters.AddWithValue("@creator", userID);
+            createCmd.Parameters.AddWithValue("@players", userID);
 
 
             createCmd.ExecuteScalar();
             //LobbyStore.Lobbies.Add(newLobby);
 
+            conn.Close();
             return Ok(lobCode);
         }
 
@@ -109,11 +130,12 @@ namespace API.Controllers
         [HttpPost("play")]
         public IActionResult Play([FromBody] PlayRequest request)
         {
-            var token = request.Token;
+            //var token = request.Token;
 
             //Patikrinam Tokena
-            if (token == "")
+            /*if (token == "")
                 return Unauthorized("User not found");
+            */
             
             if (string.IsNullOrEmpty(_connString))
             {
@@ -124,15 +146,35 @@ namespace API.Controllers
             using var conn = new SqlConnection(_connString);
             conn.Open();
             
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+
+            if (userEmail == null)
+            {
+                conn.Close();
+                return BadRequest("Authentication token is missing!");
+            }
+            
+            var idQuery = "SELECT id FROM users WHERE email = @email";
+            using var idCmd = new SqlCommand(idQuery, conn);
+            idCmd.Parameters.AddWithValue("@email", userEmail);
+
+            string userID = null;
+            object tempID = idCmd.ExecuteScalar();
+
+            if (tempID != null)
+            {
+                userID = Convert.ToString(tempID);
+            }
+            
             //Patikrinam ar tokenas valid
-            var tokenQuery = "SELECT 1 FROM users WHERE gid = @token";
+            /*var tokenQuery = "SELECT 1 FROM users WHERE gid = @token";
             using var tokenCmd = new SqlCommand(tokenQuery, conn);
             tokenCmd.Parameters.AddWithValue("@token", token);
 
             if (tokenCmd.ExecuteScalar() == null)
             {
                 return Unauthorized("User authentication failed");
-            }
+            }*/
             
 
             if (!string.IsNullOrEmpty(request.LobbyCode)) //jeigu ne null tai iveda seed
@@ -143,11 +185,13 @@ namespace API.Controllers
                 var playerCount = Int32.Parse(lobcCmd.ExecuteScalar().ToString());
                 if (playerCount == null)
                 {
+                    conn.Close();
                     return NotFound("Lobby not found");
                 }
 
                 if (playerCount >= Lobby.MaxPlayers)
                 {
+                    conn.Close();
                     return BadRequest("Lobby limit exceeded");
                 }
                 
@@ -164,21 +208,22 @@ namespace API.Controllers
                     lobby.Private = reader.GetInt32(reader.GetOrdinal("isPrivate")).Equals(1);
                     lobby.AiRate = reader.GetInt32(reader.GetOrdinal("isAiRate")).Equals(1);
                     lobby.HumanRate = reader.GetInt32(reader.GetOrdinal("isHumanRate")).Equals(1);
-                    lobby.Creator = reader.GetString(reader.GetOrdinal("creator"));
+                    lobby.CreatorId = reader.GetString(reader.GetOrdinal("creator"));
                     var players = reader.GetString(reader.GetOrdinal("players"));
-                    lobby.PlayersTokens = (players.Split(',', StringSplitOptions.RemoveEmptyEntries)).ToList();
+                    lobby.PlayersIds = (players.Split(',', StringSplitOptions.RemoveEmptyEntries)).ToList();
                 }
                 reader.Close();
                 
-                lobby.PlayersTokens.Add(token);
+                lobby.PlayersIds.Add(userID);
                 
                 var insertJoinQuery = "UPDATE lobby SET players = @players WHERE id = @id";
                 var insertJoinCmd = new SqlCommand(insertJoinQuery, conn);
-                var playersJoinStr = string.Join(",", lobby.PlayersTokens);
+                var playersJoinStr = string.Join(",", lobby.PlayersIds);
                 insertJoinCmd.Parameters.AddWithValue("@players", playersJoinStr);
                 insertJoinCmd.Parameters.AddWithValue("@id", lobby.Id);
                 insertJoinCmd.ExecuteScalar();
 
+                conn.Close();
                 return Ok(lobby);
             }
             
@@ -196,26 +241,28 @@ namespace API.Controllers
                 lobbyRand.Private = lobReader.GetInt32(lobReader.GetOrdinal("isPrivate")).Equals(1);
                 lobbyRand.AiRate = lobReader.GetInt32(lobReader.GetOrdinal("isAiRate")).Equals(1);
                 lobbyRand.HumanRate = lobReader.GetInt32(lobReader.GetOrdinal("isHumanRate")).Equals(1);
-                lobbyRand.Creator = lobReader.GetString(lobReader.GetOrdinal("creator"));
-                lobbyRand.PlayersTokens = lobReader.GetString(lobReader.GetOrdinal("players")).Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
+                lobbyRand.CreatorId = lobReader.GetString(lobReader.GetOrdinal("creator"));
+                lobbyRand.PlayersIds = lobReader.GetString(lobReader.GetOrdinal("players")).Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
             }
             lobReader.Close();
 
             if (lobbyRand.Id == 0)
             {
+                conn.Close();
                 return NotFound("Empty lobby not found");// TODO: Frontend should react to this response and show user a create lobby screen
             }
             
-            if (!lobbyRand.PlayersTokens.Contains(token))
+            if (!lobbyRand.PlayersIds.Contains(userID))
             {
-                lobbyRand.PlayersTokens.Add(token);
+                lobbyRand.PlayersIds.Add(userID);
                 var updateQuery = "UPDATE lobby SET players = @players WHERE id = @id";
                 using var updateCmd = new SqlCommand(updateQuery, conn);
-                updateCmd.Parameters.AddWithValue("@players", string.Join(",", lobbyRand.PlayersTokens));
+                updateCmd.Parameters.AddWithValue("@players", string.Join(",", lobbyRand.PlayersIds));
                 updateCmd.Parameters.AddWithValue("@id", lobbyRand.Id);
                 updateCmd.ExecuteNonQuery();
             }
 
+            conn.Close();
             return Ok(lobbyRand);
         }
     }
