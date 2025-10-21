@@ -1,19 +1,285 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\RecordingsController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Controllers\\RecordingsController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\LobbyController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Controllers\\LobbyController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\Lobby.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Models\\Lobby.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\AuthController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Controllers\\AuthController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\SongController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Controllers\\SongController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\Recording.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Models\\Recording.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\Song.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Models\\Song.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\PlayRequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Models\\PlayRequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\RatingMode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Models\\RatingMode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\RecordingUploadRequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Models\\RecordingUploadRequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Stores\\SongStore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Stores\\SongStore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Stores\\UserStore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Stores\\UserStore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\User.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Models\\User.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Stores\\LobbyStore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Stores\\LobbyStore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 200,
+          "DockedWidth": 266,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "RecordingsController.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\RecordingsController.cs",
+              "RelativeDocumentMoniker": "API\\API\\Controllers\\RecordingsController.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\RecordingsController.cs",
+              "RelativeToolTip": "API\\API\\Controllers\\RecordingsController.cs",
+              "ViewState": "AgIAAFIAAAAAAAAAAAAAAHMAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-20T13:39:51.444Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "SongController.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\SongController.cs",
+              "RelativeDocumentMoniker": "API\\API\\Controllers\\SongController.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\SongController.cs",
+              "RelativeToolTip": "API\\API\\Controllers\\SongController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-17T12:18:10.042Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "API\\API\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "API\\API\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-20T11:55:14.586Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "LobbyController.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\LobbyController.cs",
+              "RelativeDocumentMoniker": "API\\API\\Controllers\\LobbyController.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\LobbyController.cs",
+              "RelativeToolTip": "API\\API\\Controllers\\LobbyController.cs",
+              "ViewState": "AgIAADoAAAAAAAAAAAAAAGEAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-17T12:10:24.883Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Recording.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\Recording.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\Recording.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\Recording.cs",
+              "RelativeToolTip": "API\\API\\Models\\Recording.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-17T13:50:37.06Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Song.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\Song.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\Song.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\Song.cs",
+              "RelativeToolTip": "API\\API\\Models\\Song.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-17T13:51:19.44Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Lobby.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\Lobby.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\Lobby.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\Lobby.cs",
+              "RelativeToolTip": "API\\API\\Models\\Lobby.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-17T12:17:56.527Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "PlayRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\PlayRequest.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\PlayRequest.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\PlayRequest.cs",
+              "RelativeToolTip": "API\\API\\Models\\PlayRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-17T13:51:21.986Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "RatingMode.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\RatingMode.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\RatingMode.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\RatingMode.cs",
+              "RelativeToolTip": "API\\API\\Models\\RatingMode.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-20T17:43:42.61Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "RecordingUploadRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\RecordingUploadRequest.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\RecordingUploadRequest.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\RecordingUploadRequest.cs",
+              "RelativeToolTip": "API\\API\\Models\\RecordingUploadRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-20T12:12:50.967Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "SongStore.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Stores\\SongStore.cs",
+              "RelativeDocumentMoniker": "API\\API\\Stores\\SongStore.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Stores\\SongStore.cs",
+              "RelativeToolTip": "API\\API\\Stores\\SongStore.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-20T11:55:27.463Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "UserStore.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Stores\\UserStore.cs",
+              "RelativeDocumentMoniker": "API\\API\\Stores\\UserStore.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Stores\\UserStore.cs",
+              "RelativeToolTip": "API\\API\\Stores\\UserStore.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-20T11:55:30.315Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Program.cs",
+              "RelativeDocumentMoniker": "API\\API\\Program.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Program.cs",
+              "RelativeToolTip": "API\\API\\Program.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAAAC8AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-20T11:55:37.222Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\User.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\User.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\User.cs",
+              "RelativeToolTip": "API\\API\\Models\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-17T13:51:29.804Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "LobbyStore.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Stores\\LobbyStore.cs",
+              "RelativeDocumentMoniker": "API\\API\\Stores\\LobbyStore.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Stores\\LobbyStore.cs",
+              "RelativeToolTip": "API\\API\\Stores\\LobbyStore.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-20T11:55:25.571Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 134,
           "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
             }
           ]
         }

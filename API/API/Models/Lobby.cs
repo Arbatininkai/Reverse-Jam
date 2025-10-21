@@ -10,7 +10,10 @@
         public bool AiRate { get; set; } = true;
         public bool HumanRate { get; set; } = true;
 
+
         public int MaxPlayers { get; set; } = 4;
         public List<User> Players { get; set; } = new List<User>();
+
+        public List<Recording> Recordings { get; set; } = new List<Recording>();
     }
 }
