@@ -1,13 +1,16 @@
-﻿using API.Models;
+﻿using API.Hubs;
+using API.Models;
 using API.Stores;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 
 using Microsoft.EntityFrameworkCore;
 using API.Data;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace API.Controllers
 {
@@ -16,14 +19,15 @@ namespace API.Controllers
     public class LobbyController : ControllerBase
     {
         private readonly string _connString;
+        private readonly IHubContext<LobbyHub> _hubContext;
 
-        public LobbyController(IConfiguration configuration)
+        public LobbyController(IHubContext<LobbyHub> hubContext, IConfiguration configuration)
         {
-            //Console.WriteLine(configuration.GetConnectionString("ConnectionString"));
-            _connString = configuration.GetConnectionString("DefaultConnection");
+             _connString = configuration.GetConnectionString("DefaultConnection");
+            _hubContext = hubContext;
         }
-        
-        //[Authorize] // tik prisijungę per Google gali kurti lobby
+
+        [Authorize] // tik prisijungę per Google gali kurti lobby
         [HttpPost("create")]
         public IActionResult CreateLobby([FromBody] Lobby? options)
         {
@@ -62,13 +66,18 @@ namespace API.Controllers
             
             
 
+            if (creator == null)
+            {
+                return BadRequest("User does not exist");
+            }
+
             var newLobby = new Lobby
             {
                 Id = LobbyStore.Lobbies.Count > 0 ? LobbyStore.Lobbies.Max(l => l.Id) + 1 : 1,
                 Private = options.Private, //is frontendo gaunamos reiksmes
                 AiRate = options.AiRate,
                 HumanRate = options.HumanRate,
-                LobbyCode = lobCode
+                OwnerId = creator.Id
             };
             
             newLobby.Players.Add(token);
@@ -102,6 +111,16 @@ namespace API.Controllers
 
             return Ok(lobCode);
         }
+
+        [HttpGet("exists/{code}")]
+        public IActionResult LobbyExists(string code)
+        {
+            var exists = LobbyStore.Lobbies.Any(l =>
+                l.LobbyCode.Equals(code, StringComparison.OrdinalIgnoreCase));
+            if (!exists) return NotFound("Lobby not found");
+            return Ok();
+        }
+
 
         [Authorize]
         [HttpPost("play")]
@@ -157,6 +176,23 @@ namespace API.Controllers
                 chosenLobby.Players.Add(user);
 
             return Ok(chosenLobby);
+        }
+
+        [Authorize]
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeleteLobby([FromBody] int lobbyId)
+        {
+            var lobby = LobbyStore.Lobbies.FirstOrDefault(l => l.Id == lobbyId);
+            if (lobby == null)
+                return NotFound("Lobby not found");
+
+            // Notify all players that the lobby is deleted
+            await _hubContext.Clients.Group(lobby.LobbyCode).SendAsync("LobbyDeleted");
+
+            // Remove the lobby
+            LobbyStore.Lobbies.Remove(lobby);
+
+            return Ok(new { message = "Lobby deleted successfully" });
         }
     }
 }

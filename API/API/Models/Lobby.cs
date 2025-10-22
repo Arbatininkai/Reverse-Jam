@@ -12,6 +12,9 @@
         
         public string Token { get; set;}
 
-        public List<String> Players { get; set; } = new List<String>();
+        public int MaxPlayers { get; set; } = 4;
+        public bool HasGameStarted { get; set; } = false;
+        public int OwnerId { get; set; }
+        public List<User> Players { get; set; } = new List<User>();
     }
 }

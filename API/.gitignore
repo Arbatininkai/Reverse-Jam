@@ -6,3 +6,13 @@ obj/
 *.suo
 *.db
 *.log
+.json
+
+# Publish / VS publish profiles
+Properties/PublishProfiles/
+*.pubxml
+*.publishsettings
+
+# Editor dirs
+.vscode/
+.idea/
