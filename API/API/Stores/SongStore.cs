@@ -15,14 +15,14 @@ namespace API.Stores
         }
         private static List<Song> LoadSongs(string? explicitPath = null)
         {
-            var path = explicitPath ?? Path.Combine(AppContext.BaseDirectory, "songs.json"); //jeigu neduodamas naujas path tai numatytas naudojamas, programos paleidimo katalogas kur yra exe failas
+            var path = explicitPath ?? Path.Combine(AppContext.BaseDirectory, "Stores", "songs.json"); //jeigu neduodamas naujas path tai numatytas naudojamas, programos paleidimo katalogas kur yra exe failas
 
             if (!File.Exists(path))
                 return new List<Song>();
             try
             {
                 var songJson = File.ReadAllText(path);
-                var options = new JsonSerializerOptions{PropertyNameCaseInsensitive = true}; 
+                var options = new JsonSerializerOptions{PropertyNameCaseInsensitive = true};
                 return JsonSerializer.Deserialize<List<Song>>(songJson, options) ?? new List<Song>();
             }
             catch (Exception ex)

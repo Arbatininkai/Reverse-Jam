@@ -14,5 +14,6 @@
         public bool HasGameStarted { get; set; } = false;
         public int OwnerId { get; set; }
         public List<User> Players { get; set; } = new List<User>();
+        public List<Recording> Recordings { get; set; } = new List<Recording>();
     }
 }
