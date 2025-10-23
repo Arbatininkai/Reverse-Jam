@@ -109,7 +109,13 @@ namespace API.Controllers
                 return Ok(newLobby);
             }
 
-            int maxPlayersNow = availableLobbies.Max(l => l.Players.Count);
+             int maxPlayersNow = 0;
+                 foreach (var lobby in availableLobbies)
+                 {
+                     if (lobby.Players.Count > maxPlayersNow)
+                         maxPlayersNow = lobby.Players.Count;
+                 }
+
             var bestLobbies = availableLobbies.Where(l => l.Players.Count == maxPlayersNow).ToList(); //randam labiausiai uzpildyta lobby
 
             var random = new Random();
