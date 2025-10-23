@@ -16,7 +16,7 @@ namespace API.Stores
         private static List<Song> LoadSongs(string? explicitPath = null) => LoadSongsAsync(explicitPath).GetAwaiter().GetResult();
         private static async Task<List<Song>> LoadSongsAsync(string? explicitPath = null)
         {
-            var path = explicitPath ?? Path.Combine(AppContext.BaseDirectory, "songs.json"); //jeigu neduodamas naujas path tai numatytas naudojamas, programos paleidimo katalogas kur yra exe failas
+            var path = explicitPath ?? Path.Combine(AppContext.BaseDirectory, "Stores", "songs.json"); //jeigu neduodamas naujas path tai numatytas naudojamas, programos paleidimo katalogas kur yra exe failas
 
             if (!File.Exists(path))
                 return new List<Song>();
