@@ -9,14 +9,11 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class SongsController : ControllerBase
     {
-        [HttpGet]  // GET api/songs
-        public IActionResult GetSongs()
-        {
-            return Ok(SongStore.Songs);
-        }
+        [HttpGet] // GET api/songs
+        public IActionResult GetSongs() => Ok(SongStore.Songs);
 
-        [HttpGet("random")]
-        public IActionResult GetSong()
+        [HttpGet("random")] // GET api/songs/random
+        public IActionResult GetRandomSong()
         {
             if (SongStore.Songs == null || SongStore.Songs.Count == 0)
                 return NotFound("No songs available");

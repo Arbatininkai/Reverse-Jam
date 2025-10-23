@@ -17,5 +17,9 @@
 		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.5.2" />
 		<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
 	</ItemGroup>
-
-</Project>
+	
+	<ItemGroup>
+		<Content Update="Stores\songs.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup></Project>
