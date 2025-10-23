@@ -3,7 +3,7 @@
     public class Lobby
     {
         public int Id { get; set; }
-        public string LobbyCode { get; set; } = Guid.NewGuid().ToString("N")[..6].ToUpper(); // random 6 simbolių kodas
+        public int LobbyCode { get; set; } // random 4 simbolių kodas
         
         //defaultines reiksmes, is frontendo bus galima gaut kitokias reiksmes
         public bool Private { get; set; } = false;

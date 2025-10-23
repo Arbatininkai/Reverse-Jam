@@ -20,7 +20,9 @@ namespace API.Controllers
             _hubContext = hubContext;
         }
 
-        [Authorize] // tik prisijungę per Google gali kurti lobby
+        
+        //Lobby sukurimas
+        [Authorize]
         [HttpPost("create")]
         public IActionResult CreateLobby([FromBody] Lobby? options)
         {
@@ -46,8 +48,7 @@ namespace API.Controllers
                 OwnerId = creator.Id
             };
 
-            if (creator != null)
-                newLobby.Players.Add(creator);
+            newLobby.Players.Add(creator);
 
             LobbyStore.Lobbies.Add(newLobby);
 
@@ -58,7 +59,7 @@ namespace API.Controllers
         public IActionResult LobbyExists(string code)
         {
             var exists = LobbyStore.Lobbies.Any(l =>
-                l.LobbyCode.Equals(code, StringComparison.OrdinalIgnoreCase));
+                string.Equals(l.LobbyCode.ToString(), code, StringComparison.OrdinalIgnoreCase));
             if (!exists) return NotFound("Lobby not found");
             return Ok();
         }
@@ -77,7 +78,7 @@ namespace API.Controllers
             if (!string.IsNullOrEmpty(request.LobbyCode)) //jeigu ne null tai iveda seed
             {
                 var lobby = LobbyStore.Lobbies.FirstOrDefault(l =>
-                    l.LobbyCode.Equals(request.LobbyCode, StringComparison.OrdinalIgnoreCase));
+                    string.Equals(l.LobbyCode.ToString(), request.LobbyCode, StringComparison.OrdinalIgnoreCase));
 
                 if (lobby == null)
                     return NotFound("Lobby not found");
@@ -129,7 +130,7 @@ namespace API.Controllers
                 return NotFound("Lobby not found");
 
             // Notify all players that the lobby is deleted
-            await _hubContext.Clients.Group(lobby.LobbyCode).SendAsync("LobbyDeleted");
+            await _hubContext.Clients.Group((lobby.LobbyCode).ToString()).SendAsync("LobbyDeleted");
 
             // Remove the lobby
             LobbyStore.Lobbies.Remove(lobby);

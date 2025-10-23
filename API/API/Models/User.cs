@@ -10,6 +10,6 @@ namespace API.Models
         [EmailAddress]
         public string? Email { get; set; } //gali but null
         public string? Name { get; set; }
-        public string? PholoUrl { get; set; }
+        public string? PhotoUrl { get; set; }
     }
 }
