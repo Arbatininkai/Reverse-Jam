@@ -5,11 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-
-using Microsoft.EntityFrameworkCore;
-using API.Data;
-using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 
 namespace API.Controllers
@@ -18,53 +13,26 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class LobbyController : ControllerBase
     {
-        private readonly string _connString;
         private readonly IHubContext<LobbyHub> _hubContext;
 
-        public LobbyController(IHubContext<LobbyHub> hubContext, IConfiguration configuration)
+        public LobbyController(IHubContext<LobbyHub> hubContext)
         {
-             _connString = configuration.GetConnectionString("DefaultConnection");
             _hubContext = hubContext;
         }
 
-        [Authorize] // tik prisijungę per Google gali kurti lobby
+        
+        //Lobby sukurimas
+        [Authorize]
         [HttpPost("create")]
         public IActionResult CreateLobby([FromBody] Lobby? options)
         {
             if (options == null)
                 return BadRequest("Options required");
 
-            if (options.Token == "")
-            {
-                return BadRequest("Token required");
-            }
-            
-            if (string.IsNullOrEmpty(_connString))
-            {
-                return BadRequest("Connection string is missing!");
-            }
-
-            //Paimam tokena
-            var token = options.Token;
-            
-            //Sql connectionas
-            using var conn = new SqlConnection(_connString);
-            conn.Open();
-            
-            //Patikrinam ar tokenas valid
-            string tokenQuery = "SELECT 1 FROM users WHERE gid = @token";
-            using var tokenCmd = new SqlCommand(tokenQuery, conn);
-            tokenCmd.Parameters.AddWithValue("@token", token);
-
-            if (tokenCmd.ExecuteScalar() == null)
-            {
-                return BadRequest("User authentication failed");
-            }
-            
-            Random rnd = new Random();
-            int lobCode = 0;
-            
-            
+            // paimam prisijungusio user info iš tokeno
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            var creator = UserStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
 
             if (creator == null)
             {
@@ -79,44 +47,19 @@ namespace API.Controllers
                 HumanRate = options.HumanRate,
                 OwnerId = creator.Id
             };
-            
-            newLobby.Players.Add(token);
 
-            while (true)
-            {
-                lobCode = rnd.Next(1000, 9999);
-                string lobcQuery = "SELECT 1 FROM lobby WHERE lobbyCode = @lobCode";
-                using var lobCmd = new SqlCommand(lobcQuery, conn);
-                lobCmd.Parameters.AddWithValue("@lobCode", lobCode);
+            newLobby.Players.Add(creator);
 
-                if (lobCmd.ExecuteScalar() == null)
-                {
-                    break;
-                }
-            }
+            LobbyStore.Lobbies.Add(newLobby);
 
-            //Issaugom lobby sql
-            string createQuery = "INSERT INTO lobby (lobbyCode, isPrivate, isAiRate, isHumanRate, creator, players) VALUES(@lobbyCode, @isPrivate, @isAiRate, @isHumanRate, @creator, @players)";
-            using var createCmd = new SqlCommand(createQuery, conn);
-            createCmd.Parameters.AddWithValue("@lobbyCode", lobCode);
-            createCmd.Parameters.AddWithValue("@isPrivate", newLobby.Private);
-            createCmd.Parameters.AddWithValue("@isAiRate", newLobby.AiRate);
-            createCmd.Parameters.AddWithValue("@isHumanRate", newLobby.HumanRate);
-            createCmd.Parameters.AddWithValue("@creator", token);
-            createCmd.Parameters.AddWithValue("@players", token);
-
-
-            createCmd.ExecuteScalar();
-            //LobbyStore.Lobbies.Add(newLobby);
-
-            return Ok(lobCode);
+            return Ok(newLobby);
         }
 
         [HttpGet("exists/{code}")]
         public IActionResult LobbyExists(string code)
         {
             var exists = LobbyStore.Lobbies.Any(l =>
-                l.LobbyCode.Equals(code, StringComparison.OrdinalIgnoreCase));
+                string.Equals(l.LobbyCode.ToString(), code, StringComparison.OrdinalIgnoreCase));
             if (!exists) return NotFound("Lobby not found");
             return Ok();
         }
@@ -135,7 +78,7 @@ namespace API.Controllers
             if (!string.IsNullOrEmpty(request.LobbyCode)) //jeigu ne null tai iveda seed
             {
                 var lobby = LobbyStore.Lobbies.FirstOrDefault(l =>
-                    l.LobbyCode.Equals(request.LobbyCode, StringComparison.OrdinalIgnoreCase));
+                    string.Equals(l.LobbyCode.ToString(), request.LobbyCode, StringComparison.OrdinalIgnoreCase));
 
                 if (lobby == null)
                     return NotFound("Lobby not found");
@@ -187,7 +130,7 @@ namespace API.Controllers
                 return NotFound("Lobby not found");
 
             // Notify all players that the lobby is deleted
-            await _hubContext.Clients.Group(lobby.LobbyCode).SendAsync("LobbyDeleted");
+            await _hubContext.Clients.Group((lobby.LobbyCode).ToString()).SendAsync("LobbyDeleted");
 
             // Remove the lobby
             LobbyStore.Lobbies.Remove(lobby);
