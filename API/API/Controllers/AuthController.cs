@@ -1,5 +1,5 @@
 ﻿using API.Models;
-using API.Stores;
+//using API.Stores;
 using Google.Apis.Auth; //google tokenui
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +33,7 @@ public class AuthController : ControllerBase
         var keys = new JsonWebKeySet(json);
         return keys.GetSigningKeys(); //grazina raktus, kuriais galima patikrinti JWT parasa 
     }
+    
 
     [HttpPost("google-signin")]
     public async Task<IActionResult> GoogleSignIn([FromBody] string idToken)
@@ -51,8 +52,7 @@ public class AuthController : ControllerBase
                 ValidateLifetime = true,
                 IssuerSigningKeys = await GetGoogleKeysAsync()
             };
-
-
+            
             tokenHandler.ValidateToken(idToken, validationParameters, out var validatedToken); //patikrina ar gautas idToken yra tinkamas google token
 
             var jwtToken = (JwtSecurityToken)validatedToken;
@@ -67,15 +67,6 @@ public class AuthController : ControllerBase
             using var conn = new SqlConnection(_connectionString);
             conn.Open();
 
-            /*
-            //TEST
-            var email = "alicess@example.com";
-            var name = "test";
-            var photoUrl = "test";
-            */
-
-
-
             string query = "SELECT COUNT(*) FROM users WHERE email = @email";
             using var cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@email", email);
@@ -83,46 +74,48 @@ public class AuthController : ControllerBase
 
             int count = (int)cmd.ExecuteScalar();
 
-            var user = UserStore.Users.FirstOrDefault(u => u.Email == email); //jei tokio nera tai sukuriam
+            User user = new User(0,null, null, null);
+            //var user = UserStore.Users.FirstOrDefault(u => u.Email == email); //jei tokio nera tai sukuriam
             if (count == 0)
             {
-                user = new User
-                {
-                    Id = UserStore.Users.Count > 0 ? UserStore.Users.Max(u => u.Id) + 1 : 1,
-                    Email = email,
-                    Name = name,
-                    PholoUrl = photoUrl,
-                };
-                UserStore.Users.Add(user);
-                string query2 = "INSERT INTO users(email, name, photourl, gid) VALUES(@email, @name, @photourl, @gid)";
+                var maxIdQuery = "SELECT MAX(id) + 1 FROM users";
+                var maxIdCmd =  new SqlCommand(maxIdQuery, conn);
+                var newId = (int)maxIdCmd.ExecuteScalar();
+                
+                user = new User(
+                    id: newId, 
+                    email: email,
+                    name: name,
+                    photoUrl: photoUrl
+                );
+                //UserStore.Users.Add(user);
+                string query2 = "INSERT INTO users(email, name, photourl) VALUES(@email, @name, @photourl)";
                 using var cmd2 = new SqlCommand(query2, conn);
                 cmd2.Parameters.AddWithValue("@email", user.Email);
                 cmd2.Parameters.AddWithValue("@name", user.Name);
-                cmd2.Parameters.AddWithValue("@photourl", user.PholoUrl);
-                cmd2.Parameters.AddWithValue("@gid", user.Id);
+                cmd2.Parameters.AddWithValue("@photourl", user.photoUrl);
 
                 cmd2.ExecuteScalar();
             }
             else
             {
                 //User exist
-                string query3 = "SELECT TOP 1 gid, email, name, photourl FROM users WHERE email = @email";
+                string query3 = "SELECT TOP 1 id, email, name, photourl FROM users WHERE email = @email";
                 using var cmd3 = new SqlCommand(query3, conn);
                 cmd3.Parameters.AddWithValue("@email", email);
 
                 using var reader = cmd3.ExecuteReader();
                 if (reader.Read())
                 {
-                    user = new User
-                    {
-                        Id = int.Parse(reader.GetString(0)),
-                        Email = reader.GetString(1),
-                        Name = reader.GetString(2),
-                        PholoUrl = reader.GetString(3)
-                    };
+                    user = new User(
+                        id: int.Parse(reader.GetString(0)), 
+                        email: reader.GetString(1), 
+                        name: reader.GetString(2), 
+                        photoUrl: reader.GetString(3)
+                        );
 
-                    if (!UserStore.Users.Any(u => u.Email == email))
-                        UserStore.Users.Add(user);
+                    //if (!UserStore.Users.Any(u => u.Email == email))
+                    //    UserStore.Users.Add(user);
                 }
             }
 
@@ -173,33 +166,32 @@ public class AuthController : ControllerBase
             using var conn = new SqlConnection(_connectionString);
             await conn.OpenAsync();
 
-            string query = "SELECT gid, email, name, photourl FROM users WHERE email = @Email";
+            string query = "SELECT id, email, name, photourl FROM users WHERE email = @Email";
             using var cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@Email", email);
 
             using var reader = await cmd.ExecuteReaderAsync();
             if (await reader.ReadAsync())
             {
-                var user = new User
-                {
-                    Id = int.Parse(reader["gid"].ToString() ?? "0"),
-                    Email = reader["email"].ToString() ?? "",
-                    Name = reader["name"].ToString() ?? "",
-                    PholoUrl = reader["photourl"].ToString() ?? ""
-                };
+                var user = new User(
+                    id: int.Parse(reader["id"].ToString() ?? "0"), 
+                    email: reader["email"].ToString() ?? "", 
+                    name: reader["name"].ToString() ?? "", 
+                    photoUrl: reader["photourl"].ToString()
+                    );
 
                 // Make sure UserStore has latest data
-                var existing = UserStore.Users.FirstOrDefault(u => u.Id == user.Id);
+                /*var existing = UserStore.Users.FirstOrDefault(u => u.Id == user.Id);
                 if (existing != null)
                 {
                     existing.Email = user.Email;
                     existing.Name = user.Name;
-                    existing.PholoUrl = user.PholoUrl;
+                    existing.photoUrl = user.photoUrl;
                 }
                 else
                 {
                     UserStore.Users.Add(user);
-                }
+                }*/
 
                 return Ok(user);
             }
