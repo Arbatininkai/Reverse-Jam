@@ -1,13 +1,15 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using API.Hubs;
 using API.Models;
 using API.Stores;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.StaticFiles;
+using System;
+using System.IO;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -15,6 +17,12 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class RecordingsController : ControllerBase
     {
+        private readonly IHubContext<LobbyHub> _hubContext;
+
+        public RecordingsController(IHubContext<LobbyHub> hubContext)
+        {
+            _hubContext = hubContext;
+        }
 
         [Authorize]
         [HttpPost("upload/{lobbyId}")]
@@ -88,6 +96,7 @@ namespace API.Controllers
             {
                 lobby.Recordings.Add(recording);
             }
+            await _hubContext.Clients.Group(lobby.LobbyCode).SendAsync("LobbyUpdated", lobby);
 
             return Ok(recording);
         }
@@ -122,6 +131,37 @@ namespace API.Controllers
                 contentType = "application/octet-stream";
 
             return PhysicalFile(filePath, contentType);
+        }
+
+        [Authorize]
+        [HttpGet("{lobbyCode}/recordings")]
+        public IActionResult GetAllRecordings(string lobbyCode)
+        {
+            var lobby = LobbyStore.Lobbies.FirstOrDefault(l =>
+                l.LobbyCode.Equals(lobbyCode, StringComparison.OrdinalIgnoreCase));
+            if (lobby == null)
+                return NotFound("Lobby not found");
+
+            if (lobby.Private)
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (string.IsNullOrEmpty(userId))
+                    return Unauthorized();
+
+                var user = UserStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+                if (user == null || !lobby.Players.Any(p => p.Id == user.Id))
+                    return Forbid();
+            }
+
+            var result = lobby.Recordings.Select(r => new
+            {
+                r.UserId,
+                r.FileName,
+                r.Url,
+                r.UploadedAt
+            }).ToList();
+
+            return Ok(result);
         }
     }
 }
