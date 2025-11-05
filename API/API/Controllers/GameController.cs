@@ -14,11 +14,11 @@ namespace API.Controllers
         [HttpPost("end-round")]
         public IActionResult EndRound([FromBody] EndRoundRequest request)
         {
-            if (request is null || request.LobbyCode is null)
+            if (request is null || string.IsNullOrWhiteSpace(request.LobbyCode))
                 return BadRequest("LobbyCode and request body are required.");
 
-            var lobby = LobbyStore.Lobbies
-                .FirstOrDefault(l => l.LobbyCode == request.LobbyCode);
+            var lobby = LobbyStore.Lobbies.FirstOrDefault(l =>
+                string.Equals(l.LobbyCode, request.LobbyCode, StringComparison.OrdinalIgnoreCase));
 
             if (lobby is null)
                 return NotFound("Lobby not found.");
