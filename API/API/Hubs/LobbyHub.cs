@@ -120,11 +120,42 @@ namespace API.Hubs
             }
             lobby.HasGameStarted = true;
 
-            var random = Random.Shared;
-            var song = SongStore.Songs[random.Next(SongStore.Songs.Count)];
+            List<Song> songs = new List<Song>();
+            var random = new Random();
+            for (var i = 0; i < lobby.TotalRounds; i++)
+            {
+                var song = SongStore.Songs[random.Next(SongStore.Songs.Count)];
+                songs.Add(song);
+            }
 
-            await Clients.Group(lobby.LobbyCode).SendAsync("GameStarted", lobby.Id, song);
+            await Clients.Group(lobby.LobbyCode).SendAsync("GameStarted", lobby.Id, songs);
         }
+
+        public async Task NextPlayer(int lobbyId)
+        {
+            var lobby = LobbyStore.Lobbies.FirstOrDefault(l => l.Id == lobbyId);
+            if (lobby == null) return;
+
+            // Only owner can advance
+            var userId = Context.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (lobby.OwnerId.ToString() != userId) return;
+
+            if (lobby.CurrentPlayerIndex < lobby.Players.Count - 1)
+            {
+                lobby.CurrentPlayerIndex++;
+            }
+            else
+            {
+                if (lobby.CurrentRound < lobby.TotalRounds - 1)
+                {
+                    lobby.CurrentRound++;
+                    lobby.CurrentPlayerIndex = 0;
+                }
+            }
+
+            await Clients.Group(lobby.LobbyCode).SendAsync("LobbyUpdated", lobby);
+        }
+
 
         public async Task LeaveLobby(int lobbyId)
         {

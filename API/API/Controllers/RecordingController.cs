@@ -25,9 +25,9 @@ namespace API.Controllers
         }
 
         [Authorize]
-        [HttpPost("upload/{lobbyId}")]
+        [HttpPost("upload/{lobbyId}/{roundIndex}")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> UploadRecording(int lobbyId, [FromForm] RecordingUploadRequest request)
+        public async Task<IActionResult> UploadRecording(int lobbyId, int roundIndex, [FromForm] RecordingUploadRequest request)
         {
             var file = request.File;
             if (file == null || file.Length == 0)
@@ -48,8 +48,10 @@ namespace API.Controllers
             var recordingsFolder = Path.Combine(Directory.GetCurrentDirectory(), "recordings", lobby.LobbyCode);
             Directory.CreateDirectory(recordingsFolder);
 
+            while (lobby.RecordingsByRound.Count <= roundIndex)
+                lobby.RecordingsByRound.Add(new List<Recording>());
 
-            var existing = lobby.Recordings.FirstOrDefault(r => r.UserId == user.Id);
+            var existing = lobby.RecordingsByRound[roundIndex].FirstOrDefault(r => r.UserId == user.Id);
             if (existing != null)
             {
                 try
@@ -94,7 +96,7 @@ namespace API.Controllers
             }
             else
             {
-                lobby.Recordings.Add(recording);
+                lobby.RecordingsByRound[roundIndex].Add(recording);
             }
             await _hubContext.Clients.Group(lobby.LobbyCode).SendAsync("LobbyUpdated", lobby);
 
@@ -153,13 +155,16 @@ namespace API.Controllers
                     return Forbid();
             }
 
-            var result = lobby.Recordings.Select(r => new
-            {
-                r.UserId,
-                r.FileName,
-                r.Url,
-                r.UploadedAt
-            }).ToList();
+            var result = lobby.RecordingsByRound
+                .SelectMany((roundList, roundIndex) => roundList.Select(r => new
+                {
+                    r.UserId,
+                    r.FileName,
+                    r.Url,
+                    r.UploadedAt,
+                    Round = roundIndex + 1
+                }))
+                .ToList();
 
             return Ok(result);
         }
