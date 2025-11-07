@@ -44,6 +44,7 @@ namespace API.Controllers
                 Id = LobbyStore.Lobbies.Count > 0 ? LobbyStore.Lobbies.Max(l => l.Id) + 1 : 1,
                 Private = options.Private, //is frontendo gaunamos reiksmes
                 AiRate = options.AiRate,
+                TotalRounds = options.TotalRounds,
                 HumanRate = options.HumanRate,
                 OwnerId = creator.Id
             };

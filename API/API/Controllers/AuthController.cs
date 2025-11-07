@@ -75,7 +75,7 @@ public class AuthController : ControllerBase
             };
             object result = SqlQuery(query, conn, parameters);
             int count = (int)result; //Unboxing
-            
+
             var user = UserStore.Users.FirstOrDefault(u => u.Email == email);
             //If user doesn't exist we need to register it
             if (count == 0)
@@ -88,33 +88,33 @@ public class AuthController : ControllerBase
                     PhotoUrl = photoUrl,
                 };
                 UserStore.Users.Add(user);
-                query = "INSERT INTO users(email, name, photourl, gid) VALUES(@email, @name, @photourl, @gid)";
+                query = "INSERT INTO users(email, name, photourl, id) VALUES(@email, @name, @photourl, @id)";
                 parameters = new Dictionary<string, object>
                 {
                     { "@email", user.Email },
                     { "@name", user.Name },
                     { "@photourl", user.PhotoUrl },
-                    { "@gid", user.Id }
+                    { "@id", user.Id }
                 };
                 SqlQuery(query, conn, parameters);
-                
+
             }
-            
+
             //If user exist return it's info from database
             else
             {
-                query = "SELECT TOP 1 CONCAT(gid, ';', email, ';', name, ';', photourl) FROM users WHERE email = @email";
+                query = "SELECT TOP 1 CONCAT(id, ';', email, ';', name, ';', photourl) FROM users WHERE email = @email";
                 parameters = new Dictionary<string, object>
                 {
                     { "@email", email},
                 };
 
                 result = SqlQuery(query, conn, parameters);
-                
+
                 //Do this because the result has multiple variables
                 string combined = result.ToString() ?? "";
                 var parts = combined.Split(';');
-                
+
                 user = new User
                 {
                     Id = int.Parse(parts[0]),
@@ -122,10 +122,10 @@ public class AuthController : ControllerBase
                     Name = parts[2],
                     PhotoUrl = parts[3]
                 };
-                
+
                 if (!UserStore.Users.Any(u => u.Email == email))
                     UserStore.Users.Add(user);
-                
+
             }
 
             var token = GenerateJwtToken(user);
@@ -181,24 +181,24 @@ public class AuthController : ControllerBase
             //Open sql connection
             using var conn = new SqlConnection(_connectionString);
             await conn.OpenAsync();
-            
+
             //Select user information
-            string query = "SELECT CONCAT(gid, ';', email, ';', name, ';', photourl) FROM users WHERE email = @Email";
+            string query = "SELECT CONCAT(id, ';', email, ';', name, ';', photourl) FROM users WHERE email = @Email";
             var parameters = new Dictionary<string, object>
             {
                 { "@email", email},
             };
-            object result = SqlQuery(connection: conn, query:query, parameters:parameters); // Named arguments
+            object result = SqlQuery(connection: conn, query: query, parameters: parameters); // Named arguments
 
             object emptyObj = ""; // Boxing
             if (result == emptyObj)
             {
                 return Unauthorized(new { message = "User not found" });
             }
-            
+
             string combined = result.ToString() ?? "";
             var parts = combined.Split(';');
-            
+
             //Store information inside user object
             var user = new User
             {
@@ -207,7 +207,7 @@ public class AuthController : ControllerBase
                 Name = parts[2],
                 PhotoUrl = parts[3]
             };
-            
+
             // Make sure UserStore has latest data
             var existing = UserStore.Users.FirstOrDefault(u => u.Id == user.Id);
             if (existing != null)
@@ -220,9 +220,9 @@ public class AuthController : ControllerBase
             {
                 UserStore.Users.Add(user);
             }
-            
+
             return Ok(user);
-            
+
         }
         catch (Exception ex)
         {
@@ -258,4 +258,3 @@ public class AuthController : ControllerBase
         return result;
     }
 }
-
