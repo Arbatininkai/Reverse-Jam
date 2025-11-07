@@ -22,4 +22,8 @@
 		<Content Update="Stores\songs.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <Folder Include="recordings\" />
 	</ItemGroup></Project>
