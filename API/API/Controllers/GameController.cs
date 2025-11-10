@@ -1,7 +1,7 @@
+
 using API.Models;
 using API.Stores;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
 
 namespace API.Controllers
@@ -10,41 +10,34 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class GameController : ControllerBase
     {
-        // POST api/game/end-round
-        [HttpPost("end-round")]
-        public IActionResult EndRound([FromBody] EndRoundRequest request)
+        [HttpPost("submit-votes")]
+        public IActionResult SubmitVotes([FromBody] EndRoundRequest request)
         {
             if (request is null || string.IsNullOrWhiteSpace(request.LobbyCode))
-                return BadRequest("LobbyCode and request body are required.");
+                return BadRequest("LobbyCode is required.");
 
-            var lobby = LobbyStore.Lobbies.FirstOrDefault(l =>
-                string.Equals(l.LobbyCode, request.LobbyCode, StringComparison.OrdinalIgnoreCase));
-
+            var lobby = LobbyStore.Lobbies.FirstOrDefault(l => l.LobbyCode == request.LobbyCode);
             if (lobby is null)
                 return NotFound("Lobby not found.");
 
-            var lobbyUserIds = lobby.Players.Select(p => p.Id).ToHashSet();
+           
+            var lobbyScores = LobbyStore.GetOrCreateLobbyScores(request.LobbyCode);
+            lobbyScores.AddVotes(request.Votes, request.Round);
 
-            var filteredVotes = (request.Votes ?? Enumerable.Empty<VoteDto>())
-                .Where(v => lobbyUserIds.Contains(v.TargetUserId));
+            return Ok(new { message = "Votes submitted" });
+        }
 
-            var scores = filteredVotes
-                .GroupBy(v => v.TargetUserId)
-                .Select(g => new ScoreEntry
-                {
-                    UserId = g.Key,
-                    Name = lobby.Players.FirstOrDefault(p => p.Id == g.Key)?.Name,
-                    Score = g.Sum(x => x.Score)
-                })
-                .OrderByDescending(s => s.Score)
-                .ThenBy(s => s.Name)
-                .ToList();
+        [HttpPost("calculate-final-scores")]
+        public IActionResult CalculateFinalScores([FromBody] string lobbyCode)
+        {
+            var lobby = LobbyStore.Lobbies.FirstOrDefault(l => l.LobbyCode == lobbyCode);
+            if (lobby is null)
+                return NotFound("Lobby not found.");
 
-            return Ok(new
-            {
-                lobby = new { lobby.LobbyCode, lobby.Id },
-                scores
-            });
+            var lobbyScores = LobbyStore.GetOrCreateLobbyScores(lobbyCode);
+            var finalScores = lobbyScores.GetFinalScores();
+
+            return Ok(new { scores = finalScores });
         }
     }
 }

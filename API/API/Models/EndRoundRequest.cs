@@ -5,6 +5,7 @@ namespace API.Models
     public class EndRoundRequest
     {
         public string LobbyCode { get; set; } = string.Empty;
+        public int Round { get; set; }
         public List<VoteDto> Votes { get; set; } = new();
     }
 
