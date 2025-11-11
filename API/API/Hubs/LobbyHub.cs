@@ -185,5 +185,33 @@ namespace API.Hubs
             await Clients.Group(lobby.LobbyCode).SendAsync("PlayerLeft", user, lobby.OwnerId);
         }
 
+        public async Task UpdateLobbyWithScores(int lobbyId, object updatedLobby)
+        {
+            var lobby = LobbyStore.Lobbies.FirstOrDefault(l => l.Id == lobbyId);
+            if (lobby == null) return;
+
+           
+            await Clients.Group(lobby.LobbyCode).SendAsync("LobbyUpdated", updatedLobby);
+
+            Console.WriteLine($"Lobby updated with final scores for {lobby.LobbyCode}");
+        }
+        public async Task NotifyFinalScores(int lobbyId, object scores)
+        {
+            var lobby = LobbyStore.Lobbies.FirstOrDefault(l => l.Id == lobbyId);
+            if (lobby == null) return;
+
+            
+            await Clients.Group(lobby.LobbyCode).SendAsync("FinalScoresReady", scores);
+        }
+        public async Task NotifyPlayerVoted(int lobbyId)
+        {
+            var lobby = LobbyStore.Lobbies.FirstOrDefault(l => l.Id == lobbyId);
+            if (lobby == null) return;
+
+            
+            await Clients.Group(lobby.LobbyCode).SendAsync("PlayerVoted");
+
+           
+        }
     }
 }

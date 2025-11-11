@@ -3,6 +3,7 @@
     public class Lobby
     {
         public int Id { get; set; }
+
         public string LobbyCode { get; set; } = Guid.NewGuid().ToString("N")[..6].ToUpper();
 
         //defaultines reiksmes, is frontendo bus galima gaut kitokias reiksmes
