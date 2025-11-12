@@ -64,23 +64,69 @@ public class AuthController : ControllerBase
             var photoUrl = jwtToken.Claims.First(c => c.Type == "picture").Value;
 
             //Opening sql connection
+            using var conn = new SqlConnection(_connectionString);
+            conn.Open();
 
-
-
-
+            //Querying sql to check is there a user created with this email
+            var query = "SELECT COUNT(*) FROM users WHERE email = @email";
+            var parameters = new Dictionary<string, object>
+            {
+                { "@email", email },
+            };
+            object result = SqlQuery(query, conn, parameters);
+            int count = (int)result; //Unboxing
 
             var user = UserStore.Users.FirstOrDefault(u => u.Email == email);
             //If user doesn't exist we need to register it
-
-            user = new User
+            if (count == 0)
             {
-                Id = UserStore.Users.Count > 0 ? UserStore.Users.Max(u => u.Id) + 1 : 1,
-                Email = email,
-                Name = name,
-                PhotoUrl = photoUrl,
-            };
-            UserStore.Users.Add(user);
+                user = new User
+                {
+                    Id = UserStore.Users.Count > 0 ? UserStore.Users.Max(u => u.Id) + 1 : 1,
+                    Email = email,
+                    Name = name,
+                    PhotoUrl = photoUrl,
+                };
+                UserStore.Users.Add(user);
+                query = "INSERT INTO users(email, name, photourl, id) VALUES(@email, @name, @photourl, @id)";
+                parameters = new Dictionary<string, object>
+                {
+                    { "@email", user.Email },
+                    { "@name", user.Name },
+                    { "@photourl", user.PhotoUrl },
+                    { "@id", user.Id }
+                };
+                SqlQuery(query, conn, parameters);
 
+            }
+
+            //If user exist return it's info from database
+            else
+            {
+                query = "SELECT TOP 1 CONCAT(id, ';', email, ';', name, ';', photourl) FROM users WHERE email = @email";
+                parameters = new Dictionary<string, object>
+                {
+                    { "@email", email},
+                };
+
+                result = SqlQuery(query, conn, parameters);
+
+                //Do this because the result has multiple variables
+                string combined = result.ToString() ?? "";
+                var parts = combined.Split(';');
+
+                user = new User
+                {
+                    Id = int.Parse(parts[0]),
+                    Email = parts[1],
+                    Name = parts[2],
+                    PhotoUrl = parts[3]
+                };
+
+                if (!UserStore.Users.Any(u => u.Email == email))
+                    UserStore.Users.Add(user);
+
+            }
 
             var token = GenerateJwtToken(user);
             return Ok(new
