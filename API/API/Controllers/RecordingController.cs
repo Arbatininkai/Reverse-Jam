@@ -114,6 +114,28 @@ namespace API.Controllers
 
             }
 
+            if (lobby.AiRate && (recording.Score == 0 || recording.Score == null))
+            {
+                try
+                {
+                    var song = SongStore.Songs.ElementAtOrDefault(roundIndex);
+
+                    if (!song.Equals(default(Song)) && !string.IsNullOrWhiteSpace(song.Lyrics))
+                    {
+                        var autoScore = await _scoringService.ScoreRecordingAsync(song.Lyrics, filePath);
+                        recording.Score = Math.Round(autoScore, 2);
+                        recording.StatusMessage = $"AI auto-score: {recording.Score:F1}/5";
+                    }
+                    else
+                    {
+                        recording.StatusMessage = "No lyrics found for this song.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    recording.StatusMessage = $"AI lyrics scoring failed: {ex.Message}";
+                }
+            }
 
             await _hubContext.Clients.Group(lobby.LobbyCode).SendAsync("LobbyUpdated", lobby);
 
