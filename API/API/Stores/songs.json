@@ -3,67 +3,78 @@
     "Name": "Crazy",
     "Url": "https://songstorage25.blob.core.windows.net/songs/Gnarls Barkley - Crazy.mp3",
     "Artist": "Gnarls Barkley",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Crazy.jpg"
+    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Crazy.jpg",
+    "Lyrics":
   },
   {
     "Name": "Billie Jean",
     "Url": "https://songstorage25.blob.core.windows.net/songs/Michael Jackson - Billie Jean.mp3",
     "Artist": "Michael Jackson",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Billie jean.jpg"
+    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Billie jean.jpg",
+    "Lyrics":
   },
   {
     "Name": "Without me",
     "Url": "https://songstorage25.blob.core.windows.net/songs/Eminem - Without Me.mp3",
     "Artist": "Eminem",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Without me.jpg"
+    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Without me.jpg",
+    "Lyrics":
   },
   {
     "Name": "Watermelon Sugar",
     "Url": "https://songstorage25.blob.core.windows.net/songs/Harry Styles - Watermelon Sugar.mp3",
     "Artist": "Harry Styles",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Watermelon sugar.jpg"
+    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Watermelon sugar.jpg",
+    "Lyrics":
   },
   {
     "Name": "Believer",
     "Url": "https://songstorage25.blob.core.windows.net/songs/Imagine Dragons - Believer.mp3",
     "Artist": "Imagine Dragons",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Believer.jpg"
+    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Believer.jpg",
+    "Lyrics":
   },
   {
     "Name": "Sexy and I Know It",
     "Url": "https://songstorage25.blob.core.windows.net/songs/LMFAO - Sexy and I Know It.mp3",
     "Artist": "LMFAO",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Sexy and i know ti.jpg"
+    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Sexy and i know ti.jpg",
+    "Lyrics":
   },
   {
     "Name": "Judas",
     "Url": "https://songstorage25.blob.core.windows.net/songs/Lady Gaga - Judas.mp3",
     "Artist": "Lady Gaga",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Judas.jpg"
+    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Judas.jpg",
+    "Lyrics":
   },
   {
     "Name": "Uptown Funk",
     "Url": "https://songstorage25.blob.core.windows.net/songs/Mark Ronson - Uptown Funk.mp3",
     "Artist": "Mark Ronson",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Uptown funk.jpg"
+    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Uptown funk.jpg",
+    "Lyrics":
   },
   {
     "Name": "La la la",
     "Url": "https://songstorage25.blob.core.windows.net/songs/Naughty Boy - La la la.mp3",
     "Artist": "Naughty Boy",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/La la la.jpg"
+    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/La la la.jpg",
+    "Lyrics":
   },
   {
     "Name": "Smells Like Teen Spirit",
     "Url": "https://songstorage25.blob.core.windows.net/songs/Nirvana - Smells Like Teen Spirit.mp3",
     "Artist": "Nirvana",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Smells like teen spirit.jpg"
+    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Smells like teen spirit.jpg",
+    "Lyrics":
   },
   {
     "Name": "Let Her Go",
     "Url": "https://songstorage25.blob.core.windows.net/songs/Passenger  Let Her Go.mp3",
     "Artist": "Passenger",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/let her go.jpg"
+    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/let her go.jpg",
+    "Lyrics":
   },
   {
     "Name": "Sunflower",
@@ -82,18 +93,21 @@
     "Url": "https://songstorage25.blob.core.windows.net/songs/50 Cent - Candy Shop.mp3",
     "Artist": "50 Cent",
     "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Candy shop.jpg"
+    "Lyrics": "I took you to the candy shop. I let you lick the lollipop. Go ahead girl don't you stop. Keep going 'til you hit the spot (whoa)"
   },
   {
     "Name": "Rolling in the Deep",
     "Url": "https://songstorage25.blob.core.windows.net/songs/Adele - Rolling in the Deep.mp3",
     "Artist": "Adele",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Rolling in the deep.jpg"
+    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Rolling in the deep.jpg",
+    "Lyrics":
   },
   {
     "Name": "thank u, next",
     "Url": "https://songstorage25.blob.core.windows.net/songs/Ariana Grande - thank u, next.mp3",
     "Artist": "Ariana Grande",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Thank u, next.jpg"
+    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Thank u, next.jpg",
+    "Lyrics":
   },
   {
     "Name": "Pitbull Terrier",
@@ -105,18 +119,21 @@
     "Name": "Perfect",
     "Url": "https://songstorage25.blob.core.windows.net/songs/Ed Sheeran - Perfect.mp3",
     "Artist": "Ed Sheeran",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Perfect.jpg"
+    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Perfect.jpg",
+    "Lyrics":
   },
   {
     "Name": "Shape of You",
     "Url": "https://songstorage25.blob.core.windows.net/songs/Ed Sheeran - Shape of You.mp3",
     "Artist": "Ed Sheeran",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Shape of you.jpg"
+    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Shape of you.jpg",
+    "Lyrics":
   },
   {
     "Name": "The Real Slim Shady",
     "Url": "https://songstorage25.blob.core.windows.net/songs/Eminem - The Real Slim Shady.mp3",
     "Artist": "Eminem",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/The real slim shady.jpg"
+    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/The real slim shady.jpg",
+    "Lyrics":
   }
 ]
