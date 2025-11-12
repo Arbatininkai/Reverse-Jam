@@ -37,6 +37,17 @@ namespace API.Controllers
             var lobbyScores = LobbyStore.GetOrCreateLobbyScores(lobbyCode);
             var finalScores = lobbyScores.GetFinalScores();
 
+            var winnerId = finalScores.Select(p => p.UserId).FirstOrDefault();
+            var winner = UserStore.Users.FirstOrDefault(u => u.Id == winnerId);
+
+            if (winner != null)
+            {
+                winner.TotalWins++;
+
+                //TODO: Update the database
+                //UserStore.UpdateUser(winner);
+            }
+
             return Ok(new { scores = finalScores });
         }
     }

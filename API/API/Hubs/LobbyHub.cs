@@ -153,7 +153,9 @@ namespace API.Hubs
                 }
             }
 
-            await Clients.Group(lobby.LobbyCode).SendAsync("LobbyUpdated", lobby);
+            var currentPlayerId = lobby.Players[lobby.CurrentPlayerIndex].Id;
+
+            await Clients.Group(lobby.LobbyCode).SendAsync("CurrentPlayerChanged", lobby, currentPlayerId);
         }
 
 
@@ -174,12 +176,15 @@ namespace API.Hubs
                 return;
             }
 
-            // If the owner leaves, make the first person the new onwer
-            if (!lobby.IsOwner(user.Id))
+            var wasOwner = lobby.IsOwner(user.Id);
+
+            lobby.Players.RemoveAll(p => p.Id == user.Id);
+
+            // If owner left, assign a new one
+            if (wasOwner && lobby.Players.Any())
             {
                 lobby.OwnerId = lobby.Players.First().Id;
             }
-            lobby.Players.RemoveAll(p => p.Id == user.Id);
 
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, lobby.LobbyCode);
             await Clients.Group(lobby.LobbyCode).SendAsync("PlayerLeft", user, lobby.OwnerId);

@@ -11,5 +11,6 @@ namespace API.Models
         public string? Email { get; set; } //gali but null
         public string? Name { get; set; }
         public string? PhotoUrl { get; set; }
+        public int TotalWins { get; set; } = 0;
     }
 }

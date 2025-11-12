@@ -1,10 +1,13 @@
 ﻿using API.Hubs;
 using API.Models;
+using API.Services;
 using API.Stores;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.StaticFiles;
+using NWaves.Audio;
+using NWaves.Signals;
 using System;
 using System.IO;
 using System.Linq;
@@ -18,10 +21,12 @@ namespace API.Controllers
     public class RecordingsController : ControllerBase
     {
         private readonly IHubContext<LobbyHub> _hubContext;
+        private readonly AIScoringService _scoringService;
 
-        public RecordingsController(IHubContext<LobbyHub> hubContext)
+        public RecordingsController(IHubContext<LobbyHub> hubContext, AIScoringService scoringService)
         {
             _hubContext = hubContext;
+            _scoringService = scoringService;
         }
 
         [Authorize]
@@ -98,6 +103,18 @@ namespace API.Controllers
             {
                 lobby.RecordingsByRound[roundIndex].Add(recording);
             }
+
+            // Calculate ai score
+            if(lobby.AiRate)
+            {
+                var originalSongText = request.OriginalSongText;
+                var score = await _scoringService.ScoreRecordingAsync(originalSongText, filePath);
+                recording.Score = Math.Round(score, 2);
+                recording.StatusMessage = $"AI score: {recording.Score:F1}/5";
+
+            }
+
+
             await _hubContext.Clients.Group(lobby.LobbyCode).SendAsync("LobbyUpdated", lobby);
 
             return Ok(recording);
