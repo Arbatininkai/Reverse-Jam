@@ -11,6 +11,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
+using Xabe.FFmpeg;
+
 namespace API.Controllers
 {
     [ApiController]
@@ -76,6 +78,17 @@ namespace API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Failed to save file");
             }
+            
+            // Reverse the audio file after saving
+            try
+            {
+                await ReverseAudioFileAsync(filePath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Audio reversal failed: {ex.Message}");
+            }
+
 
             var baseUrl = $"{Request.Scheme}://{Request.Host}";
             var fileUrl = $"{baseUrl}/api/recordings/{lobby.LobbyCode}/{storedFileName}";
@@ -168,5 +181,22 @@ namespace API.Controllers
 
             return Ok(result);
         }
+        private async Task ReverseAudioFileAsync(string inputPath)
+        {
+            var directory = Path.GetDirectoryName(inputPath)!;
+            var fileNameWithoutExt = Path.GetFileNameWithoutExtension(inputPath);
+            var outputPath = Path.Combine(directory, fileNameWithoutExt + "_reversed.m4a");
+
+            // Reverse audio using FFmpeg filter
+            var conversion = await FFmpeg.Conversions.FromSnippet.Convert(inputPath, outputPath);
+            conversion.AddParameter("-af areverse", ParameterPosition.PreInput);
+
+            await conversion.Start();
+
+            // Replace the original file with the reversed version
+            System.IO.File.Delete(inputPath);
+            System.IO.File.Move(outputPath, inputPath);
+        }
+
     }
 }

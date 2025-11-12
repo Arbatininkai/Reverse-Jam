@@ -3,16 +3,36 @@ using API.Models;
 using API.Stores;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
+using API.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Hubs
 {
     public class LobbyHub : Hub
     {
+        private readonly AppDbContext _context;
+        public LobbyHub(AppDbContext context) { _context = context; }
+        
         // Called when a user joins a lobby (by code or auto-match)
         public async Task JoinLobby(string? lobbyCode)
         {
-            var userId = Context.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = UserStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+            var userIdStr = Context.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = UserStore.Users.FirstOrDefault(u => u.Id.ToString() == userIdStr);
+
+            
+            if (user == null)
+            {
+                // 🔁 Fallback to DB → bridge into UserStore
+                if (int.TryParse(userIdStr, out var userId))
+                {
+                    var dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+                    if (dbUser != null)
+                    {
+                        UserStore.Users.Add(dbUser);
+                        user = dbUser;
+                    }
+                }
+            }
 
             if (user == null)
             {
@@ -64,7 +84,7 @@ namespace API.Hubs
                     Id = LobbyStore.Lobbies.Count > 0 ? LobbyStore.Lobbies.Max(l => l.Id) + 1 : 1,
                     Private = false,
                     MaxPlayers = 4,
-                    OwnerId = user.Id
+                    CreatorId = user.Id
                 };
                 newLobby.Players.Add(user);
                 LobbyStore.Lobbies.Add(newLobby);
@@ -138,7 +158,7 @@ namespace API.Hubs
 
             // Only owner can advance
             var userId = Context.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (lobby.OwnerId.ToString() != userId) return;
+            if (lobby.CreatorId.ToString() != userId) return;
 
             if (lobby.CurrentPlayerIndex < lobby.Players.Count - 1)
             {
@@ -177,12 +197,12 @@ namespace API.Hubs
             // If the owner leaves, make the first person the new onwer
             if (!lobby.IsOwner(user.Id))
             {
-                lobby.OwnerId = lobby.Players.First().Id;
+                lobby.CreatorId = lobby.Players.First().Id;
             }
             lobby.Players.RemoveAll(p => p.Id == user.Id);
 
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, lobby.LobbyCode);
-            await Clients.Group(lobby.LobbyCode).SendAsync("PlayerLeft", user, lobby.OwnerId);
+            await Clients.Group(lobby.LobbyCode).SendAsync("PlayerLeft", user, lobby.CreatorId);
         }
 
         public async Task UpdateLobbyWithScores(int lobbyId, object updatedLobby)

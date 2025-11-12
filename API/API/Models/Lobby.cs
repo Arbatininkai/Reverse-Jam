@@ -1,4 +1,6 @@
-﻿namespace API.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace API.Models
 {
     public class Lobby
     {
@@ -16,8 +18,11 @@
         public int CurrentRound { get; set; } = 0;
         public int CurrentPlayerIndex { get; set; } = 0;  // Which player's turn to listen
         public bool HasGameStarted { get; set; } = false;
-        public int OwnerId { get; set; }
+        
+        public int? CreatorId { get; set; }
         public List<User> Players { get; set; } = new List<User>();
+        
+        [NotMapped]
         public List<List<Recording>> RecordingsByRound { get; set; } = new List<List<Recording>>();
     }
 }

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using API.Models;
 
 namespace API.Data;
 
@@ -8,4 +9,7 @@ public class AppDbContext : DbContext
         : base(options)
     {
     }
+    
+    public DbSet<User> Users { get; set; }
+    public DbSet<Lobby> Lobbies { get; set; }
 }

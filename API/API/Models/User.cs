@@ -11,5 +11,8 @@ namespace API.Models
         public string? Email { get; set; } //gali but null
         public string? Name { get; set; }
         public string? PhotoUrl { get; set; }
+        public string? Emoji { get; set; }
+        
+        public ICollection<Lobby>? Lobbies { get; set; }
     }
 }
