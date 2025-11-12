@@ -107,8 +107,8 @@ namespace API.Controllers
             // Calculate ai score
             if(lobby.AiRate)
             {
-                var originalSongText = request.OriginalSongText;
-                var score = await _scoringService.ScoreRecordingAsync(originalSongText, filePath);
+                var lyrics = request.OriginalSongLyrics;
+                var score = await _scoringService.ScoreRecordingAsync(lyrics, filePath);
                 recording.Score = Math.Round(score, 2);
                 recording.StatusMessage = $"AI score: {recording.Score:F1}/5";
 
