@@ -187,13 +187,14 @@ namespace API.Controllers
             var fileNameWithoutExt = Path.GetFileNameWithoutExtension(inputPath);
             var outputPath = Path.Combine(directory, fileNameWithoutExt + "_reversed.m4a");
 
-            // Reverse audio using FFmpeg filter
-            var conversion = await FFmpeg.Conversions.FromSnippet.Convert(inputPath, outputPath);
-            conversion.AddParameter("-af areverse", ParameterPosition.PreInput);
+            var conversion = FFmpeg.Conversions.New()
+                .AddParameter("-i \"" + inputPath + "\"", ParameterPosition.PreInput)   // input
+                .AddParameter("-af areverse")                                          // apply filter
+                .AddParameter("-c:a aac")                                              // ensure M4A codec
+                .SetOutput(outputPath);
 
             await conversion.Start();
 
-            // Replace the original file with the reversed version
             System.IO.File.Delete(inputPath);
             System.IO.File.Move(outputPath, inputPath);
         }

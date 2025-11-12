@@ -29,7 +29,7 @@ namespace API.Extensions
 
         public static bool IsOwner(this Lobby lobby, int userId)
         {
-            return lobby.CreatorId == userId;
+            return lobby.OwnerId == userId;
         }
     }
 }

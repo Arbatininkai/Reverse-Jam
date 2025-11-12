@@ -84,7 +84,7 @@ namespace API.Hubs
                     Id = LobbyStore.Lobbies.Count > 0 ? LobbyStore.Lobbies.Max(l => l.Id) + 1 : 1,
                     Private = false,
                     MaxPlayers = 4,
-                    CreatorId = user.Id
+                    OwnerId = user.Id
                 };
                 newLobby.Players.Add(user);
                 LobbyStore.Lobbies.Add(newLobby);
@@ -158,7 +158,7 @@ namespace API.Hubs
 
             // Only owner can advance
             var userId = Context.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (lobby.CreatorId.ToString() != userId) return;
+            if (lobby.OwnerId.ToString() != userId) return;
 
             if (lobby.CurrentPlayerIndex < lobby.Players.Count - 1)
             {
@@ -197,12 +197,12 @@ namespace API.Hubs
             // If the owner leaves, make the first person the new onwer
             if (!lobby.IsOwner(user.Id))
             {
-                lobby.CreatorId = lobby.Players.First().Id;
+                lobby.OwnerId = lobby.Players.First().Id;
             }
             lobby.Players.RemoveAll(p => p.Id == user.Id);
 
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, lobby.LobbyCode);
-            await Clients.Group(lobby.LobbyCode).SendAsync("PlayerLeft", user, lobby.CreatorId);
+            await Clients.Group(lobby.LobbyCode).SendAsync("PlayerLeft", user, lobby.OwnerId);
         }
 
         public async Task UpdateLobbyWithScores(int lobbyId, object updatedLobby)

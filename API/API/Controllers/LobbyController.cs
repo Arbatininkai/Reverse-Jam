@@ -46,7 +46,7 @@ namespace API.Controllers
                 AiRate = options.AiRate,
                 TotalRounds = options.TotalRounds,
                 HumanRate = options.HumanRate,
-                CreatorId = creator.Id
+                OwnerId = creator.Id
             };
 
             newLobby.Players.Add(creator);
