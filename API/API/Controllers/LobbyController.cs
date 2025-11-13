@@ -136,6 +136,20 @@ namespace API.Controllers
             if (lobby == null)
                 return NotFound("Lobby not found");
 
+            try
+            {
+                var recordingsPath = Path.Combine(Directory.GetCurrentDirectory(), "recordings");
+                if (Directory.Exists(recordingsPath))
+                {
+                    Directory.Delete(recordingsPath, true); 
+                   
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error cleaning up recordings : {ex.Message}");
+            }
+
             // Notify all players that the lobby is deleted
             await _hubContext.Clients.Group((lobby.LobbyCode).ToString()).SendAsync("LobbyDeleted");
 
@@ -144,5 +158,6 @@ namespace API.Controllers
 
             return Ok(new { message = "Lobby deleted successfully" });
         }
+     
     }
 }
