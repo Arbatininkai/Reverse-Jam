@@ -109,12 +109,12 @@ namespace API.Controllers
             {
                 var lyrics = request.OriginalSongLyrics;
                 var score = await _scoringService.ScoreRecordingAsync(lyrics, filePath);
-                recording.Score = Math.Round(score, 2);
-                recording.StatusMessage = $"AI score: {recording.Score:F1}/5";
+                recording.AiScore = Math.Round(score, 2);
+                recording.StatusMessage = $"AI score: {recording.AiScore:F1}/5";
 
             }
 
-            if (lobby.AiRate && (recording.Score == 0 || recording.Score == null))
+            if (lobby.AiRate && (recording.AiScore == 0 || recording.AiScore == null))
             {
                 try
                 {
@@ -123,8 +123,8 @@ namespace API.Controllers
                     if (!song.Equals(default(Song)) && !string.IsNullOrWhiteSpace(song.Lyrics))
                     {
                         var autoScore = await _scoringService.ScoreRecordingAsync(song.Lyrics, filePath);
-                        recording.Score = Math.Round(autoScore, 2);
-                        recording.StatusMessage = $"AI auto-score: {recording.Score:F1}/5";
+                        recording.AiScore = Math.Round(autoScore, 2);
+                        recording.StatusMessage = $"AI auto-score: {recording.AiScore:F1}/5";
                     }
                     else
                     {

@@ -11,7 +11,7 @@ namespace API.Models
         public DateTime UploadedAt { get; set; } = DateTime.UtcNow;
 
 
-        public double? Score { get; set; } = null;
+        public double? AiScore { get; set; } = null;
         public string? StatusMessage { get; set; } = null;
     }
 }
