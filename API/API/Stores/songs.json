@@ -54,14 +54,13 @@
     "Artist": "Mark Ronson",
     "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Uptown funk.jpg",
     "Lyrics": "Girls hit your hallelujah. Girls hit your hallelujah. 'Cause uptown funk gon' give it to you"
-    "
   },
   {
     "Name": "La la la",
     "Url": "https://songstorage25.blob.core.windows.net/songs/Naughty Boy - La la la.mp3",
     "Artist": "Naughty Boy",
     "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/La la la.jpg",
-    "Lyrics": "I'm covering my ears like a kid. When your words mean nothing, I go la la la""
+    "Lyrics": "I'm covering my ears like a kid. When your words mean nothing, I go la la la"
   },
   {
     "Name": "Smells Like Teen Spirit",
@@ -82,7 +81,7 @@
     "Url": "https://songstorage25.blob.core.windows.net/songs/Post Malone - Sunflower.mp3",
     "Artist": "Post Malone",
     "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/sunflower.jpg",
-    "Lyrics": "You're a sunflower. I think your love would be too much""
+    "Lyrics": "You're a sunflower. I think your love would be too much"
   },
   {
     "Name": "Blank Space",
@@ -95,7 +94,7 @@
     "Name": "Candy Shop",
     "Url": "https://songstorage25.blob.core.windows.net/songs/50 Cent - Candy Shop.mp3",
     "Artist": "50 Cent",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Candy shop.jpg"
+    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Candy shop.jpg",
     "Lyrics": "I took you to the candy shop. I let you lick the lollipop. Go ahead girl don't you stop. Keep going 'til you hit the spot (whoa)"
   },
   {
