@@ -5,6 +5,6 @@ namespace API.Models
     public class RecordingUploadRequest
     {
         public IFormFile File { get; set; } = null!;
-        public string? OriginalSongText { get; set; }
+        public string? OriginalSongLyrics { get; set; }
     }
 }

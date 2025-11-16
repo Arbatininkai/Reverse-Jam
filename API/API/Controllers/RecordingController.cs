@@ -21,12 +21,12 @@ namespace API.Controllers
     public class RecordingsController : ControllerBase
     {
         private readonly IHubContext<LobbyHub> _hubContext;
-        private readonly AIScoringService _scoringService;
+        //private readonly AIScoringService _scoringService;
 
-        public RecordingsController(IHubContext<LobbyHub> hubContext, AIScoringService scoringService)
+        public RecordingsController(IHubContext<LobbyHub> hubContext)
         {
             _hubContext = hubContext;
-            _scoringService = scoringService;
+           // _scoringService = scoringService;
         }
 
         [Authorize]
@@ -38,7 +38,7 @@ namespace API.Controllers
             if (file == null || file.Length == 0)
                 return BadRequest("File is required");
 
-            var lobby = LobbyStore.Lobbies.FirstOrDefault(l => l.Id == lobbyId);
+            var lobby = LobbyStore.Lobbies.Values.FirstOrDefault(l => l.Id == lobbyId);
             if (lobby == null)
                 return NotFound("Lobby not found");
 
@@ -105,37 +105,14 @@ namespace API.Controllers
             }
 
             // Calculate ai score
-            if(lobby.AiRate)
+            /*if(lobby.AiRate)
             {
-                var originalSongText = request.OriginalSongText;
-                var score = await _scoringService.ScoreRecordingAsync(originalSongText, filePath);
-                recording.Score = Math.Round(score, 2);
-                recording.StatusMessage = $"AI score: {recording.Score:F1}/5";
+                var lyrics = request.OriginalSongLyrics;
+                var score = await _scoringService.ScoreRecordingAsync(lyrics, filePath);
+                recording.AiScore = Math.Round(score, 2);
+                recording.StatusMessage = $"AI score: {recording.AiScore:F1}/5";
 
-            }
-
-            if (lobby.AiRate && (recording.Score == 0 || recording.Score == null))
-            {
-                try
-                {
-                    var song = SongStore.Songs.ElementAtOrDefault(roundIndex);
-
-                    if (!song.Equals(default(Song)) && !string.IsNullOrWhiteSpace(song.Lyrics))
-                    {
-                        var autoScore = await _scoringService.ScoreRecordingAsync(song.Lyrics, filePath);
-                        recording.Score = Math.Round(autoScore, 2);
-                        recording.StatusMessage = $"AI auto-score: {recording.Score:F1}/5";
-                    }
-                    else
-                    {
-                        recording.StatusMessage = "No lyrics found for this song.";
-                    }
-                }
-                catch (Exception ex)
-                {
-                    recording.StatusMessage = $"AI lyrics scoring failed: {ex.Message}";
-                }
-            }
+            }*/
 
             await _hubContext.Clients.Group(lobby.LobbyCode).SendAsync("LobbyUpdated", lobby);
 
@@ -146,7 +123,7 @@ namespace API.Controllers
         [HttpGet("{lobbyCode}/{fileName}")]
         public IActionResult GetRecording(string lobbyCode, string fileName)
         {
-            var lobby = LobbyStore.Lobbies.FirstOrDefault(l =>
+            var lobby = LobbyStore.Lobbies.Values.FirstOrDefault(l =>
                 l.LobbyCode.Equals(lobbyCode, StringComparison.OrdinalIgnoreCase));
             if (lobby == null)
                 return NotFound("Lobby not found");
@@ -178,7 +155,7 @@ namespace API.Controllers
         [HttpGet("{lobbyCode}/recordings")]
         public IActionResult GetAllRecordings(string lobbyCode)
         {
-            var lobby = LobbyStore.Lobbies.FirstOrDefault(l =>
+            var lobby = LobbyStore.Lobbies.Values.FirstOrDefault(l =>
                 l.LobbyCode.Equals(lobbyCode, StringComparison.OrdinalIgnoreCase));
             if (lobby == null)
                 return NotFound("Lobby not found");

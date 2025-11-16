@@ -41,7 +41,7 @@ namespace API.Controllers
 
             var newLobby = new Lobby
             {
-                Id = LobbyStore.Lobbies.Count > 0 ? LobbyStore.Lobbies.Max(l => l.Id) + 1 : 1,
+                Id = LobbyStore.Lobbies.Count > 0 ? LobbyStore.Lobbies.Values.Max(l => l.Id) + 1 : 1,
                 Private = options.Private, //is frontendo gaunamos reiksmes
                 AiRate = options.AiRate,
                 TotalRounds = options.TotalRounds,
@@ -51,7 +51,7 @@ namespace API.Controllers
 
             newLobby.Players.Add(creator);
 
-            LobbyStore.Lobbies.Add(newLobby);
+            LobbyStore.Lobbies.TryAdd(newLobby.Id, newLobby);
 
             return Ok(newLobby);
         }
@@ -59,7 +59,7 @@ namespace API.Controllers
         [HttpGet("exists/{code}")]
         public IActionResult LobbyExists(string code)
         {
-            var exists = LobbyStore.Lobbies.Any(l =>
+            var exists = LobbyStore.Lobbies.Values.Any(l =>
                 string.Equals(l.LobbyCode.ToString(), code, StringComparison.OrdinalIgnoreCase));
             if (!exists) return NotFound("Lobby not found");
             return Ok();
@@ -78,7 +78,7 @@ namespace API.Controllers
 
             if (!string.IsNullOrEmpty(request.LobbyCode)) //jeigu ne null tai iveda seed
             {
-                var lobby = LobbyStore.Lobbies.FirstOrDefault(l =>
+                var lobby = LobbyStore.Lobbies.Values.FirstOrDefault(l =>
                     string.Equals(l.LobbyCode.ToString(), request.LobbyCode, StringComparison.OrdinalIgnoreCase));
 
                 if (lobby == null)
@@ -94,19 +94,19 @@ namespace API.Controllers
             }
 
             var availableLobbies = LobbyStore.Lobbies //jeigu nenurodyta nieko tai i random meta lobby
-                .Where(l => !l.Private && l.Players.Count < l.MaxPlayers)
+                .Values.Where(l => !l.Private && l.Players.Count < l.MaxPlayers)
                 .ToList();
 
             if (availableLobbies.Count == 0)
             {
                 var newLobby = new Lobby
                 {
-                    Id = LobbyStore.Lobbies.Count > 0 ? LobbyStore.Lobbies.Max(l => l.Id) + 1 : 1,
+                    Id = LobbyStore.Lobbies.Count > 0 ? LobbyStore.Lobbies.Values.Max(l => l.Id) + 1 : 1,
                     Private = false,
                     MaxPlayers = 4
                 };
                 newLobby.Players.Add(user);
-                LobbyStore.Lobbies.Add(newLobby);
+                LobbyStore.Lobbies.TryAdd(newLobby.Id, newLobby);
                 return Ok(newLobby);
             }
 
@@ -132,7 +132,7 @@ namespace API.Controllers
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteLobby([FromBody] int lobbyId)
         {
-            var lobby = LobbyStore.Lobbies.FirstOrDefault(l => l.Id == lobbyId);
+            var lobby = LobbyStore.Lobbies.Values.FirstOrDefault(l => l.Id == lobbyId);
             if (lobby == null)
                 return NotFound("Lobby not found");
 
@@ -140,7 +140,7 @@ namespace API.Controllers
             await _hubContext.Clients.Group((lobby.LobbyCode).ToString()).SendAsync("LobbyDeleted");
 
             // Remove the lobby
-            LobbyStore.Lobbies.Remove(lobby);
+            LobbyStore.Lobbies.TryRemove(lobby.Id, out _);
 
             return Ok(new { message = "Lobby deleted successfully" });
         }

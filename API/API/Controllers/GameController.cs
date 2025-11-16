@@ -1,8 +1,11 @@
 
+using API.Hubs;
 using API.Models;
 using API.Stores;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -10,13 +13,20 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class GameController : ControllerBase
     {
+        private readonly IHubContext<LobbyHub> _hubContext;
+
+        public GameController(IHubContext<LobbyHub> hubContext)
+        {
+            _hubContext = hubContext;
+        }
+
         [HttpPost("submit-votes")]
         public IActionResult SubmitVotes([FromBody] EndRoundRequest request)
         {
             if (request is null || string.IsNullOrWhiteSpace(request.LobbyCode))
                 return BadRequest("LobbyCode is required.");
 
-            var lobby = LobbyStore.Lobbies.FirstOrDefault(l => l.LobbyCode == request.LobbyCode);
+            var lobby = LobbyStore.Lobbies.Values.FirstOrDefault(l => l.LobbyCode == request.LobbyCode);
             if (lobby is null)
                 return NotFound("Lobby not found.");
 
@@ -28,9 +38,9 @@ namespace API.Controllers
         }
 
         [HttpPost("calculate-final-scores")]
-        public IActionResult CalculateFinalScores([FromBody] string lobbyCode)
+        public async Task<IActionResult> CalculateFinalScores([FromBody] string lobbyCode)
         {
-            var lobby = LobbyStore.Lobbies.FirstOrDefault(l => l.LobbyCode == lobbyCode);
+            var lobby = LobbyStore.Lobbies.Values.FirstOrDefault(l => l.LobbyCode == lobbyCode);
             if (lobby is null)
                 return NotFound("Lobby not found.");
 
@@ -47,6 +57,8 @@ namespace API.Controllers
                 //TODO: Update the database
                 //UserStore.UpdateUser(winner);
             }
+            await _hubContext.Clients.Group(lobby.LobbyCode).SendAsync("PlayerWon", winner);
+
 
             return Ok(new { scores = finalScores });
         }
