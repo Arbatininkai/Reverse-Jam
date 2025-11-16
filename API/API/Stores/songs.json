@@ -1,143 +1,151 @@
 [
   {
-    "Name": "Crazy",
-    "Url": "https://songstorage25.blob.core.windows.net/songs/Gnarls Barkley - Crazy.mp3",
-    "Artist": "Gnarls Barkley",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Crazy.jpg",
-    "Lyrics": "I remember when, I remember, I remember when I lost my mind"
-  },
-  {
-    "Name": "Billie Jean",
-    "Url": "https://songstorage25.blob.core.windows.net/songs/Michael Jackson - Billie Jean.mp3",
-    "Artist": "Michael Jackson",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Billie jean.jpg",
-    "Lyrics": "Billie Jean is not my lover. She's just a girl who thinks that I am the one"
-  },
-  {
-    "Name": "Without me",
-    "Url": "https://songstorage25.blob.core.windows.net/songs/Eminem - Without Me.mp3",
-    "Artist": "Eminem",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Without me.jpg",
-    "Lyrics": "He said this looks like a job for me. So everybody just follow me. Cause we need a little controversy. Cause it feels so empty without me"
-  },
-  {
-    "Name": "Watermelon Sugar",
-    "Url": "https://songstorage25.blob.core.windows.net/songs/Harry Styles - Watermelon Sugar.mp3",
-    "Artist": "Harry Styles",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Watermelon sugar.jpg",
-    "Lyrics": "Watermelon sugar high. Watermelon sugar high"
-  },
-  {
-    "Name": "Believer",
-    "Url": "https://songstorage25.blob.core.windows.net/songs/Imagine Dragons - Believer.mp3",
-    "Artist": "Imagine Dragons",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Believer.jpg",
-    "Lyrics": "You made me a, you made me a believer, believer"
-  },
-  {
-    "Name": "Sexy and I Know It",
-    "Url": "https://songstorage25.blob.core.windows.net/songs/LMFAO - Sexy and I Know It.mp3",
-    "Artist": "LMFAO",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Sexy and i know ti.jpg",
-    "Lyrics": "Show it. Show it. Show it. Show it. I'm sexy and I know it"
-  },
-  {
-    "Name": "Judas",
-    "Url": "https://songstorage25.blob.core.windows.net/songs/Lady Gaga - Judas.mp3",
-    "Artist": "Lady Gaga",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Judas.jpg",
-    "Lyrics": "Judas, Judas-ah-ah. Judas, Judas-ah-ah"
-  },
-  {
-    "Name": "Uptown Funk",
-    "Url": "https://songstorage25.blob.core.windows.net/songs/Mark Ronson - Uptown Funk.mp3",
-    "Artist": "Mark Ronson",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Uptown funk.jpg",
-    "Lyrics": "Girls hit your hallelujah. Girls hit your hallelujah. 'Cause uptown funk gon' give it to you"
-    "
-  },
-  {
-    "Name": "La la la",
-    "Url": "https://songstorage25.blob.core.windows.net/songs/Naughty Boy - La la la.mp3",
-    "Artist": "Naughty Boy",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/La la la.jpg",
-    "Lyrics": "I'm covering my ears like a kid. When your words mean nothing, I go la la la""
-  },
-  {
-    "Name": "Smells Like Teen Spirit",
-    "Url": "https://songstorage25.blob.core.windows.net/songs/Nirvana - Smells Like Teen Spirit.mp3",
-    "Artist": "Nirvana",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Smells like teen spirit.jpg",
-    "Lyrics": "And i forget just why I taste"
-  },
-  {
-    "Name": "Let Her Go",
-    "Url": "https://songstorage25.blob.core.windows.net/songs/Passenger  Let Her Go.mp3",
-    "Artist": "Passenger",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/let her go.jpg",
-    "Lyrics": "But you only need the light when it's burning low. Only miss the sun when it starts to snow. Only know you love her when you let her go"
-  },
-  {
-    "Name": "Sunflower",
-    "Url": "https://songstorage25.blob.core.windows.net/songs/Post Malone - Sunflower.mp3",
-    "Artist": "Post Malone",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/sunflower.jpg",
-    "Lyrics": "You're a sunflower. I think your love would be too much""
-  },
-  {
-    "Name": "Blank Space",
-    "Url": "https://songstorage25.blob.core.windows.net/songs/Taylor Swift - Blank Space.mp3",
-    "Artist": "Taylor Swift",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/blank space.jpg",
-    "Lyrics": "And i got a blank space baby. ANd i'll write your name"
-  },
-  {
-    "Name": "Candy Shop",
-    "Url": "https://songstorage25.blob.core.windows.net/songs/50 Cent - Candy Shop.mp3",
-    "Artist": "50 Cent",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Candy shop.jpg"
-    "Lyrics": "I took you to the candy shop. I let you lick the lollipop. Go ahead girl don't you stop. Keep going 'til you hit the spot (whoa)"
-  },
-  {
     "Name": "Rolling in the Deep",
-    "Url": "https://songstorage25.blob.core.windows.net/songs/Adele - Rolling in the Deep.mp3",
+    "Url": "https://song.blob.core.windows.net/songs/Adele - Rolling in the Deep.mp3",
     "Artist": "Adele",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Rolling in the deep.jpg",
+    "CoverUrl": "https://song.blob.core.windows.net/covers/Rolling in the deep.jpg",
     "Lyrics": "We could have had it all. Rolling in the deep"
   },
   {
-    "Name": "thank u, next",
-    "Url": "https://songstorage25.blob.core.windows.net/songs/Ariana Grande - thank u, next.mp3",
-    "Artist": "Ariana Grande",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Thank u, next.jpg",
-    "Lyrics": "thank u, next next. Thank u, next next"
-  },
-  {
-    "Name": "Pitbull Terrier",
-    "Url": "https://songstorage25.blob.core.windows.net/songs/Die Antwoord   Pitbull Terrier.mp3",
-    "Artist": "Die Antwoord",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Pitbull terrier.jpg",
-    "Lyrics": "I am a pitbull terrier. Pitbull terrier"
+    "Name": "Count on me",
+    "Url": "https://song.blob.core.windows.net/songs/Bruno Mars - Count on Me.mp3",
+    "Artist": "Bruno Mars",
+    "CoverUrl": "https://song.blob.core.windows.net/covers/count on me.jpg",
+    "Lyrics": "You can count on me like one two three"
   },
   {
     "Name": "Perfect",
-    "Url": "https://songstorage25.blob.core.windows.net/songs/Ed Sheeran - Perfect.mp3",
+    "Url": "https://song.blob.core.windows.net/songs/Ed Sheeran - Perfect.mp3",
     "Artist": "Ed Sheeran",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Perfect.jpg",
+    "CoverUrl": "https://song.blob.core.windows.net/covers/Perfect.jpg",
     "Lyrics": "Cause we were just kids when we fell in love"
   },
   {
     "Name": "Shape of You",
-    "Url": "https://songstorage25.blob.core.windows.net/songs/Ed Sheeran - Shape of You.mp3",
+    "Url": "https://song.blob.core.windows.net/songs/Ed Sheeran - Shape of You.mp3",
     "Artist": "Ed Sheeran",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/Shape of you.jpg",
+    "CoverUrl": "https://song.blob.core.windows.net/covers/Shape of you.jpg",
     "Lyrics": "I'm in love with the shape of you. We push and pull like a magnet do"
   },
   {
-    "Name": "The Real Slim Shady",
-    "Url": "https://songstorage25.blob.core.windows.net/songs/Eminem - The Real Slim Shady.mp3",
+    "Name": "Photograph",
+    "Url": "https://song.blob.core.windows.net/songs/Ed Sheeran - Photograph.mp3",
+    "Artist": "Ed Sheeran",
+    "CoverUrl": "https://song.blob.core.windows.net/covers/photograph.jpg",
+    "Lyrics": "We keep this in a photograph. We made these memories for ourselves"
+  },
+  {
+    "Name": "Crazy",
+    "Url": "https://song.blob.core.windows.net/songs/Gnarls Barkley - Crazy.mp3",
+    "Artist": "Gnarls Barkley",
+    "CoverUrl": "https://song.blob.core.windows.net/covers/Crazy.jpg",
+    "Lyrics": "I remember when, I remember, I remember when I lost my mind"
+  },
+  {
+    "Name": "Without me",
+    "Url": "https://song.blob.core.windows.net/songs/Eminem - Without Me.mp3",
     "Artist": "Eminem",
-    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/The real slim shady.jpg",
+    "CoverUrl": "https://song.blob.core.windows.net/covers/Without me.jpg",
+    "Lyrics": "He said this looks like a job for me. So everybody just follow me. Cause we need a little controversy. Cause it feels so empty without me"
+  },
+  {
+    "Name": "The Real Slim Shady",
+    "Url": "https://song.blob.core.windows.net/songs/Eminem - The Real Slim Shady.mp3",
+    "Artist": "Eminem",
+    "CoverUrl": "https://song.blob.core.windows.net/covers/The real slim shady.jpg",
     "Lyrics": "Please stand up. Please stand up. Please stand up"
+  },
+  {
+    "Name": "Watermelon Sugar",
+    "Url": "https://song.blob.core.windows.net/songs/Harry Styles - Watermelon Sugar.mp3",
+    "Artist": "Harry Styles",
+    "CoverUrl": "https://song.blob.core.windows.net/covers/Watermelon sugar.jpg",
+    "Lyrics": "Watermelon sugar high. Watermelon sugar high"
+  },
+  {
+    "Name": "Believer",
+    "Url": "https://song.blob.core.windows.net/songs/Imagine Dragons - Believer.mp3",
+    "Artist": "Imagine Dragons",
+    "CoverUrl": "https://song.blob.core.windows.net/covers/Believer.jpg",
+    "Lyrics": "You made me a, you made me a believer, believer"
+  },
+  {
+    "Name": "Radioactive",
+    "Url": "https://song.blob.core.windows.net/songs/Imagine Dragons - Radioactive.mp3",
+    "Artist": "Imagine Dragons",
+    "CoverUrl": "https://song.blob.core.windows.net/covers/radioactive.jpg",
+    "Lyrics": "I'm waking up i feel it in my bones"
+  },
+  {
+    "Name": "Don't stop believing",
+    "Url": "https://song.blob.core.windows.net/songs/Journey - Don't Stop Believin'.mp3",
+    "Artist": "Journey",
+    "CoverUrl": "https://song.blob.core.windows.net/covers/dont stopbelievin.jpg",
+    "Lyrics": "Just a small town girl, livin in a lonely world"
+  },
+  {
+    "Name": "Roar",
+    "Url": "https://song.blob.core.windows.net/songs/Katy Perry - Roar.mp3",
+    "Artist": "Katy Perry",
+    "CoverUrl": "https://song.blob.core.windows.net/covers/roar.jpg",
+    "Lyrics": "I've got the eye of the tiger the fire"
+  },
+  {
+    "Name": "Sexy and I Know It",
+    "Url": "https://song.blob.core.windows.net/songs/LMFAO - Sexy and I Know It.mp3",
+    "Artist": "LMFAO",
+    "CoverUrl": "https://song.blob.core.windows.net/covers/Sexy and i know ti.jpg",
+    "Lyrics": "Show it. Show it. Show it. Show it. I'm sexy and I know it"
+  },
+  {
+    "Name": "Uptown Funk",
+    "Url": "https://song.blob.core.windows.net/songs/Mark Ronson - Uptown Funk.mp3",
+    "Artist": "Mark Ronson",
+    "CoverUrl": "https://song.blob.core.windows.net/covers/Uptown funk.jpg",
+    "Lyrics": "Girls hit your hallelujah. Girls hit your hallelujah. 'Cause uptown funk gon' give it to you",
+    "
+  },
+  {
+    "Name": "Counting Stars",
+    "Url": "https://song.blob.core.windows.net/songs/songs/OneRepublic - Counting Stars.mp3",
+    "Artist": "OneRepublic",
+    "CoverUrl": "https://song.blob.core.windows.net/covers/counting stars.jpg",
+    "Lyrics": "Lately i've been i've been losing sleep. dreaming about the things that we could be"
+  },
+  {
+    "Name": "Let Her Go",
+    "Url": "https://song.blob.core.windows.net/songs/songs/Passenger  Let Her Go.mp3",
+    "Artist": "Passenger",
+    "CoverUrl": "https://song.blob.core.windows.net/covers/let her go.jpg",
+    "Lyrics": "But you only need the light when it's burning low. Only miss the sun when it starts to snow. Only know you love her when you let her go"
+  },
+  {
+    "Name": "Sunflower",
+    "Url": "https://song.blob.core.windows.net/songs/songs/Post Malone - Sunflower.mp3",
+    "Artist": "Post Malone",
+    "CoverUrl": "https://songstorage25.blob.core.windows.net/covers/sunflower.jpg",
+    "Lyrics": "You're a sunflower. I think your love would be too much",
+    "
+  },
+  {
+    "Name": "Someone like you",
+    "Url": "https://song.blob.core.windows.net/songs/songs/Someone Like You - Adele.mp3",
+    "Artist": "Adele",
+    "CoverUrl": "https://song.blob.core.windows.net/covers/someone like you.jpg",
+    "Lyrics": "Nvermind i'll find someone like you"
+  },
+  {
+    "Name": "Blank Space",
+    "Url": "https://song.blob.core.windows.net/songs/songs/Taylor Swift - Blank Space.mp3",
+    "Artist": "Taylor Swift",
+    "CoverUrl": "https://song.blob.core.windows.net/covers/blank space.jpg",
+    "Lyrics": "And i got a blank space baby. ANd i'll write your name"
+  },
+  {
+    "Name": "Blinding lights",
+    "Url": "https://song.blob.core.windows.net/songs/songs/The weekend - Blinding Lights.mp3",
+    "Artist": "The weekend",
+    "CoverUrl": "https://song.blob.core.windows.net/covers/blinding lights.jpg",
+    "Lyrics": "Oh And i said ohh i'm blinded by the lights"
   }
 ]
