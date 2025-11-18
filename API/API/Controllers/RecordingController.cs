@@ -1,10 +1,13 @@
-﻿using API.Hubs;
+﻿using API.Data;
+using API.Hubs;
 using API.Models;
 using API.Stores;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
 using System.Linq;
@@ -20,10 +23,12 @@ namespace API.Controllers
     public class RecordingsController : ControllerBase
     {
         private readonly IHubContext<LobbyHub> _hubContext;
+        private readonly AppDbContext _dbContext;
 
-        public RecordingsController(IHubContext<LobbyHub> hubContext)
+        public RecordingsController(IHubContext<LobbyHub> hubContext, AppDbContext dbContext)
         {
             _hubContext = hubContext;
+            _dbContext = dbContext;
         }
 
         [Authorize]
@@ -35,12 +40,17 @@ namespace API.Controllers
             if (file == null || file.Length == 0)
                 return BadRequest("File is required");
 
-            var lobby = LobbyStore.Lobbies.FirstOrDefault(l => l.Id == lobbyId);
+            var lobby = await _dbContext.Lobbies
+                .Include(l => l.Recordings)
+                .Include(l => l.Players)
+                .FirstOrDefaultAsync(l => l.Id == lobbyId);
+
             if (lobby == null)
                 return NotFound("Lobby not found");
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = UserStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+
             if (user == null)
                 return Unauthorized("User not found");
 
@@ -50,20 +60,8 @@ namespace API.Controllers
             var recordingsFolder = Path.Combine(Directory.GetCurrentDirectory(), "recordings", lobby.LobbyCode);
             Directory.CreateDirectory(recordingsFolder);
 
-            while (lobby.RecordingsByRound.Count <= roundIndex)
-                lobby.RecordingsByRound.Add(new List<Recording>());
-
-            var existing = lobby.RecordingsByRound[roundIndex].FirstOrDefault(r => r.UserId == user.Id);
-            if (existing != null)
-            {
-                try
-                {
-                    var oldPath = Path.Combine(recordingsFolder, existing.FileName);
-                    if (System.IO.File.Exists(oldPath))
-                        System.IO.File.Delete(oldPath);
-                }
-                catch { }
-            }
+            var round = roundIndex + 1;
+          
 
             var extension = Path.GetExtension(file.FileName);
             var storedFileName = $"{user.Id}_{Guid.NewGuid()}{extension}";
@@ -98,19 +96,15 @@ namespace API.Controllers
                 UserId = user.Id,
                 FileName = storedFileName,
                 Url = fileUrl,
-                UploadedAt = DateTime.UtcNow
+                UploadedAt = DateTime.UtcNow,
+                Round = round,
+                LobbyId = lobbyId,
             };
 
-            if (existing != null)
-            {
-                existing.FileName = recording.FileName;
-                existing.Url = recording.Url;
-                existing.UploadedAt = recording.UploadedAt;
-            }
-            else
-            {
-                lobby.RecordingsByRound[roundIndex].Add(recording);
-            }
+            lobby.Recordings.Add(recording);
+            _dbContext.Recordings.Add(recording);
+            await _dbContext.SaveChangesAsync();
+            
             await _hubContext.Clients.Group(lobby.LobbyCode).SendAsync("LobbyUpdated", lobby);
 
             return Ok(recording);
@@ -120,7 +114,7 @@ namespace API.Controllers
         [HttpGet("{lobbyCode}/{fileName}")]
         public IActionResult GetRecording(string lobbyCode, string fileName)
         {
-            var lobby = LobbyStore.Lobbies.FirstOrDefault(l =>
+            var lobby = LobbyStore.Lobbies.Values.FirstOrDefault(l =>
                 l.LobbyCode.Equals(lobbyCode, StringComparison.OrdinalIgnoreCase));
             if (lobby == null)
                 return NotFound("Lobby not found");
@@ -150,10 +144,13 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet("{lobbyCode}/recordings")]
-        public IActionResult GetAllRecordings(string lobbyCode)
+        public async Task<IActionResult> GetAllRecordings(string lobbyCode)
         {
-            var lobby = LobbyStore.Lobbies.FirstOrDefault(l =>
-                l.LobbyCode.Equals(lobbyCode, StringComparison.OrdinalIgnoreCase));
+            var lobby = await _dbContext.Lobbies
+                .Include(l => l.Recordings)
+                .Include(l => l.Players)
+                .FirstOrDefaultAsync(l => l.LobbyCode == lobbyCode);
+
             if (lobby == null)
                 return NotFound("Lobby not found");
 
@@ -168,16 +165,19 @@ namespace API.Controllers
                     return Forbid();
             }
 
-            var result = lobby.RecordingsByRound
-                .SelectMany((roundList, roundIndex) => roundList.Select(r => new
+            var result = lobby.Recordings
+                .GroupBy(r => r.Round)
+                .OrderBy(g => g.Key)
+                .SelectMany(g => g.Select(r => new
                 {
                     r.UserId,
                     r.FileName,
                     r.Url,
                     r.UploadedAt,
-                    Round = roundIndex + 1
+                    r.Round
                 }))
                 .ToList();
+
 
             return Ok(result);
         }

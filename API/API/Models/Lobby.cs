@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace API.Models
 {
@@ -6,7 +7,7 @@ namespace API.Models
     {
         public int Id { get; set; }
 
-        public string LobbyCode { get; set; } = Guid.NewGuid().ToString("N")[..6].ToUpper();
+        public string LobbyCode { get; set; } = Guid.NewGuid().ToString("N")[..6].ToUpperInvariant();
 
         //defaultines reiksmes, is frontendo bus galima gaut kitokias reiksmes
         public bool Private { get; set; } = false;
@@ -19,8 +20,8 @@ namespace API.Models
         public int CurrentPlayerIndex { get; set; } = 0;  // Which player's turn to listen
         public bool HasGameStarted { get; set; } = false;
         public int OwnerId { get; set; }
+
         public List<User> Players { get; set; } = new List<User>();
-        [NotMapped]
-        public List<List<Recording>> RecordingsByRound { get; set; } = new List<List<Recording>>();
+        public ICollection<Recording> Recordings { get; set; } = new List<Recording>();
     }
 }
