@@ -1,8 +1,9 @@
-﻿using API.Models;
-using System.Collections.Generic;
-using System.Text.Json;
-using System.IO;
+﻿using API.Exceptions;
+using API.Models;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
 
 namespace API.Stores
 {
@@ -35,17 +36,35 @@ namespace API.Stores
                 var result = new List<Song>();
                 await foreach (var song in JsonSerializer.DeserializeAsyncEnumerable<Song>(fs, options))
                 {
-                    if (!string.IsNullOrWhiteSpace(song.Name) && !string.IsNullOrWhiteSpace(song.Url))
-                        result.Add(song);
-                }
+                    if (string.IsNullOrWhiteSpace(song.Name) || string.IsNullOrWhiteSpace(song.Url))
+                        throw new InvalidSongFormatException("Song entry in JSON file has invalid or missing Name/Url.");
 
+                    result.Add(song);
+                }
                 return result;
+            }
+            catch (InvalidSongFormatException ex)
+            {
+                LogError(ex);
+                return new List<Song>();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading songs: {ex.Message}");
+                LogError(ex);
                 return new List<Song>();
             }
+
         }
+        private static void LogError(Exception ex)
+        {
+            var logFolder = Path.Combine(AppContext.BaseDirectory, "logs");
+            Directory.CreateDirectory(logFolder);
+
+            var logFile = Path.Combine(logFolder, "errors.txt");
+
+            var content = $"[{DateTime.Now}] {ex.GetType().Name}: {ex.Message}{Environment.NewLine}";
+            File.AppendAllText(logFile, content);
+        }
+
     }
 }
