@@ -49,10 +49,17 @@ namespace API.Controllers
                 return NotFound("Lobby not found");
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+            if (!int.TryParse(userId, out var uid))
+                return Unauthorized("Invalid user token");
+
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == uid);
 
             if (user == null)
+            {
+                Console.WriteLine("ERROR: User not found in DB, but token exists.");
                 return Unauthorized("User not found");
+            }
+
 
             if (!lobby.Players.Any(p => p.Id == user.Id))
                 return Forbid("User is not a participant of this lobby");
@@ -94,10 +101,12 @@ namespace API.Controllers
             var recording = new Recording
             {
                 UserId = user.Id,
+                User = user,
                 FileName = storedFileName,
                 Url = fileUrl,
                 UploadedAt = DateTime.UtcNow,
                 Round = round,
+                Lobby = lobby,
                 LobbyId = lobbyId,
             };
 

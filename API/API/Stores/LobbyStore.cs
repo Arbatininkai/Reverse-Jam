@@ -9,13 +9,14 @@ namespace API.Stores
         public static Dictionary<string, Dictionary<int, List<VoteDto>>> Votes { get; set; }
             = new Dictionary<string, Dictionary<int, List<VoteDto>>>();
 
-      
-        public static List<LobbyScores> AllLobbyScores { get; set; } = new List<LobbyScores>();
 
-        
+        public static ConcurrentDictionary<string, LobbyScores> AllLobbyScores { get; set; } = new();
+
+
         public static LobbyScores? GetLobbyScores(string lobbyCode)
         {
-            return AllLobbyScores.FirstOrDefault(ls => ls.LobbyCode == lobbyCode);
+            AllLobbyScores.TryGetValue(lobbyCode, out var scores);
+            return scores;
         }
 
         
@@ -25,7 +26,7 @@ namespace API.Stores
             if (lobbyScores == null)
             {
                 lobbyScores = new LobbyScores { LobbyCode = lobbyCode };
-                AllLobbyScores.Add(lobbyScores);
+                AllLobbyScores.TryAdd(lobbyCode, lobbyScores);
             }
             return lobbyScores;
         }

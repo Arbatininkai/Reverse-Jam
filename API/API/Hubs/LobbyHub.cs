@@ -11,7 +11,13 @@ namespace API.Hubs
     public class LobbyHub : Hub
     {
         private readonly AppDbContext _context;
-        public LobbyHub(AppDbContext context) { _context = context; }
+        private readonly IGroupManager? _groupsMock;
+        private IGroupManager GroupsService => _groupsMock ?? Groups!;
+        public LobbyHub(AppDbContext context, IGroupManager? groupsMock = null) 
+        { 
+            _context = context;
+            _groupsMock = groupsMock; 
+        }
         
         // Called when a user joins a lobby (by code or auto-match)
         public async Task JoinLobby(string? lobbyCode)
@@ -65,7 +71,7 @@ namespace API.Hubs
                     await _context.SaveChangesAsync();
                 }
 
-                await Groups.AddToGroupAsync(Context.ConnectionId, lobby.LobbyCode);
+                await GroupsService.AddToGroupAsync(Context.ConnectionId, lobby.LobbyCode);
                 await Clients.Group(lobby.LobbyCode).SendAsync("PlayerJoined", user);
                 await Clients.Caller.SendAsync("JoinedLobby", lobby);
                 return;
@@ -91,7 +97,7 @@ namespace API.Hubs
                 await _context.SaveChangesAsync();
                 LobbyStore.Lobbies.TryAdd(newLobby.Id, newLobby);
 
-                await Groups.AddToGroupAsync(Context.ConnectionId, newLobby.LobbyCode);
+                await GroupsService.AddToGroupAsync(Context.ConnectionId, newLobby.LobbyCode);
                 await Clients.Caller.SendAsync("JoinedLobby", newLobby);
                 return;
             }
@@ -110,7 +116,7 @@ namespace API.Hubs
                 await _context.SaveChangesAsync();
             }
 
-            await Groups.AddToGroupAsync(Context.ConnectionId, chosenLobby.LobbyCode);
+            await GroupsService.AddToGroupAsync(Context.ConnectionId, chosenLobby.LobbyCode);
             await Clients.Group(chosenLobby.LobbyCode).SendAsync("PlayerJoined", user);
             await Clients.Caller.SendAsync("JoinedLobby", chosenLobby);
         }
@@ -157,6 +163,7 @@ namespace API.Hubs
                 songs.Add(song);
             }
             await _context.SaveChangesAsync();
+            LobbyStore.Lobbies.AddOrUpdate(lobby.Id, lobby, (key, existingLobby) => lobby);
             await Clients.Group(lobby.LobbyCode).SendAsync("GameStarted", lobby.Id, songs);
         }
 
@@ -185,6 +192,7 @@ namespace API.Hubs
             }
             _context.Lobbies.Update(lobby);
             await _context.SaveChangesAsync();
+            LobbyStore.Lobbies.AddOrUpdate(lobby.Id, lobby, (key, existingLobby) => lobby);
             await Clients.Group(lobby.LobbyCode).SendAsync("LobbyUpdated", lobby);
         }
 
@@ -209,31 +217,33 @@ namespace API.Hubs
                     .Include(l => l.Players)
                     .Include(l => l.Recordings)
                     .FirstOrDefaultAsync(l => l.Id == lobbyId);
+
             if (lobby == null)
             {
                 await Clients.Caller.SendAsync("Error", "No lobby found");
                 return;
             }
+            
+            var playerToRemove = lobby.Players.FirstOrDefault(p => p.Id == user.Id);
+
+            if (playerToRemove == null) return;
+
             var wasOwner = lobby.IsOwner(user.Id);
 
-            var playerToRemove = lobby.Players.FirstOrDefault(p => p.Id == user.Id);
-            if (playerToRemove != null)
-            {
-                lobby.Players.Remove(playerToRemove);
-                _context.Entry(playerToRemove).State = EntityState.Detached;
-            }
-                
+            lobby.Players.Remove(playerToRemove);
 
             // If owner left, assign a new one
             if (wasOwner && lobby.Players.Any())
             {
                 lobby.OwnerId = lobby.Players.First().Id;
             }
-            _context.Lobbies.Update(lobby);
             await _context.SaveChangesAsync();
+                                      
+            LobbyStore.Lobbies.AddOrUpdate(lobby.Id, lobby, (key, existingLobby) => lobby);
 
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, lobby.LobbyCode);
-            await Clients.Group(lobby.LobbyCode).SendAsync("PlayerLeft", user, lobby.OwnerId);
+            await GroupsService.RemoveFromGroupAsync(Context.ConnectionId, lobby.LobbyCode);
+            await Clients.Group(lobby.LobbyCode).SendAsync("PlayerLeft", user, lobby.OwnerId, lobby);
+            await Clients.Caller.SendAsync("YouLeft");
         }
 
         public async Task UpdateLobbyWithScores(int lobbyId, object updatedLobby)
@@ -261,8 +271,7 @@ namespace API.Hubs
 
             
             await Clients.Group(lobby.LobbyCode).SendAsync("PlayerVoted");
-
-           
+   
         }
     }
 }

@@ -22,6 +22,7 @@ namespace API.Models
         public int OwnerId { get; set; }
 
         public List<User> Players { get; set; } = new List<User>();
+        [NotMapped]
         public ICollection<Recording> Recordings { get; set; } = new List<Recording>();
     }
 }

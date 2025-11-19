@@ -5,6 +5,7 @@ using API.Models;
 using API.Stores;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Security.Claims;
@@ -24,13 +25,14 @@ namespace API.Controllers
             _dbContext = dbContext;
         }
 
+        [Authorize]
         [HttpPost("submit-votes")]
-        public IActionResult SubmitVotes([FromBody] EndRoundRequest request)
+        public async Task<IActionResult> SubmitVotes([FromBody] EndRoundRequest request)
         {
             if (request is null || string.IsNullOrWhiteSpace(request.LobbyCode))
                 return BadRequest("LobbyCode is required.");
 
-            var lobby = LobbyStore.Lobbies.Values.FirstOrDefault(l => l.LobbyCode == request.LobbyCode);
+            var lobby = await _dbContext.Lobbies.FirstOrDefaultAsync(l => l.LobbyCode == request.LobbyCode);
             if (lobby is null)
                 return NotFound("Lobby not found.");
 
@@ -41,13 +43,18 @@ namespace API.Controllers
             return Ok(new { message = "Votes submitted" });
         }
 
+        [Authorize]
         [HttpPost("calculate-final-scores")]
         public async Task<IActionResult> CalculateFinalScores([FromBody] string lobbyCode)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdStr))
+                return Unauthorized("No user ID found in token.");
 
-            var user = await _dbContext.Users.FindAsync(int.Parse(userId));
-            var lobby = _dbContext.Lobbies.FirstOrDefault(l => l.LobbyCode == lobbyCode);
+            int userId = int.Parse(userIdStr);
+            var user = await _dbContext.Users.FindAsync(userId);
+
+            var lobby = await _dbContext.Lobbies.FirstOrDefaultAsync(l => l.LobbyCode == lobbyCode);
             if (lobby is null)
                 return NotFound("Lobby not found.");
 
@@ -64,7 +71,7 @@ namespace API.Controllers
                 _dbContext.Update(winner);
                 await _dbContext.SaveChangesAsync();
             }
-            await _hubContext.Clients.Group(lobby.LobbyCode).SendAsync("PlayerWon", winner);
+            await _hubContext.Clients.Group(lobbyCode).SendAsync("PlayerWon", winner);
 
             return Ok(new { scores = finalScores });
         }

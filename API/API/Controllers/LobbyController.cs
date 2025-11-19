@@ -36,7 +36,7 @@ namespace API.Controllers
             // paimam prisijungusio user info iš tokeno
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var email = User.FindFirstValue(ClaimTypes.Email);
-            var creator = await _dbContext.Users.FindAsync(int.Parse(userId));
+            var creator = await _dbContext.Users.FindAsync(int.Parse(userId!));
 
             if (creator == null)
             {
@@ -77,13 +77,13 @@ namespace API.Controllers
 
             if (lobby == null)
                  return NotFound("Lobby not found");
-            
 
             _dbContext.Lobbies.Remove(lobby);
+
             await _dbContext.SaveChangesAsync();
 
             // Remove the lobby in memory
-            //LobbyStore.Lobbies.TryRemove(lobby.Id, out _);
+            LobbyStore.Lobbies.TryRemove(lobby.Id, out _);
 
             // Notify all players that the lobby is deleted
             await _hubContext.Clients.Group((lobby.LobbyCode).ToString()).SendAsync("LobbyDeleted");

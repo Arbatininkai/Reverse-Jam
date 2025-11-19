@@ -1,29 +1,25 @@
+using System.Collections.Concurrent;
+
 namespace API.Models
 {
     public class LobbyScores
     {
         public string LobbyCode { get; set; } = string.Empty;
-        public List<PlayerScore> PlayerScores { get; set; } = new();
+        public ConcurrentDictionary<int, PlayerScore> PlayerScores { get; set; }
+                    = new ConcurrentDictionary<int, PlayerScore>();
 
         public PlayerScore GetOrCreatePlayerScore(int userId, string? playerName = null)
         {
-            var playerScore = PlayerScores.FirstOrDefault(ps => ps.UserId == userId);
-
-            if (playerScore == null)
-            {
-                playerScore = new PlayerScore
-                {
-                    UserId = userId,
-                    PlayerName = playerName
-                };
-                PlayerScores.Add(playerScore);
-            }
-            else if (!string.IsNullOrEmpty(playerName))
-            {
-                playerScore.PlayerName = playerName;
-            }
-
-            return playerScore;
+            return PlayerScores.AddOrUpdate(
+               userId,
+               _ => new PlayerScore { UserId = userId, PlayerName = playerName },
+               (_, existing) =>
+               {
+                   if (!string.IsNullOrEmpty(playerName))
+                       existing.PlayerName = playerName;
+                   return existing;
+               }
+           );
         }
 
         public void AddVotes(List<VoteDto> votes, int round)
@@ -37,7 +33,7 @@ namespace API.Models
 
         public List<ScoreEntry> GetFinalScores()
         {
-            return PlayerScores
+            return PlayerScores.Values
                 .Select(ps => new ScoreEntry
                 {
                     UserId = ps.UserId,
