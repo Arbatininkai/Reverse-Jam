@@ -35,4 +35,11 @@
 	
 	<ItemGroup>
 	  <Folder Include="recordings\" />
-	</ItemGroup></Project>
+	</ItemGroup>
+
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+			<_Parameter1>API.Tests</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+</Project>
