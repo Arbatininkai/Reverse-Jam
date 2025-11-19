@@ -3,24 +3,28 @@ namespace API.Models
     public class LobbyScores
     {
         public string LobbyCode { get; set; } = string.Empty;
-        public List<PlayerScore> PlayerScores { get; set; } = new();
+        public List<PlayerScore<User, RoundScore>> PlayerScores { get; set; } = new();
 
-        public PlayerScore GetOrCreatePlayerScore(int userId, string? playerName = null)
+        public PlayerScore<User, RoundScore> GetOrCreatePlayerScore(int userId, string? playerName = null)
         {
             var playerScore = PlayerScores.FirstOrDefault(ps => ps.UserId == userId);
 
             if (playerScore == null)
             {
-                playerScore = new PlayerScore
+                playerScore = new PlayerScore<User, RoundScore>
                 {
-                    UserId = userId,
-                    PlayerName = playerName
+                    Player = new User
+                    {
+                        Id = userId,
+                        Name = playerName
+                    }
+                   
                 };
                 PlayerScores.Add(playerScore);
             }
-            else if (!string.IsNullOrEmpty(playerName))
+            else if (!string.IsNullOrEmpty(playerName) && playerScore.Player != null)
             {
-                playerScore.PlayerName = playerName;
+                playerScore.Player.Name = playerName;
             }
 
             return playerScore;

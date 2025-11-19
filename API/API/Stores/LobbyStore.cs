@@ -2,23 +2,23 @@
 
 namespace API.Stores
 {
-    public static class LobbyStore
+    public  class LobbyStore : ILobbyStore
     {
-        public static List<Lobby> Lobbies { get; set; } = new List<Lobby>();
-        public static Dictionary<string, Dictionary<int, List<VoteDto>>> Votes { get; set; }
+        public  List<Lobby> Lobbies { get; } = new List<Lobby>();
+        public Dictionary<string, Dictionary<int, List<VoteDto>>> Votes { get; }
             = new Dictionary<string, Dictionary<int, List<VoteDto>>>();
 
       
-        public static List<LobbyScores> AllLobbyScores { get; set; } = new List<LobbyScores>();
+        public List<LobbyScores> AllLobbyScores { get; } = new List<LobbyScores>();
 
         
-        public static LobbyScores? GetLobbyScores(string lobbyCode)
+        public LobbyScores? GetLobbyScores(string lobbyCode)
         {
             return AllLobbyScores.FirstOrDefault(ls => ls.LobbyCode == lobbyCode);
         }
 
         
-        public static LobbyScores GetOrCreateLobbyScores(string lobbyCode)
+        public  LobbyScores GetOrCreateLobbyScores(string lobbyCode)
         {
             var lobbyScores = GetLobbyScores(lobbyCode);
             if (lobbyScores == null)

@@ -21,10 +21,11 @@ public class AuthController : ControllerBase
 {
     private readonly string jwtKey = "tavo_labai_slaptas_raktas_turi_buti_ilgesnis_32_bytes!"; // kolkas demo tiesiog
     private readonly string _connectionString;
-
-    public AuthController(IConfiguration configuration)
+    private readonly IUserStore _userStore;
+    public AuthController(IConfiguration configuration, IUserStore userStore)
     {
         _connectionString = configuration.GetConnectionString("DefaultConnection");
+        _userStore = userStore;
     }
 
     private static async Task<IEnumerable<SecurityKey>> GetGoogleKeysAsync()
@@ -76,18 +77,18 @@ public class AuthController : ControllerBase
             object result = SqlQuery(query, conn, parameters);
             int count = (int)result; //Unboxing
 
-            var user = UserStore.Users.FirstOrDefault(u => u.Email == email);
+            var user = _userStore.Users.FirstOrDefault(u => u.Email == email);
             //If user doesn't exist we need to register it
             if (count == 0)
             {
                 user = new User
                 {
-                    Id = UserStore.Users.Count > 0 ? UserStore.Users.Max(u => u.Id) + 1 : 1,
+                    Id = _userStore.Users.Count > 0 ? _userStore.Users.Max(u => u.Id) + 1 : 1,
                     Email = email,
                     Name = name,
                     PhotoUrl = photoUrl,
                 };
-                UserStore.Users.Add(user);
+                _userStore.Users.Add(user);
                 query = "INSERT INTO users(email, name, photourl, id) VALUES(@email, @name, @photourl, @id)";
                 parameters = new Dictionary<string, object>
                 {
@@ -123,8 +124,8 @@ public class AuthController : ControllerBase
                     PhotoUrl = parts[3]
                 };
 
-                if (!UserStore.Users.Any(u => u.Email == email))
-                    UserStore.Users.Add(user);
+                if (!_userStore.Users.Any(u => u.Email == email))
+                    _userStore.Users.Add(user);
 
             }
 
@@ -209,7 +210,7 @@ public class AuthController : ControllerBase
             };
 
             // Make sure UserStore has latest data
-            var existing = UserStore.Users.FirstOrDefault(u => u.Id == user.Id);
+            var existing = _userStore.Users.FirstOrDefault(u => u.Id == user.Id);
             if (existing != null)
             {
                 existing.Email = user.Email;
@@ -218,7 +219,7 @@ public class AuthController : ControllerBase
             }
             else
             {
-                UserStore.Users.Add(user);
+                _userStore.Users.Add(user);
             }
 
             return Ok(user);

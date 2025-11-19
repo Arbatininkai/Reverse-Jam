@@ -3,8 +3,9 @@
     "",
     "\\API",
     "\\API\\API",
-    "\\API\\API\\Controllers"
+    "\\API\\API\\Controllers",
+    "\\API\\API\\Hubs"
   ],
-  "SelectedNode": "\\API\\API\\Controllers\\GameController.cs",
+  "SelectedNode": "\\API\\API\\Controllers\\AuthController.cs",
   "PreviewInSolutionExplorer": false
 }
