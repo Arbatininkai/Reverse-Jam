@@ -6,15 +6,19 @@ using System;
 
 namespace API.Stores
 {
-    public static class SongStore
+    public class SongStore : ISongStore
     {
-        public static List<Song> Songs { get; private set; } = LoadSongs(); //property usage for third task also load from file for seventh task
-        public static void Reload(string? explicitPath = null) //reloadina jeigu kokiu pakeitimu faile padarai
+        public List<Song> Songs { get; private set; }
+        public SongStore()
+        {
+            Songs = LoadSongs();
+        }//property usage for third task also load from file for seventh task
+        public  void Reload(string? explicitPath = null) //reloadina jeigu kokiu pakeitimu faile padarai
         {
             Songs = LoadSongs(explicitPath);
         }
-        private static List<Song> LoadSongs(string? explicitPath = null) => LoadSongsAsync(explicitPath).GetAwaiter().GetResult();
-        private static async Task<List<Song>> LoadSongsAsync(string? explicitPath = null)
+        private List<Song> LoadSongs(string? explicitPath = null) => LoadSongsAsync(explicitPath).GetAwaiter().GetResult();
+        private async Task<List<Song>> LoadSongsAsync(string? explicitPath = null)
         {
             var path = explicitPath ?? Path.Combine(AppContext.BaseDirectory, "Stores", "songs.json"); //jeigu neduodamas naujas path tai numatytas naudojamas, programos paleidimo katalogas kur yra exe failas
 

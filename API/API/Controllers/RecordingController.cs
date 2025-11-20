@@ -21,11 +21,16 @@ namespace API.Controllers
     public class RecordingsController : ControllerBase
     {
         private readonly IHubContext<LobbyHub> _hubContext;
+        private readonly ILobbyStore _lobbyStore;
+        private readonly IUserStore _userStore;
         //private readonly AIScoringService _scoringService;
 
-        public RecordingsController(IHubContext<LobbyHub> hubContext)
+
+        public RecordingsController(IHubContext<LobbyHub> hubContext, ILobbyStore lobbyStore, IUserStore userStore)
         {
             _hubContext = hubContext;
+            _lobbyStore = lobbyStore;
+            _userStore = userStore;
            // _scoringService = scoringService;
         }
 
@@ -38,12 +43,12 @@ namespace API.Controllers
             if (file == null || file.Length == 0)
                 return BadRequest("File is required");
 
-            var lobby = LobbyStore.Lobbies.Values.FirstOrDefault(l => l.Id == lobbyId);
+            var lobby = _lobbyStore.Lobbies.Values.FirstOrDefault(l => l.Id == lobbyId);
             if (lobby == null)
                 return NotFound("Lobby not found");
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = UserStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+            var user = _userStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
             if (user == null)
                 return Unauthorized("User not found");
 
@@ -123,7 +128,7 @@ namespace API.Controllers
         [HttpGet("{lobbyCode}/{fileName}")]
         public IActionResult GetRecording(string lobbyCode, string fileName)
         {
-            var lobby = LobbyStore.Lobbies.Values.FirstOrDefault(l =>
+            var lobby = _lobbyStore.Lobbies.Values.FirstOrDefault(l =>
                 l.LobbyCode.Equals(lobbyCode, StringComparison.OrdinalIgnoreCase));
             if (lobby == null)
                 return NotFound("Lobby not found");
@@ -134,7 +139,7 @@ namespace API.Controllers
                 if (string.IsNullOrEmpty(userId))
                     return Unauthorized();
 
-                var user = UserStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+                var user = _userStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
                 if (user == null || !lobby.Players.Any(p => p.Id == user.Id))
                     return Forbid();
             }
@@ -155,7 +160,7 @@ namespace API.Controllers
         [HttpGet("{lobbyCode}/recordings")]
         public IActionResult GetAllRecordings(string lobbyCode)
         {
-            var lobby = LobbyStore.Lobbies.Values.FirstOrDefault(l =>
+            var lobby = _lobbyStore.Lobbies.Values.FirstOrDefault(l =>
                 l.LobbyCode.Equals(lobbyCode, StringComparison.OrdinalIgnoreCase));
             if (lobby == null)
                 return NotFound("Lobby not found");
@@ -166,7 +171,7 @@ namespace API.Controllers
                 if (string.IsNullOrEmpty(userId))
                     return Unauthorized();
 
-                var user = UserStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+                var user = _userStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
                 if (user == null || !lobby.Players.Any(p => p.Id == user.Id))
                     return Forbid();
             }

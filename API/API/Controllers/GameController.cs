@@ -13,12 +13,16 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class GameController : ControllerBase
     {
-        private readonly IHubContext<LobbyHub> _hubContext;
 
-        public GameController(IHubContext<LobbyHub> hubContext)
+        private readonly IHubContext<LobbyHub> _hubContext;
+         private readonly ILobbyStore _lobbyStore;
+
+        public GameController(IHubContext<LobbyHub> hubContext, ILobbyStore lobbyStore)
         {
             _hubContext = hubContext;
+            _lobbyStore = lobbyStore;
         }
+
 
         [HttpPost("submit-votes")]
         public IActionResult SubmitVotes([FromBody] EndRoundRequest request)
@@ -26,12 +30,14 @@ namespace API.Controllers
             if (request is null || string.IsNullOrWhiteSpace(request.LobbyCode))
                 return BadRequest("LobbyCode is required.");
 
-            var lobby = LobbyStore.Lobbies.Values.FirstOrDefault(l => l.LobbyCode == request.LobbyCode);
+
+            var lobby = _lobbyStore.Lobbies.Values.FirstOrDefault(l => l.LobbyCode == request.LobbyCode);
+
             if (lobby is null)
                 return NotFound("Lobby not found.");
 
            
-            var lobbyScores = LobbyStore.GetOrCreateLobbyScores(request.LobbyCode);
+            var lobbyScores = _lobbyStore.GetOrCreateLobbyScores(request.LobbyCode);
             lobbyScores.AddVotes(request.Votes, request.Round);
 
             return Ok(new { message = "Votes submitted" });
@@ -40,11 +46,11 @@ namespace API.Controllers
         [HttpPost("calculate-final-scores")]
         public async Task<IActionResult> CalculateFinalScores([FromBody] string lobbyCode)
         {
-            var lobby = LobbyStore.Lobbies.Values.FirstOrDefault(l => l.LobbyCode == lobbyCode);
+            var lobby = _lobbyStore.Lobbies.Values.FirstOrDefault(l => l.LobbyCode == lobbyCode);
             if (lobby is null)
                 return NotFound("Lobby not found.");
 
-            var lobbyScores = LobbyStore.GetOrCreateLobbyScores(lobbyCode);
+            var lobbyScores = _lobbyStore.GetOrCreateLobbyScores(lobbyCode);
             var finalScores = lobbyScores.GetFinalScores();
 
             var winnerId = finalScores.Select(p => p.UserId).FirstOrDefault();
