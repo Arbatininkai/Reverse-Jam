@@ -4,7 +4,6 @@
     {
         private string _name;
         private string _url;
-
         public string Name
         {
             get => _name;
@@ -15,7 +14,6 @@
                 _name = value;
             }
         }
-
         public string Url
         {
             get => _url;
@@ -28,6 +26,7 @@
         }
         public string? Artist { get; set; }
         public string? CoverUrl { get; set; }
+        public string? Lyrics { get; set; }
         public bool Equals(Song other) //IEquatable usage to compare songs by URL
         {
             return string.Equals(Url, other.Url, StringComparison.OrdinalIgnoreCase);

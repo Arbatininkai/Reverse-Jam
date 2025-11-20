@@ -35,6 +35,9 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
+builder.Services.AddSingleton<AIScoringService>();
+builder.Services.AddSingleton<WhisperService>();
+
 // SignalR configuration
 builder.Services.AddSignalR();
 

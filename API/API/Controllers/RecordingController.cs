@@ -1,10 +1,13 @@
 ﻿using API.Hubs;
 using API.Models;
+using API.Services;
 using API.Stores;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.StaticFiles;
+using NWaves.Audio;
+using NWaves.Signals;
 using System;
 using System.IO;
 using System.Linq;
@@ -20,6 +23,7 @@ namespace API.Controllers
         private readonly IHubContext<LobbyHub> _hubContext;
         private readonly ILobbyStore _lobbyStore;
         private readonly IUserStore _userStore;
+        //private readonly AIScoringService _scoringService;
 
 
         public RecordingsController(IHubContext<LobbyHub> hubContext, ILobbyStore lobbyStore, IUserStore userStore)
@@ -27,6 +31,7 @@ namespace API.Controllers
             _hubContext = hubContext;
             _lobbyStore = lobbyStore;
             _userStore = userStore;
+           // _scoringService = scoringService;
         }
 
         [Authorize]
@@ -38,7 +43,7 @@ namespace API.Controllers
             if (file == null || file.Length == 0)
                 return BadRequest("File is required");
 
-            var lobby = _lobbyStore.Lobbies.FirstOrDefault(l => l.Id == lobbyId);
+            var lobby = _lobbyStore.Lobbies.Values.FirstOrDefault(l => l.Id == lobbyId);
             if (lobby == null)
                 return NotFound("Lobby not found");
 
@@ -103,6 +108,17 @@ namespace API.Controllers
             {
                 lobby.RecordingsByRound[roundIndex].Add(recording);
             }
+
+            // Calculate ai score
+            /*if(lobby.AiRate)
+            {
+                var lyrics = request.OriginalSongLyrics;
+                var score = await _scoringService.ScoreRecordingAsync(lyrics, filePath);
+                recording.AiScore = Math.Round(score, 2);
+                recording.StatusMessage = $"AI score: {recording.AiScore:F1}/5";
+
+            }*/
+
             await _hubContext.Clients.Group(lobby.LobbyCode).SendAsync("LobbyUpdated", lobby);
 
             return Ok(recording);
@@ -112,7 +128,7 @@ namespace API.Controllers
         [HttpGet("{lobbyCode}/{fileName}")]
         public IActionResult GetRecording(string lobbyCode, string fileName)
         {
-            var lobby = _lobbyStore.Lobbies.FirstOrDefault(l =>
+            var lobby = _lobbyStore.Lobbies.Values.FirstOrDefault(l =>
                 l.LobbyCode.Equals(lobbyCode, StringComparison.OrdinalIgnoreCase));
             if (lobby == null)
                 return NotFound("Lobby not found");
@@ -144,7 +160,7 @@ namespace API.Controllers
         [HttpGet("{lobbyCode}/recordings")]
         public IActionResult GetAllRecordings(string lobbyCode)
         {
-            var lobby = _lobbyStore.Lobbies.FirstOrDefault(l =>
+            var lobby = _lobbyStore.Lobbies.Values.FirstOrDefault(l =>
                 l.LobbyCode.Equals(lobbyCode, StringComparison.OrdinalIgnoreCase));
             if (lobby == null)
                 return NotFound("Lobby not found");
