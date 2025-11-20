@@ -155,6 +155,7 @@ namespace API.Hubs
             }
             lobby.HasGameStarted = true;
 
+
             List<Song> songs = new List<Song>();
             var random = new Random();
             for (var i = 0; i < lobby.TotalRounds; i++)

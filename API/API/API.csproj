@@ -61,4 +61,5 @@
 	
 	<ItemGroup>
 	  <Folder Include="recordings\" />
+	  <Folder Include="Tests\SongControllerTests\" />
 	</ItemGroup></Project>
