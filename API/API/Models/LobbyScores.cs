@@ -5,18 +5,18 @@ namespace API.Models
     public class LobbyScores
     {
         public string LobbyCode { get; set; } = string.Empty;
-        public ConcurrentDictionary<int, PlayerScore> PlayerScores { get; set; }
-                    = new ConcurrentDictionary<int, PlayerScore>();
+        public ConcurrentDictionary<int, PlayerScore<User, RoundScore>> PlayerScores { get; set; }
+                    = new ConcurrentDictionary<int, PlayerScore<User, RoundScore>>();
 
         public PlayerScore<User, RoundScore> GetOrCreatePlayerScore(int userId, string? playerName = null)
         {
             return PlayerScores.AddOrUpdate(
                userId,
-               _ => new PlayerScore { UserId = userId, PlayerName = playerName },
+               _ => new PlayerScore<User, RoundScore> { Player = new User { Id = userId, Name = playerName } },
                (_, existing) =>
                {
-                   if (!string.IsNullOrEmpty(playerName))
-                       existing.PlayerName = playerName;
+                   if (!string.IsNullOrEmpty(playerName) && existing.Player != null)
+                       existing.Player.Name = playerName;
                    return existing;
                }
            );

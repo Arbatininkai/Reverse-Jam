@@ -9,15 +9,25 @@ namespace API.Stores
 {
     public class SongStore : ISongStore
     {
-        public static List<Song> Songs { get; private set; } = new();
+        private static List<Song> _songs = new();
+
+        public List<Song> Songs => _songs;
+
         public static async Task InitializeAsync(string? explicitPath = null)
         {
-            Songs = await LoadSongsAsync(explicitPath);
+            _songs = await LoadSongsAsync(explicitPath);
         }
+
+        public void Reload(string? explicitPath = null)
+        {
+            ReloadAsync(explicitPath).GetAwaiter().GetResult();
+        }
+
         public static async Task ReloadAsync(string? explicitPath = null)
         {
-            Songs = await LoadSongsAsync(explicitPath);
+            _songs = await LoadSongsAsync(explicitPath);
         }
+
         private static async Task<List<Song>> LoadSongsAsync(string? explicitPath = null)
         {
             var path = explicitPath ?? Path.Combine(AppContext.BaseDirectory, "Stores", "songs.json");

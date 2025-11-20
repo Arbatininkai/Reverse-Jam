@@ -4,8 +4,9 @@
     "\\API",
     "\\API\\API",
     "\\API\\API\\Controllers",
-    "\\API\\API\\Hubs"
+    "\\API\\API\\Hubs",
+    "\\API\\API\\Models"
   ],
-  "SelectedNode": "\\API\\API\\Controllers\\AuthController.cs",
+  "SelectedNode": "\\API\\API\\Controllers\\LobbyController.cs",
   "PreviewInSolutionExplorer": false
 }

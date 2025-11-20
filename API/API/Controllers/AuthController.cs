@@ -97,9 +97,9 @@ public class AuthController : ControllerBase
                     await _context.SaveChangesAsync();
             }
             
-            if (!UserStore.Users.Any(u => u.Id == user.Id))
+            if (!_userStore.Users.Any(u => u.Id == user.Id))
             {
-                UserStore.Users.Add(user);
+                _userStore.Users.Add(user);
             }
 
             var token = GenerateJwtToken(user);

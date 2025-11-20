@@ -6,29 +6,20 @@ namespace API.Models
         where TUser : User
         where TRoundScore : RoundScore, new()
     {
-//i don't now how it need to be here
-/*
-        public int UserId { get; set; }
-        public string? PlayerName { get; set; }
-        private int _totalScore;
-        public int TotalScore => _totalScore;
-*/
-
-
         public TUser? Player { get; set; }
 
         public int UserId => Player?.Id ?? 0;
         public string? PlayerName => Player?.Name;
 
-        public int TotalScore { get; private set; }
+        private int _totalScore;
+        public int TotalScore => _totalScore;
 
-        public List<TRoundScore> RoundScores { get; } = new();
         public ConcurrentDictionary<int, RoundScore> RoundScores { get; set; }
             = new ConcurrentDictionary<int, RoundScore>();
-      
-        public TRoundScore AddScore(int round, int score)
+
+        public RoundScore AddScore(int round, int score)
         {
-            RoundScores.AddOrUpdate(
+            var roundScore = RoundScores.AddOrUpdate(
                 round,
                 _ => new RoundScore { RoundNumber = round, Score = score },
                 (_, existing) =>
@@ -39,6 +30,7 @@ namespace API.Models
             );
 
             Interlocked.Add(ref _totalScore, score);
+            return roundScore;
         }
 
         public int GetRoundScore(int round)
@@ -47,7 +39,7 @@ namespace API.Models
         }
     }
 
-    
+
     public class RoundScore
     {
         public int RoundNumber { get; set; }
