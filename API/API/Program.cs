@@ -1,5 +1,6 @@
 using API.Data;
 using API.Hubs;
+using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -31,6 +32,9 @@ builder.Services.AddCors(options =>
 //Sql context
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+builder.Services.AddSingleton<AIScoringService>();
+builder.Services.AddSingleton<WhisperService>();
 
 // SignalR configuration
 builder.Services.AddSignalR();

@@ -1,10 +1,12 @@
 ﻿using API.Models;
+using System.Collections.Concurrent;
 
 namespace API.Stores
 {
     public static class LobbyStore
     {
-        public static List<Lobby> Lobbies { get; set; } = new List<Lobby>();
+        public static ConcurrentDictionary<int, Lobby> Lobbies { get; set; } = new ConcurrentDictionary<int, Lobby>();
+
         public static Dictionary<string, Dictionary<int, List<VoteDto>>> Votes { get; set; }
             = new Dictionary<string, Dictionary<int, List<VoteDto>>>();
 
