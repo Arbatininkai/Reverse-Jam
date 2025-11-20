@@ -2,16 +2,31 @@ using System.Collections.Concurrent;
 
 namespace API.Models
 {
-    public class PlayerScore
+    public class PlayerScore<TUser, TRoundScore>
+        where TUser : User
+        where TRoundScore : RoundScore, new()
     {
+//i don't now how it need to be here
+/*
         public int UserId { get; set; }
         public string? PlayerName { get; set; }
         private int _totalScore;
         public int TotalScore => _totalScore;
+*/
+
+
+        public TUser? Player { get; set; }
+
+        public int UserId => Player?.Id ?? 0;
+        public string? PlayerName => Player?.Name;
+
+        public int TotalScore { get; private set; }
+
+        public List<TRoundScore> RoundScores { get; } = new();
         public ConcurrentDictionary<int, RoundScore> RoundScores { get; set; }
             = new ConcurrentDictionary<int, RoundScore>();
-
-        public void AddScore(int round, int score)
+      
+        public TRoundScore AddScore(int round, int score)
         {
             RoundScores.AddOrUpdate(
                 round,
@@ -32,6 +47,7 @@ namespace API.Models
         }
     }
 
+    
     public class RoundScore
     {
         public int RoundNumber { get; set; }

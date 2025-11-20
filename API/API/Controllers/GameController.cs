@@ -18,11 +18,13 @@ namespace API.Controllers
     {
         private readonly IHubContext<LobbyHub> _hubContext;
         private readonly AppDbContext _dbContext;
+        private readonly ILobbyStore _lobbyStore;
 
-        public GameController(IHubContext<LobbyHub> hubContext, AppDbContext dbContext)
+        public GameController(IHubContext<LobbyHub> hubContext, AppDbContext dbContext, ILobbyStore lobbyStore)
         {
             _hubContext = hubContext;
             _dbContext = dbContext;
+            _lobbyStore = lobbyStore;
         }
 
         [Authorize]
@@ -37,7 +39,7 @@ namespace API.Controllers
                 return NotFound("Lobby not found.");
 
            
-            var lobbyScores = LobbyStore.GetOrCreateLobbyScores(request.LobbyCode);
+            var lobbyScores = _lobbyStore.GetOrCreateLobbyScores(request.LobbyCode);
             lobbyScores.AddVotes(request.Votes, request.Round);
 
             return Ok(new { message = "Votes submitted" });
@@ -58,7 +60,7 @@ namespace API.Controllers
             if (lobby is null)
                 return NotFound("Lobby not found.");
 
-            var lobbyScores = LobbyStore.GetOrCreateLobbyScores(lobbyCode);
+            var lobbyScores = _lobbyStore.GetOrCreateLobbyScores(lobbyCode);
             var finalScores = lobbyScores.GetFinalScores();
 
             var winnerId = finalScores.Select(p => p.UserId).FirstOrDefault();

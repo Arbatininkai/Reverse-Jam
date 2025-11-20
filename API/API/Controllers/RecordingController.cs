@@ -1,6 +1,7 @@
 ﻿using API.Data;
 using API.Hubs;
 using API.Models;
+using API.Services;
 using API.Stores;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Routing;
@@ -23,12 +24,20 @@ namespace API.Controllers
     public class RecordingsController : ControllerBase
     {
         private readonly IHubContext<LobbyHub> _hubContext;
+        private readonly ILobbyStore _lobbyStore;
+        private readonly IUserStore _userStore;
         private readonly AppDbContext _dbContext;
+        
+        //private readonly AIScoringService _scoringService;
 
-        public RecordingsController(IHubContext<LobbyHub> hubContext, AppDbContext dbContext)
+
+        public RecordingsController(IHubContext<LobbyHub> hubContext, ILobbyStore lobbyStore, IUserStore userStore, AppDbContext dbContext)
         {
             _hubContext = hubContext;
-            _dbContext = dbContext;
+            _lobbyStore = lobbyStore;
+            _userStore = userStore;
+             _dbContext = dbContext;
+           // _scoringService = scoringService;
         }
 
         [Authorize]
@@ -123,7 +132,7 @@ namespace API.Controllers
         [HttpGet("{lobbyCode}/{fileName}")]
         public IActionResult GetRecording(string lobbyCode, string fileName)
         {
-            var lobby = LobbyStore.Lobbies.Values.FirstOrDefault(l =>
+            var lobby = _lobbyStore.Lobbies.Values.FirstOrDefault(l =>
                 l.LobbyCode.Equals(lobbyCode, StringComparison.OrdinalIgnoreCase));
             if (lobby == null)
                 return NotFound("Lobby not found");
@@ -134,7 +143,7 @@ namespace API.Controllers
                 if (string.IsNullOrEmpty(userId))
                     return Unauthorized();
 
-                var user = UserStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+                var user = _userStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
                 if (user == null || !lobby.Players.Any(p => p.Id == user.Id))
                     return Forbid();
             }
@@ -169,7 +178,7 @@ namespace API.Controllers
                 if (string.IsNullOrEmpty(userId))
                     return Unauthorized();
 
-                var user = UserStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+                var user = _userStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
                 if (user == null || !lobby.Players.Any(p => p.Id == user.Id))
                     return Forbid();
             }

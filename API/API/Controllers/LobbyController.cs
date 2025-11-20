@@ -1,6 +1,7 @@
 ﻿using API.Data;
 using API.Hubs;
 using API.Models;
+using API.Services;
 using API.Stores;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,11 +18,17 @@ namespace API.Controllers
     public class LobbyController : ControllerBase
     {
         private readonly IHubContext<LobbyHub> _hubContext;
+        private readonly ILobbyStore _lobbyStore;
+        private readonly IUserStore _userStore;
+        private readonly IRandomValue _randomValue;
         private readonly AppDbContext _dbContext;
 
-        public LobbyController(IHubContext<LobbyHub> hubContext, AppDbContext dbContext)
+        public LobbyController(IHubContext<LobbyHub> hubContext, ILobbyStore lobbyStore, IUserStore userStore, IRandomValue randomValue,AppDbContext dbContext)
         {
             _hubContext = hubContext;
+            _lobbyStore = lobbyStore;
+            _userStore = userStore;
+            _randomValue = randomValue;
             _dbContext = dbContext;
         }
 
@@ -55,7 +62,7 @@ namespace API.Controllers
             _dbContext.Lobbies.Add(newLobby);
             await _dbContext.SaveChangesAsync();
 
-            LobbyStore.Lobbies.TryAdd(newLobby.Id, newLobby);
+            _lobbyStore.Lobbies.TryAdd(newLobby.Id, newLobby);
 
             return Ok(newLobby);
         }
@@ -63,7 +70,7 @@ namespace API.Controllers
         [HttpGet("exists/{code}")]
         public IActionResult LobbyExists(string code)
         {
-            var exists = LobbyStore.Lobbies.Values.Any(l =>
+            var exists = _lobbyStore.Lobbies.Values.Any(l =>
                 string.Equals(l.LobbyCode.ToString(), code, StringComparison.OrdinalIgnoreCase));
             if (!exists) return NotFound("Lobby not found");
             return Ok();
@@ -82,13 +89,40 @@ namespace API.Controllers
 
             await _dbContext.SaveChangesAsync();
 
+
             // Remove the lobby in memory
             LobbyStore.Lobbies.TryRemove(lobby.Id, out _);
+
+/*
+        [Authorize]
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeleteLobby([FromBody] int lobbyId)
+        {
+            var lobby = _lobbyStore.Lobbies.Values.FirstOrDefault(l => l.Id == lobbyId);
+            if (lobby == null)
+                return NotFound("Lobby not found");
+*/
+//not sure what to do abaut this
+
+            try
+            {
+                var recordingsPath = Path.Combine(Directory.GetCurrentDirectory(), "recordings");
+                if (Directory.Exists(recordingsPath))
+                {
+                    Directory.Delete(recordingsPath, true); 
+                   
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error cleaning up recordings : {ex.Message}");
+            }
 
             // Notify all players that the lobby is deleted
             await _hubContext.Clients.Group((lobby.LobbyCode).ToString()).SendAsync("LobbyDeleted");
 
             return Ok(new { message = "Lobby deleted successfully" });
         }
+     
     }
 }

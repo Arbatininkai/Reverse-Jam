@@ -16,7 +16,7 @@ namespace API.Models
         public int Round { get; set; }
 
 
-        public double? Score { get; set; } = null;
+        public double? AiScore { get; set; } = null;
         public string? StatusMessage { get; set; } = null;
     }
 }

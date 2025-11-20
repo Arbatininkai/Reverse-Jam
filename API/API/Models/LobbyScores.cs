@@ -8,7 +8,7 @@ namespace API.Models
         public ConcurrentDictionary<int, PlayerScore> PlayerScores { get; set; }
                     = new ConcurrentDictionary<int, PlayerScore>();
 
-        public PlayerScore GetOrCreatePlayerScore(int userId, string? playerName = null)
+        public PlayerScore<User, RoundScore> GetOrCreatePlayerScore(int userId, string? playerName = null)
         {
             return PlayerScores.AddOrUpdate(
                userId,

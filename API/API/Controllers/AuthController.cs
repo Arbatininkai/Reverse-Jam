@@ -20,8 +20,12 @@ public class AuthController : ControllerBase
     private readonly string jwtKey = "tavo_labai_slaptas_raktas_turi_buti_ilgesnis_32_bytes!";
     private readonly AppDbContext _context;
 
-    public AuthController(AppDbContext context)
+   
+    private readonly IUserStore _userStore;
+    public AuthController(IUserStore userStore, AppDbContext context)
     {
+        
+        _userStore = userStore;
         _context = context;
     }
 

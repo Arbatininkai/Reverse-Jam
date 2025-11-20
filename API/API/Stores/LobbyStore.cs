@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 
 namespace API.Stores
 {
-    public static class LobbyStore
+    public  class LobbyStore : ILobbyStore
     {
         public static ConcurrentDictionary<int, Lobby> Lobbies { get; set; } = new ConcurrentDictionary<int, Lobby>();
         public static Dictionary<string, Dictionary<int, List<VoteDto>>> Votes { get; set; }
@@ -20,7 +20,7 @@ namespace API.Stores
         }
 
         
-        public static LobbyScores GetOrCreateLobbyScores(string lobbyCode)
+        public  LobbyScores GetOrCreateLobbyScores(string lobbyCode)
         {
             var lobbyScores = GetLobbyScores(lobbyCode);
             if (lobbyScores == null)

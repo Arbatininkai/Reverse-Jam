@@ -1,10 +1,12 @@
+using System.Data.SqlClient; 
+using System.Text;
 using API.Data;
 using API.Hubs;
+using API.Services;
+using API.Stores;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Data.SqlClient; 
-using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 builder.Services.AddCors(options =>
 {
@@ -35,9 +38,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
+builder.Services.AddSingleton<AIScoringService>();
+builder.Services.AddSingleton<WhisperService>();
+
 // SignalR configuration
 builder.Services.AddSignalR();
 
+builder.Services.AddSingleton<IUserStore,UserStore>();
+builder.Services.AddSingleton<ILobbyStore, LobbyStore>();
+builder.Services.AddSingleton<ISongStore, SongStore>();
+builder.Services.AddSingleton<IRandomValue, RandomValue>();
 // JWT konfig�racija
 var key = Encoding.ASCII.GetBytes("tavo_labai_slaptas_raktas_turi_buti_ilgesnis_32_bytes!"); // pakeisk � saug�
 builder.Services.AddAuthentication(options =>
