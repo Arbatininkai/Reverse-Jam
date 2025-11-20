@@ -2,7 +2,6 @@ using System.Data.SqlClient;
 using System.Text;
 using API.Data;
 using API.Hubs;
-using API.Services;
 using API.Stores;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -69,6 +68,8 @@ builder.Services.AddAuthentication(options =>
 
 
 var app = builder.Build();
+
+await SongStore.InitializeAsync();
 
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {

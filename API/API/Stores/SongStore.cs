@@ -1,29 +1,29 @@
-﻿using API.Models;
-using System.Collections.Generic;
-using System.Text.Json;
-using System.IO;
+﻿using API.Exceptions;
+using API.Models;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
 
 namespace API.Stores
 {
     public class SongStore : ISongStore
     {
-        public List<Song> Songs { get; private set; }
-        public SongStore()
+        public static List<Song> Songs { get; private set; } = new();
+        public static async Task InitializeAsync(string? explicitPath = null)
         {
-            Songs = LoadSongs();
-        }//property usage for third task also load from file for seventh task
-        public  void Reload(string? explicitPath = null) //reloadina jeigu kokiu pakeitimu faile padarai
-        {
-            Songs = LoadSongs(explicitPath);
+            Songs = await LoadSongsAsync(explicitPath);
         }
-        private List<Song> LoadSongs(string? explicitPath = null) => LoadSongsAsync(explicitPath).GetAwaiter().GetResult();
-        private async Task<List<Song>> LoadSongsAsync(string? explicitPath = null)
+        public static async Task ReloadAsync(string? explicitPath = null)
         {
-            var path = explicitPath ?? Path.Combine(AppContext.BaseDirectory, "Stores", "songs.json"); //jeigu neduodamas naujas path tai numatytas naudojamas, programos paleidimo katalogas kur yra exe failas
-
+            Songs = await LoadSongsAsync(explicitPath);
+        }
+        private static async Task<List<Song>> LoadSongsAsync(string? explicitPath = null)
+        {
+            var path = explicitPath ?? Path.Combine(AppContext.BaseDirectory, "Stores", "songs.json");
             if (!File.Exists(path))
                 return new List<Song>();
+
             try
             {
                 using var fs = File.OpenRead(path);
@@ -34,19 +34,36 @@ namespace API.Stores
                 };
 
                 var result = new List<Song>();
-
-                await foreach (var song in JsonSerializer.DeserializeAsyncEnumerable<Song>(fs, options)) //streaming file by bits, not all at once, returns one song
+                await foreach (var song in JsonSerializer.DeserializeAsyncEnumerable<Song>(fs, options))
                 {
-                    if (!string.IsNullOrWhiteSpace(song.Name) && !string.IsNullOrWhiteSpace(song.Url))
-                        result.Add(song);
+                    if (string.IsNullOrWhiteSpace(song.Name) || string.IsNullOrWhiteSpace(song.Url))
+                        throw new InvalidSongFormatException("Song entry in JSON file has invalid or missing Name/Url.");
+
+                    result.Add(song);
                 }
                 return result;
             }
-            catch (Exception ex)
+            catch (InvalidSongFormatException ex)
             {
-                Console.WriteLine($"Error loading songs: {ex.Message}");
+                LogError(ex);
                 return new List<Song>();
             }
+            catch (Exception ex)
+            {
+                LogError(ex);
+                return new List<Song>();
+            }
+
+        }
+        private static void LogError(Exception ex)
+        {
+            var logFolder = Path.Combine(AppContext.BaseDirectory, "logs");
+            Directory.CreateDirectory(logFolder);
+
+            var logFile = Path.Combine(logFolder, "errors.txt");
+
+            var content = $"[{DateTime.Now}] {ex.GetType().Name}: {ex.Message}{Environment.NewLine}";
+            File.AppendAllText(logFile, content);
         }
 
     }

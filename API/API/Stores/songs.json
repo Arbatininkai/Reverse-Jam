@@ -102,7 +102,8 @@
     "Url": "https://song.blob.core.windows.net/songs/Mark Ronson - Uptown Funk.mp3",
     "Artist": "Mark Ronson",
     "CoverUrl": "https://song.blob.core.windows.net/covers/Uptown funk.jpg",
-    "Lyrics": "Girls hit your hallelujah. Girls hit your hallelujah. 'Cause uptown funk gon' give it to you"
+    "Lyrics": "Girls hit your hallelujah. Girls hit your hallelujah. 'Cause uptown funk gon' give it to you",
+    "
   },
   {
     "Name": "Counting Stars",
@@ -123,7 +124,8 @@
     "Url": "https://song.blob.core.windows.net/songs/songs/Post Malone - Sunflower.mp3",
     "Artist": "Post Malone",
     "CoverUrl": "https://song.blob.core.windows.net/covers/sunflower.jpg",
-    "Lyrics": "You're a sunflower. I think your love would be too much"
+    "Lyrics": "You're a sunflower. I think your love would be too much",
+    "
   },
   {
     "Name": "Someone like you",
