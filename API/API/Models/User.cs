@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
 
 namespace API.Models
 {
@@ -11,6 +13,12 @@ namespace API.Models
         public string? Email { get; set; } //gali but null
         public string? Name { get; set; }
         public string? PhotoUrl { get; set; }
+        public string? Emoji { get; set; }
         public int TotalWins { get; set; } = 0;
+
+        [JsonIgnore]
+        public ICollection<Lobby>? Lobbies { get; set; } = new List<Lobby>();
+        [JsonIgnore]
+        public ICollection<Recording> Recordings { get; set; } = new List<Recording>();
     }
 }

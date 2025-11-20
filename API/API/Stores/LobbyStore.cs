@@ -5,24 +5,18 @@ namespace API.Stores
 {
     public  class LobbyStore : ILobbyStore
     {
-
-        public  List<Lobby> Lobbies { get; } = new List<Lobby>();
-        public Dictionary<string, Dictionary<int, List<VoteDto>>> Votes { get; }
-
-
-        //not sure if this line need to be here
         public static ConcurrentDictionary<int, Lobby> Lobbies { get; set; } = new ConcurrentDictionary<int, Lobby>();
-
-      
+        public static Dictionary<string, Dictionary<int, List<VoteDto>>> Votes { get; set; }
             = new Dictionary<string, Dictionary<int, List<VoteDto>>>();
 
-      
-        public List<LobbyScores> AllLobbyScores { get; } = new List<LobbyScores>();
 
-        
-        public LobbyScores? GetLobbyScores(string lobbyCode)
+        public static ConcurrentDictionary<string, LobbyScores> AllLobbyScores { get; set; } = new();
+
+
+        public static LobbyScores? GetLobbyScores(string lobbyCode)
         {
-            return AllLobbyScores.FirstOrDefault(ls => ls.LobbyCode == lobbyCode);
+            AllLobbyScores.TryGetValue(lobbyCode, out var scores);
+            return scores;
         }
 
         
@@ -32,7 +26,7 @@ namespace API.Stores
             if (lobbyScores == null)
             {
                 lobbyScores = new LobbyScores { LobbyCode = lobbyCode };
-                AllLobbyScores.Add(lobbyScores);
+                AllLobbyScores.TryAdd(lobbyCode, lobbyScores);
             }
             return lobbyScores;
         }

@@ -13,7 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 //Get sql connection string
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//builder.Services.AddDbContext<AppDbContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -33,7 +35,8 @@ builder.Services.AddCors(options =>
 
 //Sql context
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 builder.Services.AddSingleton<AIScoringService>();
 builder.Services.AddSingleton<WhisperService>();

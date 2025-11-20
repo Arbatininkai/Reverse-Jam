@@ -1,9 +1,19 @@
+using System.Collections.Concurrent;
+
 namespace API.Models
 {
     public class PlayerScore<TUser, TRoundScore>
         where TUser : User
         where TRoundScore : RoundScore, new()
     {
+//i don't now how it need to be here
+/*
+        public int UserId { get; set; }
+        public string? PlayerName { get; set; }
+        private int _totalScore;
+        public int TotalScore => _totalScore;
+*/
+
 
         public TUser? Player { get; set; }
 
@@ -13,33 +23,28 @@ namespace API.Models
         public int TotalScore { get; private set; }
 
         public List<TRoundScore> RoundScores { get; } = new();
-
+        public ConcurrentDictionary<int, RoundScore> RoundScores { get; set; }
+            = new ConcurrentDictionary<int, RoundScore>();
       
         public TRoundScore AddScore(int round, int score)
         {
-            var roundScore = RoundScores.FirstOrDefault(rs => rs.RoundNumber == round);
-            if (roundScore != null)
-            {
-                roundScore.Score += score;
-            }
-            else
-            {
-                roundScore = new TRoundScore
+            RoundScores.AddOrUpdate(
+                round,
+                _ => new RoundScore { RoundNumber = round, Score = score },
+                (_, existing) =>
                 {
-                    RoundNumber = round,
-                    Score = score
-                };
-                RoundScores.Add(roundScore);
-            }
+                    existing.Score += score;
+                    return existing;
+                }
+            );
 
-            TotalScore += score;
-            return roundScore;
+            Interlocked.Add(ref _totalScore, score);
         }
 
         public int GetRoundScore(int round)
-            => RoundScores.FirstOrDefault(rs => rs.RoundNumber == round)?.Score ?? 0;
-
-     
+        {
+            return RoundScores.TryGetValue(round, out var rs) ? rs.Score : 0;
+        }
     }
 
     

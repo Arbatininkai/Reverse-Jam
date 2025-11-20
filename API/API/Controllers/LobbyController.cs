@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using System.Text.RegularExpressions;
+﻿using API.Data;
 using API.Hubs;
 using API.Models;
 using API.Services;
@@ -7,6 +6,10 @@ using API.Stores;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -18,19 +21,21 @@ namespace API.Controllers
         private readonly ILobbyStore _lobbyStore;
         private readonly IUserStore _userStore;
         private readonly IRandomValue _randomValue;
+        private readonly AppDbContext _dbContext;
 
-        public LobbyController(IHubContext<LobbyHub> hubContext, ILobbyStore lobbyStore, IUserStore userStore, IRandomValue randomValue)
+        public LobbyController(IHubContext<LobbyHub> hubContext, ILobbyStore lobbyStore, IUserStore userStore, IRandomValue randomValue,AppDbContext dbContext)
         {
             _hubContext = hubContext;
             _lobbyStore = lobbyStore;
             _userStore = userStore;
             _randomValue = randomValue;
+            _dbContext = dbContext;
         }
 
         //Lobby sukurimas
         [Authorize]
         [HttpPost("create")]
-        public IActionResult CreateLobby([FromBody] Lobby? options)
+        public async Task<IActionResult> CreateLobby([FromBody] Lobby? options)
         {
             if (options == null)
                 return BadRequest("Options required");
@@ -38,7 +43,7 @@ namespace API.Controllers
             // paimam prisijungusio user info iš tokeno
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var email = User.FindFirstValue(ClaimTypes.Email);
-            var creator = _userStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+            var creator = await _dbContext.Users.FindAsync(int.Parse(userId!));
 
             if (creator == null)
             {
@@ -47,15 +52,15 @@ namespace API.Controllers
 
             var newLobby = new Lobby
             {
-                Id = _lobbyStore.Lobbies.Count > 0 ? _lobbyStore.Lobbies.Values.Max(l => l.Id) + 1 : 1,
-                Private = options.Private, //is frontendo gaunamos reiksmes
+                Private = options.Private,
                 AiRate = options.AiRate,
                 TotalRounds = options.TotalRounds,
                 HumanRate = options.HumanRate,
-                OwnerId = creator.Id
+                OwnerId = creator.Id,
             };
-
             newLobby.Players.Add(creator);
+            _dbContext.Lobbies.Add(newLobby);
+            await _dbContext.SaveChangesAsync();
 
             _lobbyStore.Lobbies.TryAdd(newLobby.Id, newLobby);
 
@@ -71,69 +76,24 @@ namespace API.Controllers
             return Ok();
         }
 
-
         [Authorize]
-        [HttpPost("play")]
-        public IActionResult Play([FromBody] PlayRequest request)
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeleteLobby([FromBody] int lobbyId)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = _userStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+            var lobby = await _dbContext.Lobbies.FirstOrDefaultAsync(l => l.Id == lobbyId);
 
-            if (user == null)
-                return Unauthorized("User not found");
+            if (lobby == null)
+                 return NotFound("Lobby not found");
 
-            if (!string.IsNullOrEmpty(request.LobbyCode)) //jeigu ne null tai iveda seed
-            {
-                var lobby = _lobbyStore.Lobbies.Values.FirstOrDefault(l =>
-                    string.Equals(l.LobbyCode.ToString(), request.LobbyCode, StringComparison.OrdinalIgnoreCase));
+            _dbContext.Lobbies.Remove(lobby);
 
-                if (lobby == null)
-                    return NotFound("Lobby not found");
+            await _dbContext.SaveChangesAsync();
 
-                if (lobby.Players.Count >= lobby.MaxPlayers)
-                    return BadRequest("Lobby is full");
 
-                if (!lobby.Players.Any(p => p.Id == user.Id))
-                    lobby.Players.Add(user);
+            // Remove the lobby in memory
+            LobbyStore.Lobbies.TryRemove(lobby.Id, out _);
 
-                return Ok(lobby);
-            }
-
-            var availableLobbies = _lobbyStore.Lobbies //jeigu nenurodyta nieko tai i random meta lobby
-                .Values.Where(l => !l.Private && l.Players.Count < l.MaxPlayers)
-                .ToList();
-
-            if (availableLobbies.Count == 0)
-            {
-                var newLobby = new Lobby
-                {
-                    Id = _lobbyStore.Lobbies.Count > 0 ? _lobbyStore.Lobbies.Values.Max(l => l.Id) + 1 : 1,
-                    Private = false,
-                    MaxPlayers = 4
-                };
-                newLobby.Players.Add(user);
-                _lobbyStore.Lobbies.TryAdd(newLobby.Id, newLobby);
-                return Ok(newLobby);
-            }
-
-             int maxPlayersNow = 0;
-                 foreach (var lobby in availableLobbies)
-                 {
-                     if (lobby.Players.Count > maxPlayersNow)
-                         maxPlayersNow = lobby.Players.Count;
-                 }
-
-            var bestLobbies = availableLobbies.Where(l => l.Players.Count == maxPlayersNow).ToList(); //randam labiausiai uzpildyta lobby
-
-           
-            var chosenLobby = bestLobbies[_randomValue.Next(bestLobbies.Count)]; //isrenkam random jei yra keli
-
-            if (!chosenLobby.Players.Any(p => p.Id == user.Id)) //apsauga jeigu tas pats useris bando i ta pati lobby eiti
-                chosenLobby.Players.Add(user);
-
-            return Ok(chosenLobby);
-        }
-
+/*
         [Authorize]
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteLobby([FromBody] int lobbyId)
@@ -141,6 +101,8 @@ namespace API.Controllers
             var lobby = _lobbyStore.Lobbies.Values.FirstOrDefault(l => l.Id == lobbyId);
             if (lobby == null)
                 return NotFound("Lobby not found");
+*/
+//not sure what to do abaut this
 
             try
             {
@@ -158,9 +120,6 @@ namespace API.Controllers
 
             // Notify all players that the lobby is deleted
             await _hubContext.Clients.Group((lobby.LobbyCode).ToString()).SendAsync("LobbyDeleted");
-
-            // Remove the lobby
-            _lobbyStore.Lobbies.TryRemove(lobby.Id, out _);
 
             return Ok(new { message = "Lobby deleted successfully" });
         }
