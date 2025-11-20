@@ -2,6 +2,7 @@
 using API.Hubs;
 using API.Models;
 using API.Stores;
+using API.Services;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -49,11 +50,18 @@ public class LobbyHubTests : IAsyncLifetime
         // ARRANGE
         var db = _factory.CreateDbContext();
         var mockGroups = new Mock<IGroupManager>();
+        var mockUserStore = new Mock<IUserStore>();
+        var mockLobbyStore = new Mock<ILobbyStore>();
+        var mockSongStore = new Mock<ISongStore>();
+        var mockRandomValue = new Mock<IRandomValue>();
+
         var user = new User { Name = "TestUser", Email = "test@gmail.com" };
         db.Users.Add(user);
         await db.SaveChangesAsync();
 
-        var hub = new LobbyHub(db, mockGroups.Object)
+        mockLobbyStore.Setup(x => x.Lobbies).Returns(new List<Lobby>());
+
+        var hub = new LobbyHub(db, mockUserStore.Object, mockLobbyStore.Object, mockSongStore.Object, mockRandomValue.Object, mockGroups.Object)
         {
             Context = GetMockedContext(user.Id),
             Clients = GetMockedClients(out var caller, out var group)
@@ -87,11 +95,15 @@ public class LobbyHubTests : IAsyncLifetime
     {
         // ARRANGE
         var mockGroups = new Mock<IGroupManager>();
+        var mockUserStore = new Mock<IUserStore>();
+        var mockLobbyStore = new Mock<ILobbyStore>();
+        var mockSongStore = new Mock<ISongStore>();
+        var mockRandomValue = new Mock<IRandomValue>();
         var db = _factory.CreateDbContext();
 
         var user1 = new User { Name = "User1", Email = "user1@test.com" };
         var user2 = new User { Name = "User2", Email = "user2@test.com" };
-        var user3 = new User { Name = "User2", Email = "user3@test.com" };
+        var user3 = new User { Name = "User3", Email = "user3@test.com" };
 
         db.Users.AddRange(user1, user2, user3);
         await db.SaveChangesAsync();
@@ -106,7 +118,9 @@ public class LobbyHubTests : IAsyncLifetime
         db.Lobbies.Add(lobby);
         await db.SaveChangesAsync();
 
-        var hub = new LobbyHub(db, mockGroups.Object)
+        mockLobbyStore.Setup(x => x.Lobbies).Returns(new List<Lobby>());
+
+        var hub = new LobbyHub(db, mockUserStore.Object, mockLobbyStore.Object, mockSongStore.Object, mockRandomValue.Object, mockGroups.Object)
         {
             Context = GetMockedContext(user3.Id),
             Clients = GetMockedClients(out var callerMock, out var groupMock)
@@ -143,6 +157,10 @@ public class LobbyHubTests : IAsyncLifetime
     {
         // ARRANGE
         var mockGroups = new Mock<IGroupManager>();
+        var mockUserStore = new Mock<IUserStore>();
+        var mockLobbyStore = new Mock<ILobbyStore>();
+        var mockSongStore = new Mock<ISongStore>();
+        var mockRandomValue = new Mock<IRandomValue>();
         var db = _factory.CreateDbContext();
 
         var user1 = new User { Name = "User1", Email = "user1@test.com" };
@@ -160,7 +178,9 @@ public class LobbyHubTests : IAsyncLifetime
         db.Lobbies.Add(lobby);
         await db.SaveChangesAsync();
 
-        var hub = new LobbyHub(db, mockGroups.Object)
+        mockLobbyStore.Setup(x => x.Lobbies).Returns(new List<Lobby>());
+
+        var hub = new LobbyHub(db, mockUserStore.Object, mockLobbyStore.Object, mockSongStore.Object, mockRandomValue.Object, mockGroups.Object)
         {
             Context = GetMockedContext(user2.Id),
             Clients = GetMockedClients(out var callerMock, out var groupMock)
@@ -196,6 +216,10 @@ public class LobbyHubTests : IAsyncLifetime
     {
         // ARRANGE
         var mockGroups = new Mock<IGroupManager>();
+        var mockUserStore = new Mock<IUserStore>();
+        var mockLobbyStore = new Mock<ILobbyStore>();
+        var mockSongStore = new Mock<ISongStore>();
+        var mockRandomValue = new Mock<IRandomValue>();
         var db = _factory.CreateDbContext();
 
         var user1 = new User { Name = "User1", Email = "user1@test.com" };
@@ -214,7 +238,9 @@ public class LobbyHubTests : IAsyncLifetime
         db.Lobbies.Add(lobby);
         await db.SaveChangesAsync();
 
-        var hub = new LobbyHub(db, mockGroups.Object)
+        mockLobbyStore.Setup(x => x.Lobbies).Returns(new List<Lobby>());
+
+        var hub = new LobbyHub(db, mockUserStore.Object, mockLobbyStore.Object, mockSongStore.Object, mockRandomValue.Object, mockGroups.Object)
         {
             Context = GetMockedContext(user1.Id),
             Clients = GetMockedClients(out var callerMock, out var groupMock)
@@ -234,7 +260,6 @@ public class LobbyHubTests : IAsyncLifetime
         Assert.Equal(user2.Id, updatedLobby.OwnerId);
 
         // ASSERT
-        //message to everyone except the person who left
         groupMock.Verify(g => g.SendCoreAsync(
             "PlayerLeft",
              It.Is<object[]>(args =>
@@ -265,6 +290,10 @@ public class LobbyHubTests : IAsyncLifetime
     public async Task StartGame_UserNotOwner_ShouldSendError()
     {
         var db = _factory.CreateDbContext();
+        var mockUserStore = new Mock<IUserStore>();
+        var mockLobbyStore = new Mock<ILobbyStore>();
+        var mockSongStore = new Mock<ISongStore>();
+        var mockRandomValue = new Mock<IRandomValue>();
 
         var owner = new User { Name = "Owner", Email = "owner@test.com" };
         var otherUser = new User { Name = "Other", Email = "other@test.com" };
@@ -280,7 +309,9 @@ public class LobbyHubTests : IAsyncLifetime
         db.Lobbies.Add(lobby);
         await db.SaveChangesAsync();
 
-        var hub = new LobbyHub(db)
+        mockLobbyStore.Setup(x => x.Lobbies).Returns(new List<Lobby>());
+
+        var hub = new LobbyHub(db, mockUserStore.Object, mockLobbyStore.Object, mockSongStore.Object, mockRandomValue.Object)
         {
             Context = GetMockedContext(otherUser.Id),
             Clients = GetMockedClients(out var callerMock, out var groupMock)
@@ -298,16 +329,24 @@ public class LobbyHubTests : IAsyncLifetime
     public async Task StartGame_Valid_ShouldSetHasGameStartedAndNotifyGroup()
     {
         var db = _factory.CreateDbContext();
+        var mockUserStore = new Mock<IUserStore>();
+        var mockLobbyStore = new Mock<ILobbyStore>();
+        var mockSongStore = new Mock<ISongStore>();
+        var mockRandomValue = new Mock<IRandomValue>();
+
         var owner = new User { Name = "Owner", Email = "owner@test.com" };
         var otherUser = new User { Name = "Other", Email = "other@test.com" };
         db.Users.AddRange(owner, otherUser);
         await db.SaveChangesAsync();
 
-        var lobby = new Lobby { LobbyCode = "ABC123", OwnerId = owner.Id, TotalRounds = 2, Players = new List<User> { owner, otherUser} };
+        var lobby = new Lobby { LobbyCode = "ABC123", OwnerId = owner.Id, TotalRounds = 2, Players = new List<User> { owner, otherUser } };
         db.Lobbies.Add(lobby);
         await db.SaveChangesAsync();
 
-        var hub = new LobbyHub(db)
+        mockLobbyStore.Setup(x => x.Lobbies).Returns(new List<Lobby>());
+        mockSongStore.Setup(x => x.Songs).Returns(new List<Song> { new Song { Name = "Test", Url = "test" } });
+
+        var hub = new LobbyHub(db, mockUserStore.Object, mockLobbyStore.Object, mockSongStore.Object, mockRandomValue.Object)
         {
             Context = GetMockedContext(owner.Id),
             Clients = GetMockedClients(out var callerMock, out var groupMock)
@@ -329,6 +368,10 @@ public class LobbyHubTests : IAsyncLifetime
     {
         //ARRANGE
         var mockGroups = new Mock<IGroupManager>();
+        var mockUserStore = new Mock<IUserStore>();
+        var mockLobbyStore = new Mock<ILobbyStore>();
+        var mockSongStore = new Mock<ISongStore>();
+        var mockRandomValue = new Mock<IRandomValue>();
         var db = _factory.CreateDbContext();
 
         var user1 = new User { Name = "User1", Email = "user1@test.com" };
@@ -348,7 +391,9 @@ public class LobbyHubTests : IAsyncLifetime
         db.Lobbies.Add(lobby);
         await db.SaveChangesAsync();
 
-        var hub = new LobbyHub(db, mockGroups.Object)
+        mockLobbyStore.Setup(x => x.Lobbies).Returns(new List<Lobby>());
+
+        var hub = new LobbyHub(db, mockUserStore.Object, mockLobbyStore.Object, mockSongStore.Object, mockRandomValue.Object, mockGroups.Object)
         {
             Context = GetMockedContext(user1.Id),
             Clients = GetMockedClients(out var callerMock, out var groupMock)
@@ -382,6 +427,10 @@ public class LobbyHubTests : IAsyncLifetime
     {
         // ARRANGE
         var mockGroups = new Mock<IGroupManager>();
+        var mockUserStore = new Mock<IUserStore>();
+        var mockLobbyStore = new Mock<ILobbyStore>();
+        var mockSongStore = new Mock<ISongStore>();
+        var mockRandomValue = new Mock<IRandomValue>();
         var db = _factory.CreateDbContext();
 
         var user1 = new User { Name = "User1", Email = "user1@test.com" };
@@ -395,9 +444,9 @@ public class LobbyHubTests : IAsyncLifetime
             Players = new List<User> { user1 }
         };
 
-        LobbyStore.Lobbies.TryAdd(lobby.Id, lobby);
+        mockLobbyStore.Setup(x => x.Lobbies).Returns(new List<Lobby> { lobby });
 
-        var hub = new LobbyHub(db, mockGroups.Object)
+        var hub = new LobbyHub(db, mockUserStore.Object, mockLobbyStore.Object, mockSongStore.Object, mockRandomValue.Object, mockGroups.Object)
         {
             Clients = GetMockedClients(out var callerMock, out var groupMock)
         };
@@ -419,10 +468,15 @@ public class LobbyHubTests : IAsyncLifetime
     public async Task NotifyPlayerVoted_Voted_ShouldSendToGroup()
     {
         var db = _factory.CreateDbContext();
-        var lobby = new Lobby { Id = 1, LobbyCode = "ABC123" };
-        LobbyStore.Lobbies.TryAdd(lobby.Id, lobby);
+        var mockUserStore = new Mock<IUserStore>();
+        var mockLobbyStore = new Mock<ILobbyStore>();
+        var mockSongStore = new Mock<ISongStore>();
+        var mockRandomValue = new Mock<IRandomValue>();
 
-        var hub = new LobbyHub(db)
+        var lobby = new Lobby { Id = 1, LobbyCode = "ABC123" };
+        mockLobbyStore.Setup(x => x.Lobbies).Returns(new List<Lobby> { lobby });
+
+        var hub = new LobbyHub(db, mockUserStore.Object, mockLobbyStore.Object, mockSongStore.Object, mockRandomValue.Object)
         {
             Clients = GetMockedClients(out var callerMock, out var groupMock)
         };
@@ -439,10 +493,15 @@ public class LobbyHubTests : IAsyncLifetime
     public async Task UpdateLobbyWithScores_Updated_ShouldSendToGroup()
     {
         var db = _factory.CreateDbContext();
-        var lobby = new Lobby { Id = 1, LobbyCode = "ABC123" };
-        LobbyStore.Lobbies.TryAdd(lobby.Id, lobby);
+        var mockUserStore = new Mock<IUserStore>();
+        var mockLobbyStore = new Mock<ILobbyStore>();
+        var mockSongStore = new Mock<ISongStore>();
+        var mockRandomValue = new Mock<IRandomValue>();
 
-        var hub = new LobbyHub(db)
+        var lobby = new Lobby { Id = 1, LobbyCode = "ABC123" };
+        mockLobbyStore.Setup(x => x.Lobbies).Returns(new List<Lobby> { lobby });
+
+        var hub = new LobbyHub(db, mockUserStore.Object, mockLobbyStore.Object, mockSongStore.Object, mockRandomValue.Object)
         {
             Clients = GetMockedClients(out var callerMock, out var groupMock)
         };

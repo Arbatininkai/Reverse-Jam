@@ -66,11 +66,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 266,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PlayerScore.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\PlayerScore.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\PlayerScore.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\PlayerScore.cs",
+              "RelativeToolTip": "API\\API\\Models\\PlayerScore.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAADIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T11:33:54.966Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -82,8 +95,7 @@
               "RelativeToolTip": "API\\API\\Models\\Recording.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-18T11:34:06.316Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-18T11:34:06.316Z"
             },
             {
               "$type": "Document",
@@ -95,8 +107,7 @@
               "RelativeToolTip": "API\\API\\Models\\RecordingUploadRequest.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-18T11:33:58.826Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-18T11:33:58.826Z"
             },
             {
               "$type": "Document",
@@ -108,21 +119,7 @@
               "RelativeToolTip": "API\\API\\Models\\PlayRequest.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-18T11:33:55.973Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "PlayerScore.cs",
-              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\PlayerScore.cs",
-              "RelativeDocumentMoniker": "API\\API\\Models\\PlayerScore.cs",
-              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\PlayerScore.cs",
-              "RelativeToolTip": "API\\API\\Models\\PlayerScore.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAAAB0AAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-18T11:33:54.966Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-18T11:33:55.973Z"
             },
             {
               "$type": "Document",
@@ -134,8 +131,7 @@
               "RelativeToolTip": "API\\API\\Models\\LobbyScores.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACkAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-18T11:31:23.71Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-18T11:31:23.71Z"
             },
             {
               "$type": "Document",
@@ -147,8 +143,7 @@
               "RelativeToolTip": "API\\API\\Models\\ScoreEntry.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-18T11:33:56.96Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-18T11:33:56.96Z"
             },
             {
               "$type": "Document",
@@ -160,8 +155,7 @@
               "RelativeToolTip": "API\\API\\Models\\EndRoundRequest.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-18T11:33:42.633Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-18T11:33:42.633Z"
             },
             {
               "$type": "Document",
@@ -173,8 +167,7 @@
               "RelativeToolTip": "API\\API\\Models\\Lobby.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-18T11:30:25.185Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-18T11:30:25.185Z"
             },
             {
               "$type": "Document",
@@ -210,8 +203,7 @@
               "RelativeToolTip": "API\\API\\Controllers\\AuthController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-11T08:48:22.397Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-11T08:48:22.397Z"
             },
             {
               "$type": "Document",
@@ -235,8 +227,7 @@
               "RelativeToolTip": "API\\API\\Hubs\\LobbyHub.cs",
               "ViewState": "AgIAAK8AAAAAAAAAAAAuwLgAAABZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-12T19:27:44.57Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-12T19:27:44.57Z"
             },
             {
               "$type": "Document",

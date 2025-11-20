@@ -22,7 +22,7 @@ public class LobbyControllerTests : IAsyncLifetime
     public Task InitializeAsync() => _factory.ResetDatabaseAsync();
     public Task DisposeAsync() => Task.CompletedTask;
 
-    // 🔐 Helper – Generate fake JWT
+ 
     private string GenerateFakeJwt(int id, string email)
     {
         var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
@@ -44,7 +44,8 @@ public class LobbyControllerTests : IAsyncLifetime
         var token = handler.CreateToken(descriptor);
         return handler.WriteToken(token);
     }
-    
+
+    [Fact]
     public async Task CreateLobby_ValidRequest_ReturnsLobby()
     {
         // ARRANGE
@@ -60,8 +61,8 @@ public class LobbyControllerTests : IAsyncLifetime
         var requestObj = new
         {
             Private = true,
-            AiRate = 50,
-            HumanRate = 50,
+            AiRate = false,
+            HumanRate = true,
             TotalRounds = 3
         };
         var content = new StringContent(JsonConvert.SerializeObject(requestObj), Encoding.UTF8, "application/json");
@@ -72,7 +73,7 @@ public class LobbyControllerTests : IAsyncLifetime
         // ASSERT
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var responseBody = await response.Content.ReadAsStringAsync();
-        Assert.Contains("\"TotalRounds\":3", responseBody);
+        Assert.Contains("\"totalRounds\":3", responseBody);
         Assert.Contains(user.Email, responseBody);
     }
     
