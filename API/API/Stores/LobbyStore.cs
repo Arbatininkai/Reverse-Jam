@@ -1,9 +1,34 @@
 ﻿using API.Models;
+using System.Collections.Concurrent;
 
 namespace API.Stores
 {
-    public class LobbyStore
+    public  class LobbyStore : ILobbyStore
     {
-        public static List<Lobby> Lobbies { get; set; } = new List<Lobby>(); //laikinas lobiu saugojimas, reiks pakeist duom baze
+        public static ConcurrentDictionary<int, Lobby> Lobbies { get; set; } = new ConcurrentDictionary<int, Lobby>();
+        public static Dictionary<string, Dictionary<int, List<VoteDto>>> Votes { get; set; }
+            = new Dictionary<string, Dictionary<int, List<VoteDto>>>();
+
+
+        public static ConcurrentDictionary<string, LobbyScores> AllLobbyScores { get; set; } = new();
+
+
+        public static LobbyScores? GetLobbyScores(string lobbyCode)
+        {
+            AllLobbyScores.TryGetValue(lobbyCode, out var scores);
+            return scores;
+        }
+
+        
+        public  LobbyScores GetOrCreateLobbyScores(string lobbyCode)
+        {
+            var lobbyScores = GetLobbyScores(lobbyCode);
+            if (lobbyScores == null)
+            {
+                lobbyScores = new LobbyScores { LobbyCode = lobbyCode };
+                AllLobbyScores.TryAdd(lobbyCode, lobbyScores);
+            }
+            return lobbyScores;
+        }
     }
 }

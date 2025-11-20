@@ -1,36 +1,68 @@
-﻿using API.Extensions;
+﻿using System.Security.Claims;
+using API.Extensions;
 using API.Models;
+using API.Services;
 using API.Stores;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
+using API.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Hubs
 {
     public class LobbyHub : Hub
     {
+        private readonly AppDbContext _context;
+        private readonly IGroupManager? _groupsMock;
+        private readonly ISongStore _songStore;
+        private readonly ILobbyStore _lobbyStore;
+        private readonly IUserStore _userStore;
+        private readonly IRandomValue _randomValue;
+        
+        private IGroupManager GroupsService => _groupsMock ?? Groups!;
+        public LobbyHub(AppDbContext context, IGroupManager? groupsMock = null, IUserStore userStore, ILobbyStore lobbyStore, ISongStore songStore, IRandomValue randomValue) 
+        { 
+            _context = context;
+            _groupsMock = groupsMock; 
+            _userStore = userStore;
+            _lobbyStore = lobbyStore;
+            _songStore = songStore;
+            _randomValue = randomValue;
+        }
+        
         // Called when a user joins a lobby (by code or auto-match)
         public async Task JoinLobby(string? lobbyCode)
         {
-            var userId = Context.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = UserStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+            var userIdStr = Context.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            if (!int.TryParse(userIdStr, out var userId))
+            {
+                await Clients.Caller.SendAsync("Error", "Invalid user");
+                return;
+            }
+
+            var user = await _context.Users.FindAsync(userId);
             if (user == null)
             {
                 await Clients.Caller.SendAsync("Error", "User not found");
                 return;
             }
 
-
             if (!string.IsNullOrEmpty(lobbyCode))
             {
-                var lobby = LobbyStore.Lobbies.FirstOrDefault(l =>
-                    l.LobbyCode.Equals(lobbyCode, StringComparison.OrdinalIgnoreCase));
+                var lobby = await _context.Lobbies
+                    .Include(l => l.Players)
+                    .FirstOrDefaultAsync(l => l.LobbyCode == lobbyCode);
+
 
                 if (lobby == null)
                 {
                     await Clients.Caller.SendAsync("Error", "Lobby not found");
                     return;
                 }
+
+                LobbyStore.Lobbies.TryAdd(lobby.Id, lobby);
+                
 
                 if (lobby.IsFull()) //extension method to check if lobby is full
                 {
@@ -44,32 +76,39 @@ namespace API.Hubs
                     return;
                 }
 
-                lobby.AddPlayer(user); //extension method
+                if (!lobby.Players.Any(p => p.Id == user.Id))
+                {
+                    lobby.Players.Add(user); // tracked instance
+                    await _context.SaveChangesAsync();
+                }
 
-                await Groups.AddToGroupAsync(Context.ConnectionId, lobby.LobbyCode);
+                await GroupsService.AddToGroupAsync(Context.ConnectionId, lobby.LobbyCode);
                 await Clients.Group(lobby.LobbyCode).SendAsync("PlayerJoined", user);
                 await Clients.Caller.SendAsync("JoinedLobby", lobby);
                 return;
             }
 
             // If no lobby code was provided, auto-match to best available or create new
-            var availableLobbies = LobbyStore.Lobbies
+            var availableLobbies = _context.Lobbies
+                .Include(l => l.Players)
                 .Where(l => !l.Private && l.Players.Count < l.MaxPlayers && l.HasGameStarted != true)
                 .ToList();
 
-            if (availableLobbies.Count == 0)
+            if (!availableLobbies.Any())
             {
                 var newLobby = new Lobby
                 {
-                    Id = LobbyStore.Lobbies.Count > 0 ? LobbyStore.Lobbies.Max(l => l.Id) + 1 : 1,
                     Private = false,
                     MaxPlayers = 4,
                     OwnerId = user.Id
                 };
                 newLobby.Players.Add(user);
-                LobbyStore.Lobbies.Add(newLobby);
 
-                await Groups.AddToGroupAsync(Context.ConnectionId, newLobby.LobbyCode);
+                _context.Lobbies.Add(newLobby);
+                await _context.SaveChangesAsync();
+                LobbyStore.Lobbies.TryAdd(newLobby.Id, newLobby);
+
+                await GroupsService.AddToGroupAsync(Context.ConnectionId, newLobby.LobbyCode);
                 await Clients.Caller.SendAsync("JoinedLobby", newLobby);
                 return;
             }
@@ -82,28 +121,35 @@ namespace API.Hubs
             var random = new Random();
             var chosenLobby = bestLobbies[random.Next(bestLobbies.Count)];
 
-            chosenLobby.AddPlayer(user);
+            if (!chosenLobby.Players.Any(p => p.Id == user.Id))
+            {
+                chosenLobby.Players.Add(user);
+                await _context.SaveChangesAsync();
+            }
 
-            await Groups.AddToGroupAsync(Context.ConnectionId, chosenLobby.LobbyCode);
+            await GroupsService.AddToGroupAsync(Context.ConnectionId, chosenLobby.LobbyCode);
             await Clients.Group(chosenLobby.LobbyCode).SendAsync("PlayerJoined", user);
             await Clients.Caller.SendAsync("JoinedLobby", chosenLobby);
         }
 
         public async Task StartGame(int lobbyId)
         {
-            var userId = Context.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = UserStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+            var userId = int.Parse(Context.User?.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var user = await _context.Users.FindAsync(userId);
             if (user == null)
             {
                 await Clients.Caller.SendAsync("Error", "User is not found");
                 return;
             }
 
-            var lobby = LobbyStore.Lobbies.FirstOrDefault(l => l.Id == lobbyId);
+            var lobby = await _context.Lobbies
+                    .Include(l => l.Players)
+                    .FirstOrDefaultAsync(l => l.Id == lobbyId);
             if (lobby == null)
-            {
+            { 
                 await Clients.Caller.SendAsync("Error", "No lobby found");
                 return;
+                //LobbyStore.Lobbies.TryAdd(lobby.Id, lobby);
             }
 
             if (!lobby.IsOwner(user.Id))
@@ -113,46 +159,132 @@ namespace API.Hubs
             }
 
             // Make the server select a random song for all players to repeat
-            if (SongStore.Songs == null || SongStore.Songs.Count == 0)
+            if (_songStore.Songs == null || _songStore.Songs.Count == 0)
             {
                 await Clients.Caller.SendAsync("Error", "No songs found");
                 return;
             }
             lobby.HasGameStarted = true;
 
-            var random = Random.Shared;
-            var song = SongStore.Songs[random.Next(SongStore.Songs.Count)];
 
-            await Clients.Group(lobby.LobbyCode).SendAsync("GameStarted", lobby.Id, song);
+            List<Song> songs = new List<Song>();
+            var random = new Random();
+            for (var i = 0; i < lobby.TotalRounds; i++)
+            {
+                var song = _songStore.Songs[random.Next(_songStore.Songs.Count)];
+                songs.Add(song);
+            }
+            await _context.SaveChangesAsync();
+            LobbyStore.Lobbies.AddOrUpdate(lobby.Id, lobby, (key, existingLobby) => lobby);
+            await Clients.Group(lobby.LobbyCode).SendAsync("GameStarted", lobby.Id, songs);
         }
+
+        public async Task NextPlayer(int lobbyId)
+        {
+            var lobby = await _context.Lobbies
+                    .Include(l => l.Players)
+                    .FirstOrDefaultAsync(l => l.Id == lobbyId);
+            if (lobby == null) return;
+
+            // Only owner can advance
+            var userId = Context.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (lobby.OwnerId.ToString() != userId) return;
+
+            if (lobby.CurrentPlayerIndex < lobby.Players.Count - 1)
+            {
+                lobby.CurrentPlayerIndex++;
+            }
+            else
+            {
+                if (lobby.CurrentRound < lobby.TotalRounds - 1)
+                {
+                    lobby.CurrentRound++;
+                    lobby.CurrentPlayerIndex = 0;
+                }
+            }
+            _context.Lobbies.Update(lobby);
+            await _context.SaveChangesAsync();
+            _lobbyStore.Lobbies.AddOrUpdate(lobby.Id, lobby, (key, existingLobby) => lobby);
+            await Clients.Group(lobby.LobbyCode).SendAsync("LobbyUpdated", lobby);
+        }
+
 
         public async Task LeaveLobby(int lobbyId)
         {
-            var userId = Context.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = UserStore.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+            var userIdStr = Context.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdStr, out var userId))
+            {
+                await Clients.Caller.SendAsync("Error", "Invalid user");
+                return;
+            }
+
+            var user = await _context.Users.FindAsync(userId);
             if (user == null)
             {
                 await Clients.Caller.SendAsync("Error", "User is not found");
                 return;
             }
 
-            var lobby = LobbyStore.Lobbies.FirstOrDefault(l => l.Id == lobbyId);
+            var lobby = await _context.Lobbies
+                    .Include(l => l.Players)
+                    .Include(l => l.Recordings)
+                    .FirstOrDefaultAsync(l => l.Id == lobbyId);
+
             if (lobby == null)
             {
                 await Clients.Caller.SendAsync("Error", "No lobby found");
                 return;
             }
+            
+            var playerToRemove = lobby.Players.FirstOrDefault(p => p.Id == user.Id);
 
-            // If the owner leaves, make the first person the new onwer
-            if (!lobby.IsOwner(user.Id))
+            if (playerToRemove == null) return;
+
+            var wasOwner = lobby.IsOwner(user.Id);
+
+            lobby.Players.Remove(playerToRemove);
+
+            // If owner left, assign a new one
+            if (wasOwner && lobby.Players.Any())
             {
                 lobby.OwnerId = lobby.Players.First().Id;
             }
-            lobby.Players.RemoveAll(p => p.Id == user.Id);
+            await _context.SaveChangesAsync();
+                                      
+            LobbyStore.Lobbies.AddOrUpdate(lobby.Id, lobby, (key, existingLobby) => lobby);
 
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, lobby.LobbyCode);
-            await Clients.Group(lobby.LobbyCode).SendAsync("PlayerLeft", user, lobby.OwnerId);
+            await GroupsService.RemoveFromGroupAsync(Context.ConnectionId, lobby.LobbyCode);
+            await Clients.Group(lobby.LobbyCode).SendAsync("PlayerLeft", user, lobby.OwnerId, lobby);
+            await Clients.Caller.SendAsync("YouLeft");
         }
 
+
+        public async Task UpdateLobbyWithScores(int lobbyId, object updatedLobby)
+        {
+            var lobby = _lobbyStore.Lobbies.Values.FirstOrDefault(l => l.Id == lobbyId);
+            if (lobby == null) return;
+
+           
+            await Clients.Group(lobby.LobbyCode).SendAsync("LobbyUpdated", updatedLobby);
+
+            Console.WriteLine($"Lobby updated with final scores for {lobby.LobbyCode}");
+        }
+        public async Task NotifyFinalScores(int lobbyId, object scores)
+        {
+            var lobby = _lobbyStore.Lobbies.Values.FirstOrDefault(l => l.Id == lobbyId);
+            if (lobby == null) return;
+
+            
+            await Clients.Group(lobby.LobbyCode).SendAsync("FinalScoresReady", scores);
+        }
+        public async Task NotifyPlayerVoted(int lobbyId)
+        {
+            var lobby = _lobbyStore.Lobbies.Values.FirstOrDefault(l => l.Id == lobbyId);
+            if (lobby == null) return;
+
+            
+            await Clients.Group(lobby.LobbyCode).SendAsync("PlayerVoted");
+   
+        }
     }
 }

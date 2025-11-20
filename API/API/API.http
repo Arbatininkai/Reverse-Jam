@@ -8,6 +8,11 @@ Accept: application/json
 POST {{API_HostAddress}}/api/auth/google-signin
 Content-Type: application/json
 
+###
+POST {{API_HostAddress}}/api/Lobby/create
+Content-Type: application/json
+
+
 "string"
 
 ###

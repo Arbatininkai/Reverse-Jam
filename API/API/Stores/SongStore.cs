@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace API.Stores
 {
-    public static class SongStore
+    public class SongStore : ISongStore
     {
         public static List<Song> Songs { get; private set; } = new();
         public static async Task InitializeAsync(string? explicitPath = null)
