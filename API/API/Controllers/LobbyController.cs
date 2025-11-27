@@ -4,6 +4,7 @@ using API.Models;
 using API.Services;
 using API.Stores;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -75,6 +76,34 @@ namespace API.Controllers
 
             if (!exists) return NotFound("Lobby not found");
             return Ok();
+        }
+
+        [Authorize]
+        [HttpGet("get-player-lobbies")]
+        public async Task<IActionResult> GetPlayerLobbies()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _dbContext.Users.FindAsync(int.Parse(userId!));
+            if (user == null)
+            {
+                return BadRequest("User does not exist");
+            }
+            var lobbies = await _dbContext.Lobbies
+                .Where(l => l.Players.Any(p => p.Id == user.Id))
+                .ToListAsync();
+
+            if (!lobbies.Any())
+                return BadRequest("User has not participated in any lobbies");
+
+            var lobbyScoresList = lobbies
+                .Select(l => new
+                {
+                    Lobby = l,
+                    Scores = _lobbyStore.GetLobbyScores(l.LobbyCode)
+                })
+                .ToList();
+
+            return Ok(lobbyScoresList);
         }
 
         [Authorize]
