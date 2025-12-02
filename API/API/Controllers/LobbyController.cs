@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -75,6 +73,35 @@ namespace API.Controllers
 
             if (!exists) return NotFound("Lobby not found");
             return Ok();
+        }
+
+        [Authorize]
+        [HttpGet("get-player-lobbies")]
+        public async Task<IActionResult> GetPlayerLobbies()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _dbContext.Users.FindAsync(int.Parse(userId!));
+            if (user == null)
+            {
+                return BadRequest("User does not exist");
+            }
+            var lobbies = await _dbContext.Lobbies
+                .Include(l => l.Players)
+                .Where(l => l.Players.Any(p => p.Id == user.Id))
+                .ToListAsync();
+
+            if (!lobbies.Any())
+                return Ok(new List<object>());
+
+            var lobbyScoresList = lobbies
+                .Select(l => new
+                {
+                    Lobby = l,
+                    Scores = _lobbyStore.GetLobbyScores(l.LobbyCode)
+                })
+                .ToList();
+
+            return Ok(lobbyScoresList);
         }
 
         [Authorize]
