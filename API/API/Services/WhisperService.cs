@@ -16,7 +16,7 @@ namespace API.Services
             // NEED TO SET PROPER VARIABLES WITH AZURE OPEN AI
             var endpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT");
             var key = Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY");
-            _deploymentName = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT_NAME") ?? "whisper";
+            _deploymentName = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT_NAME") ?? "ReverseJamAI";
 
             if (string.IsNullOrWhiteSpace(endpoint) || string.IsNullOrWhiteSpace(key))
                 throw new Exception("Azure OpenAI endpoint or API key not set.");
