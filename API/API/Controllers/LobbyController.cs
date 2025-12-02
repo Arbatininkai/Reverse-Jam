@@ -4,13 +4,10 @@ using API.Models;
 using API.Services;
 using API.Stores;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -89,11 +86,12 @@ namespace API.Controllers
                 return BadRequest("User does not exist");
             }
             var lobbies = await _dbContext.Lobbies
+                .Include(l => l.Players)
                 .Where(l => l.Players.Any(p => p.Id == user.Id))
                 .ToListAsync();
 
             if (!lobbies.Any())
-                return BadRequest("User has not participated in any lobbies");
+                return Ok(new List<object>());
 
             var lobbyScoresList = lobbies
                 .Select(l => new
