@@ -19,14 +19,16 @@ public class AuthController : ControllerBase
 {
     private readonly string jwtKey = "tavo_labai_slaptas_raktas_turi_buti_ilgesnis_32_bytes!";
     private readonly AppDbContext _context;
+    private readonly IConfiguration _configuration;
 
-   
+
     private readonly IUserStore _userStore;
-    public AuthController(IUserStore userStore, AppDbContext context)
+    public AuthController(IUserStore userStore, AppDbContext context, IConfiguration configuration)
     {
         
         _userStore = userStore;
         _context = context;
+        _configuration = configuration;
     }
 
     private static async Task<IEnumerable<SecurityKey>> GetGoogleKeysAsync()
@@ -47,7 +49,7 @@ public class AuthController : ControllerBase
             var validationParameters = new TokenValidationParameters
             {
                 ValidIssuer = "https://accounts.google.com",
-                ValidAudience = "945939078641-no1bls6nnf2s5teqk3m5b1q3kfkorle1.apps.googleusercontent.com",
+                ValidAudience = _configuration["Google:WebClientId"],
                 ValidateIssuerSigningKey = true,
                 ValidateIssuer = true,
                 ValidateAudience = true,
