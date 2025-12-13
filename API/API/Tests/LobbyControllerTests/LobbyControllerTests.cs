@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using Microsoft.EntityFrameworkCore;
 using API.Models;
+using Integrations.Data.Entities;
 
 [Collection(nameof(DatabaseTestCollection))] 
 public class LobbyControllerTests : IAsyncLifetime
@@ -50,7 +51,7 @@ public class LobbyControllerTests : IAsyncLifetime
     {
         // ARRANGE
         var db = _factory.CreateDbContext();
-        var user = new User { Email = "creator@test.com", Name = "Creator" };
+        var user = new UserEntity { Email = "creator@test.com", Name = "Creator" };
         await db.Users.AddAsync(user);
         await db.SaveChangesAsync();
 
@@ -82,10 +83,10 @@ public class LobbyControllerTests : IAsyncLifetime
     {
         // ARRANGE
         var db = _factory.CreateDbContext();
-        var user = new User { Email = "player@test.com", Name = "Player" };
+        var user = new UserEntity { Email = "player@test.com", Name = "Player" };
         await db.Users.AddAsync(user);
 
-        var lobby = new Lobby { LobbyCode = "ABC123", OwnerId = user.Id };
+        var lobby = new LobbyEntity { LobbyCode = "ABC123", OwnerId = user.Id };
         lobby.Players.Add(user);
         db.Lobbies.Add(lobby);
         await db.SaveChangesAsync();
@@ -117,11 +118,11 @@ public class LobbyControllerTests : IAsyncLifetime
     {
         // ARRANGE
         var db = _factory.CreateDbContext();
-        var user = new User { Email = "owner@test.com", Name = "Owner" };
+        var user = new UserEntity { Email = "owner@test.com", Name = "Owner" };
         db.Users.Add(user);
         await db.SaveChangesAsync();
 
-        var lobby = new Lobby { LobbyCode = "DEL123", OwnerId = user.Id };
+        var lobby = new LobbyEntity { LobbyCode = "DEL123", OwnerId = user.Id };
         lobby.Players.Add(user);
         db.Lobbies.Add(lobby);
         await db.SaveChangesAsync();

@@ -1,12 +1,16 @@
 using System.Data.SqlClient;
 using System.Text;
-using API.Data;
-using API.Hubs;
-using API.Stores;
-using API.Services;
+using Integrations.Data.Entities;
+using Services.Hubs;
+using Services.Stores;
+using Services.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Integrations.WhisperService;
+using Services.RecordingService;
+using Services.AuthService;
+using Services.LobbyService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,10 +38,16 @@ builder.Services.AddSingleton<WhisperService>();
 // SignalR configuration
 builder.Services.AddSignalR();
 
-builder.Services.AddSingleton<IUserStore, UserStore>();
 builder.Services.AddSingleton<ILobbyStore, LobbyStore>();
 builder.Services.AddSingleton<ISongStore, SongStore>();
-builder.Services.AddSingleton<IRandomValue, RandomValue>();
+
+builder.Services.AddScoped<IRecordingService, RecordingService>();
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<GameService>();
+builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<LobbyService>();
+builder.Services.AddScoped<ILobbyService, LobbyService>();
 
 // JWT konfigūracija
 var key = Encoding.ASCII.GetBytes("tavo_labai_slaptas_raktas_turi_buti_ilgesnis_32_bytes!");
