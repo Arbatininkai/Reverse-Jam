@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.SignalR;
 using Services.Hubs;
 using Services.Models;
 using Services.Stores;
-using Services.Utils;
 
 namespace Services.LobbyService
 {
@@ -73,17 +72,23 @@ namespace Services.LobbyService
                 l.LobbyCode.ToLower() == code.ToLower());
         }
 
-        public async Task<IEnumerable<LobbyWithScoresDto>> GetPlayerLobbiesAsync(int userId)
+        public async Task<IEnumerable<LobbyWithScoresDto>> GetPlayerLobbiesAsync(int userId, int page = 1, int pageSize = 3)
         {
-            var lobbies = await _dbContext.Lobbies
+            var query = _dbContext.Lobbies
                 .Include(l => l.Players)
+                .Include(l => l.Recordings)
                 .Where(l => l.Players.Any(p => p.Id == userId))
+                .OrderByDescending(l => l.Id);
+
+            var lobbies = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
 
             if (!lobbies.Any())
-                return new List<LobbyWithScoresDto>();
+                return Enumerable.Empty<LobbyWithScoresDto>();
 
-            var result = lobbies.Select(l => new LobbyWithScoresDto
+            return lobbies.Select(l => new LobbyWithScoresDto
             {
                 Lobby = new LobbyDto
                 {
@@ -91,6 +96,24 @@ namespace Services.LobbyService
                     LobbyCode = l.LobbyCode,
                     Private = l.Private,
                     AiRate = l.AiRate,
+                    Players = l.Players.Select(p => new UserDto
+                    {
+                        Id = p.Id,
+                        Name = p.Name ?? "",
+                        Email = p.Email ?? "",
+                        PhotoUrl = p.PhotoUrl ?? "",
+                        Emoji = p.Emoji ?? ""
+                    }).ToList(),
+                    Recordings = l.Recordings.Select(r => new RecordingDto
+                    {
+                        Id = r.Id,
+                        Url = r.Url,
+                        UserId = r.UserId,
+                        FileName = r.FileName,
+                        UploadedAt = r.UploadedAt,
+                        Round = r.Round,
+                        AiScore = r.AiScore
+                    }).ToList(),
                     HumanRate = l.HumanRate,
                     MaxPlayers = l.MaxPlayers,
                     TotalRounds = l.TotalRounds,
@@ -101,9 +124,8 @@ namespace Services.LobbyService
                 },
                 Scores = _lobbyStore.GetLobbyScores(l.LobbyCode)
             });
-
-            return result;
         }
+
 
         public async Task<bool> DeleteLobbyAsync(int lobbyId)
         {

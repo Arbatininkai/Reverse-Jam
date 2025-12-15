@@ -15,7 +15,7 @@ namespace Integrations.WhisperService
         {
             var endpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT");
             var key = Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY");
-            _deploymentName = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT_NAME") ?? "ReverseJamAI";
+            _deploymentName = "whisper";
 
             if (string.IsNullOrWhiteSpace(endpoint) || string.IsNullOrWhiteSpace(key))
                 throw new Exception("Azure OpenAI endpoint or API key not set.");

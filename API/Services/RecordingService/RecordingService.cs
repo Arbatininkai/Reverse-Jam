@@ -1,11 +1,12 @@
-﻿using Services.Stores;
-using Integrations.Data.Entities;
+﻿using Integrations.Data.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Services.AiScoringService;
 using Services.Hubs;
-using Xabe.FFmpeg;
 using Services.Models;
+using Services.Stores;
+using Xabe.FFmpeg;
 
 namespace Services.RecordingService;
 
@@ -13,12 +14,12 @@ public class RecordingService : IRecordingService
 {
     private readonly IHubContext<LobbyHub> _hubContext;
     private readonly AppDbContext _db;
-    private readonly AIScoringService _scoringService;
+    private readonly IAIScoringService _scoringService;
 
     public RecordingService(
         IHubContext<LobbyHub> hubContext,
         AppDbContext db,
-        AIScoringService scoringService)
+        IAIScoringService scoringService)
     {
         _hubContext = hubContext;
         _db = db;
@@ -46,7 +47,8 @@ public class RecordingService : IRecordingService
         if (!lobby.Players.Any(p => p.Id == user.Id))
             throw new UnauthorizedAccessException("User is not a participant");
 
-        var folder = Path.Combine(Directory.GetCurrentDirectory(), "recordings", lobby.LobbyCode);
+        var servicesRoot = Path.Combine(Directory.GetCurrentDirectory(), "..", "Services");
+        var folder = Path.Combine(servicesRoot, "recordings", lobby.LobbyCode);
         Directory.CreateDirectory(folder);
 
         var extension = Path.GetExtension(request.File.FileName);
@@ -80,23 +82,52 @@ public class RecordingService : IRecordingService
 
         if (lobby.AiRate)
         {
-            try
-            {
-                var aiScore = await _scoringService.ScoreRecordingAsync(request.OriginalSongLyrics ?? "", path);
-                recordingEntity.AiScore = aiScore;
-                recordingEntity.StatusMessage = $"AI Score for user {user.Id} in lobby {lobby.LobbyCode}: {aiScore}";
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"AI scoring failed: {ex.Message}");
-            }
+         
+                var response = await _scoringService.ScoreRecordingAsync(request.OriginalSongLyrics ?? "", path);
+                recordingEntity.AiScore = response.SimilarityScore;
+                recordingEntity.StatusMessage = response.TranscribedText;
+           
         }
 
         lobby.Recordings.Add(recordingEntity);
         _db.Recordings.Add(recordingEntity);
         await _db.SaveChangesAsync();
 
-        await _hubContext.Clients.Group(lobby.LobbyCode).SendAsync("LobbyUpdated", lobby);
+        var lobbyDto = new LobbyDto
+        {
+            Id = lobby.Id,
+            LobbyCode = lobby.LobbyCode,
+            AiRate = lobby.AiRate,
+            HumanRate = lobby.HumanRate,
+            MaxPlayers = lobby.MaxPlayers,
+            TotalRounds = lobby.TotalRounds,
+            OwnerId = lobby.OwnerId,
+            HasGameStarted = lobby.HasGameStarted,
+            CurrentRound = lobby.CurrentRound,
+            CurrentPlayerIndex = lobby.CurrentPlayerIndex,
+            Recordings = lobby.Recordings.Select(r => new RecordingDto
+            {
+                Id = r.Id,
+                Url = r.Url,
+                UserId = r.UserId,
+                FileName = r.FileName,
+                UploadedAt = r.UploadedAt,
+                Round = r.Round,
+                AiScore = r.AiScore,
+                StatusMessage = r.StatusMessage
+            }).ToList(),
+            Players = lobby.Players.Select(p => new UserDto
+            {
+                Id = p.Id,
+                Name = p.Name ?? "user",
+                Email = p.Email ?? "user@gmail.com",
+                PhotoUrl = p.PhotoUrl ?? "",
+                Emoji = p.Emoji ?? ""
+            }).ToList()
+        };
+
+        await _hubContext.Clients.Group(lobby.LobbyCode).SendAsync("LobbyUpdated", lobbyDto);
+
 
         return new RecordingDto
         {
@@ -144,12 +175,12 @@ public class RecordingService : IRecordingService
     {
         var folder = Path.GetDirectoryName(inputPath)!;
         var name = Path.GetFileNameWithoutExtension(inputPath);
-        var output = Path.Combine(folder, $"{name}_reversed.m4a");
+        var output = Path.Combine(folder, name + "_reversed.m4a");
 
         try
         {
             var conversion = FFmpeg.Conversions.New()
-                .AddParameter($"-i \"{inputPath}\"", ParameterPosition.PreInput)
+                .AddParameter("-i \"" + inputPath + "\"", ParameterPosition.PreInput)
                 .AddParameter("-af areverse")
                 .AddParameter("-c:a aac")
                 .SetOutput(output);

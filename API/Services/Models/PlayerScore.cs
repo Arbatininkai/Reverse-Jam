@@ -19,7 +19,14 @@ namespace Services.Models
         {
             RoundScores.AddOrUpdate(
                 round,
-                _ => new RoundScore { RoundNumber = round, Score = score },
+                _ =>
+                {
+                    return new RoundScore
+                    {
+                        RoundNumber = round,
+                        Score = score,
+                    };
+                },
                 (_, existing) =>
                 {
                     existing.Score += score;
@@ -28,6 +35,7 @@ namespace Services.Models
 
             Interlocked.Add(ref _totalScore, score);
         }
+
     }
 
 

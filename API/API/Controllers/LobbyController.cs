@@ -48,10 +48,10 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet("user")]
-        public async Task<IActionResult> GetUserLobbies()
+        public async Task<IActionResult> GetUserLobbies([FromQuery] int page = 1, [FromQuery] int pageSize = 3)
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            var response = await _service.GetPlayerLobbiesAsync(userId);
+            var response = await _service.GetPlayerLobbiesAsync(userId, page, pageSize);
 
             return Ok(response);
         }

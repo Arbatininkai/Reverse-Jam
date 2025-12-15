@@ -1,5 +1,6 @@
 using Integrations.WhisperService;
 using Services.AiScoringService;
+using Services.Models;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ public class AIScoringService : IAIScoringService
         _whisper = whisperService;
     }
 
-    public async Task<double> ScoreRecordingAsync(string originalSongText, string userRecordingPath)
+    public async Task<AIResponse> ScoreRecordingAsync(string originalSongText, string userRecordingPath)
     {
         // Transcribe file
         var userText = await _whisper.TranscribeAsync(userRecordingPath);
@@ -20,7 +21,7 @@ public class AIScoringService : IAIScoringService
         double similarity = CalculateTextSimilarity(originalSongText, userText);
 
         // Map to 1–5
-        return 1 + similarity * 4;
+        return new AIResponse { SimilarityScore = 1 + similarity * 4, TranscribedText = userText };
     }
 
 

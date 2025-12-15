@@ -15,6 +15,7 @@ namespace Services.Models
         public bool HasGameStarted { get; set; }
         public int CurrentRound { get; set; }
         public int CurrentPlayerIndex { get; set; }
-        public List<UserDto> Players { get; set; } = new();  
+        public List<RecordingDto> Recordings { get; set; } = new();
+        public List<UserDto> Players { get; set; } = new();
     }
 }

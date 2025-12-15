@@ -123,7 +123,7 @@
     "Name": "Counting Stars",
     "Url": "https://song.blob.core.windows.net/songs/songs/OneRepublic - Counting Stars.mp3",
     "OriginalUrl": "https://song.blob.core.windows.net/original/OneRepublic - Counting Stars.mp3",
-    "Artist": "OneRepublic",
+    "Artist": "One Republic",
     "CoverUrl": "https://song.blob.core.windows.net/covers/counting stars.jpg",
     "Lyrics": "Lately i've been i've been losing sleep. dreaming about the things that we could be"
   },
@@ -149,7 +149,7 @@
     "OriginalUrl": "https://song.blob.core.windows.net/original/Someone Like You - Adele.mp3",
     "Artist": "Adele",
     "CoverUrl": "https://song.blob.core.windows.net/covers/someone like you.jpg",
-    "Lyrics": "Nvermind i'll find someone like you"
+    "Lyrics": "Nevermind i'll find someone like you"
   },
   {
     "Name": "Blank Space",
@@ -157,7 +157,7 @@
     "OriginalUrl": "https://song.blob.core.windows.net/original/Taylor Swift - Blank Space.mp3",
     "Artist": "Taylor Swift",
     "CoverUrl": "https://song.blob.core.windows.net/covers/blank space.jpg",
-    "Lyrics": "And i got a blank space baby. ANd i'll write your name"
+    "Lyrics": "And i got a blank space baby. And i'll write your name"
   },
   {
     "Name": "Blinding lights",

@@ -1,18 +1,16 @@
 ﻿using Services.Models;
 using Services.Stores;
-using Services.Utils;
 
 namespace Services.SongService
 {
     public class SongService : ISongService
     {
         private readonly ISongStore _songStore;
-        private readonly IRandomValue _random;
+        private readonly Random _random = new Random();
 
-        public SongService(ISongStore songStore, IRandomValue random)
+        public SongService(ISongStore songStore)
         {
             _songStore = songStore;
-            _random = random;
         }
 
         public IEnumerable<Song> GetAllSongs()
@@ -22,11 +20,12 @@ namespace Services.SongService
 
         public Song? GetRandomSong()
         {
-            if (_songStore.Songs == null || _songStore.Songs.Count == 0)
+            var songs = _songStore.Songs;
+            if (songs == null || songs.Count == 0)
                 return null;
 
-            var index = _random.Next(_songStore.Songs.Count);
-            return _songStore.Songs[index];
+            int index = _random.Next(songs.Count);
+            return songs[index];
         }
     }
 }

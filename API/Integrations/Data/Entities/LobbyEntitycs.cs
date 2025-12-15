@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace Integrations.Data.Entities;
 
@@ -19,7 +20,6 @@ public class LobbyEntity
     public bool HasGameStarted { get; set; } = false;
 
     public int OwnerId { get; set; }
-
     public List<UserEntity> Players { get; set; } = new List<UserEntity>();
     [NotMapped]
     public ICollection<RecordingEntity> Recordings { get; set; } = new List<RecordingEntity>();

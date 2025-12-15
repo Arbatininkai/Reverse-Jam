@@ -1,6 +1,5 @@
 ﻿using Services.Extensions;
 using Services.Models;
-using Services.Utils;
 using Services.Stores;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
@@ -230,24 +229,51 @@ namespace Services.Hubs
                 return;
             }
 
-            var playerToRemove = lobby.Players.FirstOrDefault(p => p.Id == user.Id);
+            bool gameFinished = lobby.HasGameStarted &&
+                        lobby.Recordings.Count == lobby.TotalRounds * lobby.Players.Count;
 
-            if (playerToRemove == null) return;
-
-            var wasOwner = lobby.IsOwner(user.Id);
-
-            lobby.Players.Remove(playerToRemove);
-
-         
-            if (wasOwner && lobby.Players.Any())
+            if (!gameFinished)
             {
-                lobby.OwnerId = lobby.Players.First().Id;
-            }
-            await _context.SaveChangesAsync();
+                var playerToRemove = lobby.Players.FirstOrDefault(p => p.Id == user.Id);
+                if (playerToRemove != null)
+                {
+                    bool wasOwner = lobby.IsOwner(user.Id);
+                    lobby.Players.Remove(playerToRemove);
 
+                    if (wasOwner && lobby.Players.Any())
+                    {
+                        lobby.OwnerId = lobby.Players.First().Id;
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            var lobbyDto = new LobbyDto
+            {
+                Id = lobby.Id,
+                Players = lobby.Players.Select(p => new UserDto
+                {
+                    Id = p.Id,
+                    Name = p.Name ?? "",
+                    Email = p.Email ?? "",
+                    PhotoUrl = p.PhotoUrl ?? "",
+                    Emoji = p.Emoji ?? ""
+                }).ToList(),
+                LobbyCode = lobby.LobbyCode,
+                Private = lobby.Private,
+                AiRate = lobby.AiRate,
+                HumanRate = lobby.HumanRate,
+                MaxPlayers = lobby.MaxPlayers,
+                TotalRounds = lobby.TotalRounds,
+                OwnerId = lobby.OwnerId,
+                HasGameStarted = lobby.HasGameStarted,
+                CurrentRound = lobby.CurrentRound,
+                CurrentPlayerIndex = lobby.CurrentPlayerIndex
+            };
 
             await GroupsService.RemoveFromGroupAsync(Context.ConnectionId, lobby.LobbyCode);
-            await Clients.Group(lobby.LobbyCode).SendAsync("PlayerLeft", user, lobby.OwnerId, lobby);
+            await Clients.Group(lobby.LobbyCode).SendAsync("PlayerLeft", user, lobby.OwnerId, lobbyDto);
             await Clients.Caller.SendAsync("YouLeft");
         }
 
