@@ -4,8 +4,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Xunit;
-using API.Data;
+using Integrations.Data.Entities;
 using API.Models;
+using Services.Models;
 
 [Collection(nameof(DatabaseTestCollection))]
 public class AuthControllerTests : IAsyncLifetime
@@ -40,7 +41,7 @@ public class AuthControllerTests : IAsyncLifetime
     {
         // ARRANGE
         var db = _factory.CreateDbContext();
-        var user = new User { Name = "Test", Email = "test@test.com" };
+        var user = new UserEntity { Name = "Test", Email = "test@test.com" };
         await db.Users.AddAsync(user);
         await db.SaveChangesAsync();
 

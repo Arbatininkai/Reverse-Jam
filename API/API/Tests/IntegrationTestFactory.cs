@@ -1,4 +1,4 @@
-﻿using API.Data;
+﻿using Integrations.Data.Entities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;

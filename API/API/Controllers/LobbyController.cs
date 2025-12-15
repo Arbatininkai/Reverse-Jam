@@ -1,13 +1,9 @@
-﻿using API.Data;
-using API.Hubs;
-using API.Models;
-using API.Services;
-using API.Stores;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
+using Services.LobbyService;
+using API.Models;
 using System.Security.Claims;
+using Services.Models;
 
 namespace API.Controllers
 {
@@ -15,127 +11,64 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class LobbyController : ControllerBase
     {
-        private readonly IHubContext<LobbyHub> _hubContext;
-        private readonly ILobbyStore _lobbyStore;
-        private readonly IUserStore _userStore;
-        private readonly IRandomValue _randomValue;
-        private readonly AppDbContext _dbContext;
+        private readonly ILobbyService _service;
 
-        public LobbyController(IHubContext<LobbyHub> hubContext, ILobbyStore lobbyStore, IUserStore userStore, IRandomValue randomValue, AppDbContext dbContext)
+        public LobbyController(ILobbyService service)
         {
-            _hubContext = hubContext;
-            _lobbyStore = lobbyStore;
-            _userStore = userStore;
-            _randomValue = randomValue;
-            _dbContext = dbContext;
+            _service = service;
         }
 
-        //Lobby sukurimas
         [Authorize]
         [HttpPost("create")]
-        public async Task<IActionResult> CreateLobby([FromBody] Lobby? options)
+        public async Task<IActionResult> CreateLobby([FromBody] LobbyCreateRequest request)
         {
-            if (options == null)
-                return BadRequest("Options required");
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            // paimam prisijungusio user info iš tokeno
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var email = User.FindFirstValue(ClaimTypes.Email);
-            var creator = await _dbContext.Users.FindAsync(int.Parse(userId!));
-
-            if (creator == null)
+            var options = new LobbyOptions
             {
-                return BadRequest("User does not exist");
-            }
-
-            var newLobby = new Lobby
-            {
-                Private = options.Private,
-                AiRate = options.AiRate,
-                TotalRounds = options.TotalRounds,
-                HumanRate = options.HumanRate,
-                OwnerId = creator.Id,
+                Private = request.Private,
+                AiRate = request.AiRate,
+                HumanRate = request.HumanRate,
+                MaxPlayers = request.MaxPlayers,
+                TotalRounds = request.TotalRounds
             };
-            newLobby.Players.Add(creator);
-            _dbContext.Lobbies.Add(newLobby);
-            await _dbContext.SaveChangesAsync();
 
-            LobbyStore.LobbiesDict.TryAdd(newLobby.Id, newLobby);
-
-            return Ok(newLobby);
+            var created = await _service.CreateLobbyAsync(userId, options);
+            return Ok(created);
         }
 
         [HttpGet("exists/{code}")]
-        public async Task<IActionResult> LobbyExists(string code)
+        public async Task<IActionResult> Exists(string code)
         {
-            var exists = await _dbContext.Lobbies.AnyAsync(l =>
-                l.LobbyCode.ToLower() == code.ToLower());
+            if (!await _service.LobbyExistsAsync(code))
+                return NotFound();
 
-            if (!exists) return NotFound("Lobby not found");
             return Ok();
         }
 
         [Authorize]
-        [HttpGet("get-player-lobbies")]
-        public async Task<IActionResult> GetPlayerLobbies()
+        [HttpGet("user")]
+        public async Task<IActionResult> GetUserLobbies([FromQuery] int page = 1, [FromQuery] int pageSize = 3)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _dbContext.Users.FindAsync(int.Parse(userId!));
-            if (user == null)
-            {
-                return BadRequest("User does not exist");
-            }
-            var lobbies = await _dbContext.Lobbies
-                .Include(l => l.Players)
-                .Where(l => l.Players.Any(p => p.Id == user.Id))
-                .ToListAsync();
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var response = await _service.GetPlayerLobbiesAsync(userId, page, pageSize);
 
-            if (!lobbies.Any())
-                return Ok(new List<object>());
-
-            var lobbyScoresList = lobbies
-                .Select(l => new
-                {
-                    Lobby = l,
-                    Scores = _lobbyStore.GetLobbyScores(l.LobbyCode)
-                })
-                .ToList();
-
-            return Ok(lobbyScoresList);
+            return Ok(response);
         }
 
         [Authorize]
         [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteLobby([FromBody] int lobbyId)
+        public async Task<IActionResult> Delete([FromBody] int lobbyId)
         {
-            var lobby = await _dbContext.Lobbies.FirstOrDefaultAsync(l => l.Id == lobbyId);
-
-            if (lobby == null)
-                return NotFound("Lobby not found");
-
-            _dbContext.Lobbies.Remove(lobby);
-
-            await _dbContext.SaveChangesAsync();
-
-            LobbyStore.LobbiesDict.TryRemove(lobby.Id, out _);
-
             try
             {
-                var recordingsPath = Path.Combine(Directory.GetCurrentDirectory(), "recordings");
-                if (Directory.Exists(recordingsPath))
-                {
-                    Directory.Delete(recordingsPath, true);
-                }
+                var response = await _service.DeleteLobbyAsync(lobbyId);
+                return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex.Message.Contains("Lobby not found"))
             {
-                Console.WriteLine($"Error cleaning up recordings : {ex.Message}");
+                return NotFound("Lobby not found");
             }
-
-          
-            await _hubContext.Clients.Group((lobby.LobbyCode).ToString()).SendAsync("LobbyDeleted");
-
-            return Ok(new { message = "Lobby deleted successfully" });
         }
     }
 }

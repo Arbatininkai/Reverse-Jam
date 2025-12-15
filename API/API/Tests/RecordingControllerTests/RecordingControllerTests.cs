@@ -1,13 +1,16 @@
+using Integrations.Data.Entities;
+using Microsoft.EntityFrameworkCore;
+using Moq;
+using Newtonsoft.Json;
+using Services.AiScoringService;
+using Services.Models;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
 using Xunit;
-using Newtonsoft.Json;
-using Microsoft.EntityFrameworkCore;
-using API.Models;
 
 [Collection(nameof(DatabaseTestCollection))]
 public class RecordingsControllerTests : IAsyncLifetime
@@ -49,12 +52,12 @@ public class RecordingsControllerTests : IAsyncLifetime
     {
         // ARRANGE
         var db = _factory.CreateDbContext();
-        var user = new User { Email = "testuser@test.com", Name = "TestUser" };
+        var user = new UserEntity { Email = "testuser@test.com", Name = "TestUser" };
         db.Users.Add(user);
-        db.Lobbies.Add(new Lobby { LobbyCode = "TEST123", OwnerId = user.Id });
+        db.Lobbies.Add(new LobbyEntity { LobbyCode = "TEST12", OwnerId = user.Id });
         await db.SaveChangesAsync();
 
-        var jwt = GenerateFakeJwt(user.Id, user.Email);
+        var jwt = GenerateFakeJwt(user.Id, user.Email ?? "");
         var client = _factory.CreateClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
@@ -73,30 +76,32 @@ public class RecordingsControllerTests : IAsyncLifetime
     {
         // ARRANGE
         var db = _factory.CreateDbContext();
-        var user = new User { Email = "uploader@test.com", Name = "Uploader" };
+        var user = new UserEntity { Email = "uploader@test.com", Name = "Uploader" };
         db.Users.Add(user);
         await db.SaveChangesAsync();
 
-        var lobby = new Lobby { LobbyCode = "AUDIO123", Players = new List<User> { user } };
+        var savedUser = await db.Users.SingleAsync(u => u.Email == "uploader@test.com");
+        var lobby = new LobbyEntity { LobbyCode = "AUD123", AiRate = false, Players = new List<UserEntity> { user } };
         db.Lobbies.Add(lobby);
         await db.SaveChangesAsync();
 
-        var jwt = GenerateFakeJwt(user.Id, user.Email);
+        var jwt = GenerateFakeJwt(savedUser.Id, savedUser.Email ?? "");
         var client = _factory.CreateClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
         
         
         var form = new MultipartFormDataContent();
-        var fileContent = new ByteArrayContent(Encoding.UTF8.GetBytes("fake audio"));
-        fileContent.Headers.ContentType = new MediaTypeHeaderValue("audio/mpeg");
-        form.Add(fileContent, "File", "test.mp3");
+        var dummyAudio = new byte[] { 1, 2, 3, 4 };
+        var fileContent = new ByteArrayContent(dummyAudio);
+        fileContent.Headers.ContentType = new MediaTypeHeaderValue("audio/m4a");
+        form.Add(fileContent, "File", "test.m4a");
 
         // ACT
         var response = await client.PostAsync($"/api/recordings/upload/{lobby.Id}/0", form);
 
         // ASSERT
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Contains("Url", await response.Content.ReadAsStringAsync());
+        Assert.Contains("url", await response.Content.ReadAsStringAsync());
     }
 
 
@@ -119,13 +124,13 @@ public class RecordingsControllerTests : IAsyncLifetime
     {
         // ARRANGE
         var db = _factory.CreateDbContext();
-        db.Lobbies.Add(new Lobby { LobbyCode = "PRIVATE123", Private = true });
+        db.Lobbies.Add(new LobbyEntity { LobbyCode = "PRI123", Private = true });
         await db.SaveChangesAsync();
 
         var client = _factory.CreateClient();
 
         // ACT
-        var response = await client.GetAsync("/api/recordings/PRIVATE123/recordings");
+        var response = await client.GetAsync("/api/recordings/PRI123/recordings");
 
         // ASSERT
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);

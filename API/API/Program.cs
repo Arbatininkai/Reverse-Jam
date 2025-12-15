@@ -1,12 +1,17 @@
-using System.Data.SqlClient;
 using System.Text;
-using API.Data;
-using API.Hubs;
-using API.Stores;
-using API.Services;
+using Integrations.Data.Entities;
+using Services.Hubs;
+using Services.Stores;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.FileProviders;
+using Integrations.WhisperService;
+using Services.RecordingService;
+using Services.AuthService;
+using Services.LobbyService;
+using Services.SongService;
+using Services.AiScoringService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,22 +29,24 @@ builder.Services.AddCors(options =>
     });
 });
 
-//Sql context
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddSingleton<AIScoringService>();
+builder.Services.AddScoped<IAIScoringService, AIScoringService>();
 builder.Services.AddSingleton<WhisperService>();
 
-// SignalR configuration
 builder.Services.AddSignalR();
 
-builder.Services.AddSingleton<IUserStore, UserStore>();
 builder.Services.AddSingleton<ILobbyStore, LobbyStore>();
 builder.Services.AddSingleton<ISongStore, SongStore>();
-builder.Services.AddSingleton<IRandomValue, RandomValue>();
 
-// JWT konfigūracija
+builder.Services.AddScoped<IRecordingService, RecordingService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<ILobbyService, LobbyService>();
+builder.Services.AddScoped<ISongService, SongService>();
+
+// JWT configuration
 var key = Encoding.ASCII.GetBytes("tavo_labai_slaptas_raktas_turi_buti_ilgesnis_32_bytes!");
 builder.Services.AddAuthentication(options =>
 {
@@ -60,6 +67,17 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
+var servicesRoot = Path.Combine(Directory.GetCurrentDirectory(), "..", "Services");
+var recordingsFolder = Path.Combine(servicesRoot, "recordings");
+Directory.CreateDirectory(recordingsFolder);
+
+// Serve recordings as static files
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(recordingsFolder),
+    RequestPath = "/Services/recordings"
+});
+
 await SongStore.InitializeAsync();
 
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
@@ -69,8 +87,10 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 }
 
 app.MapHub<LobbyHub>("/lobbyHub");
+
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
 app.Run();

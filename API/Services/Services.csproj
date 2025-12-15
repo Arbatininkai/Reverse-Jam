@@ -1,44 +1,36 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>63bcbc52-6433-4063-a113-fa2666468f4f</UserSecretsId>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="recordings\**" />
-    <Content Remove="recordings\**" />
-    <EmbeddedResource Remove="recordings\**" />
-    <None Remove="recordings\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="Stores\songs.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
 
 	<ItemGroup>
 
-
-		<PackageReference Include="Azure.AI.OpenAI" Version="2.1.0" />
-
-
 		<PackageReference Include="coverlet.collector" Version="6.0.4">
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		  <PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 
 
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0" />
 
 
+		<PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.2.0" />
+
+
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.0" />
 
 
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="10.0.0" />
-
-
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		  <PrivateAssets>all</PrivateAssets>
-		</PackageReference>
 
 
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
@@ -64,16 +56,14 @@
 		<PackageReference Include="Xabe.FFmpeg" Version="6.0.2" />
 		<PackageReference Include="xunit" Version="2.9.3" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		  <PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
+		<ProjectReference Include="..\Integrations\Integrations.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Integrations\Integrations.csproj" />
-	  <ProjectReference Include="..\Services\Services.csproj" />
+		<Folder Include="recordings\" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Tests\TestAudioFiles\" />
-	</ItemGroup></Project>
+</Project>
