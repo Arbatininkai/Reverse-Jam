@@ -83,9 +83,9 @@ public class RecordingService : IRecordingService
         if (lobby.AiRate)
         {
          
-                var response = await _scoringService.ScoreRecordingAsync(request.OriginalSongLyrics ?? "", path);
-                recordingEntity.AiScore = response.SimilarityScore;
-                recordingEntity.StatusMessage = response.TranscribedText;
+            var response = await _scoringService.ScoreRecordingAsync(request.OriginalSongLyrics ?? "", path);
+            recordingEntity.AiScore = response.SimilarityScore;
+            recordingEntity.StatusMessage = response.TranscribedText;
            
         }
 

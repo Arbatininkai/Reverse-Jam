@@ -72,4 +72,8 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Integrations\Integrations.csproj" />
 	  <ProjectReference Include="..\Services\Services.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Tests\TestAudioFiles\" />
 	</ItemGroup></Project>

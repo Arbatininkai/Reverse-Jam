@@ -1,13 +1,16 @@
+using Integrations.Data.Entities;
+using Microsoft.EntityFrameworkCore;
+using Moq;
+using Newtonsoft.Json;
+using Services.AiScoringService;
+using Services.Models;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
 using Xunit;
-using Newtonsoft.Json;
-using Microsoft.EntityFrameworkCore;
-using Integrations.Data.Entities;
 
 [Collection(nameof(DatabaseTestCollection))]
 public class RecordingsControllerTests : IAsyncLifetime
@@ -78,7 +81,7 @@ public class RecordingsControllerTests : IAsyncLifetime
         await db.SaveChangesAsync();
 
         var savedUser = await db.Users.SingleAsync(u => u.Email == "uploader@test.com");
-        var lobby = new LobbyEntity { LobbyCode = "AUD123", Players = new List<UserEntity> { user } };
+        var lobby = new LobbyEntity { LobbyCode = "AUD123", AiRate = false, Players = new List<UserEntity> { user } };
         db.Lobbies.Add(lobby);
         await db.SaveChangesAsync();
 
@@ -88,9 +91,10 @@ public class RecordingsControllerTests : IAsyncLifetime
         
         
         var form = new MultipartFormDataContent();
-        var fileContent = new ByteArrayContent(Encoding.UTF8.GetBytes("fake audio"));
-        fileContent.Headers.ContentType = new MediaTypeHeaderValue("audio/mpeg");
-        form.Add(fileContent, "File", "test.mp3");
+        var dummyAudio = new byte[] { 1, 2, 3, 4 };
+        var fileContent = new ByteArrayContent(dummyAudio);
+        fileContent.Headers.ContentType = new MediaTypeHeaderValue("audio/m4a");
+        form.Add(fileContent, "File", "test.m4a");
 
         // ACT
         var response = await client.PostAsync($"/api/recordings/upload/{lobby.Id}/0", form);

@@ -246,7 +246,7 @@ public class LobbyHubTests : IAsyncLifetime
                 args.Length == 3 &&
                 args[0] != null && ((UserEntity)args[0]).Id == user1.Id &&
                 args[1] != null && ((int)args[1] == user2.Id || (int)args[1] == lobby.OwnerId) &&
-                args[2] != null && ((LobbyEntity)args[2]).Id == lobby.Id
+                args[2] != null && ((LobbyDto)args[2]).Id == lobby.Id
             ),
             It.IsAny<CancellationToken>()),
             Times.Once);
