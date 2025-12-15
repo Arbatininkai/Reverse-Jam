@@ -149,75 +149,66 @@ public class GameControllerTests : IAsyncLifetime
         client2.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Bearer", GenerateFakeJwt(user2.Id, user2.Email!));
 
-        // Submit votes
-        await client.PostAsync(
-            "/api/game/submit-votes",
-            new StringContent(
-                JsonConvert.SerializeObject(new
+        using (var content1 = new StringContent(
+            JsonConvert.SerializeObject(new
+            {
+                LobbyCode = "GGG123",
+                Round = 1,
+                Votes = new[]
                 {
-                    LobbyCode = "GGG123",
-                    Round = 1,
-                    Votes = new[]
-                    {
                     new { UserId = user1.Id, Score = 5 }
-                    }
-                }),
-                Encoding.UTF8,
-                "application/json"));
-
-        await client2.PostAsync(
-            "/api/game/submit-votes",
-            new StringContent(
-                JsonConvert.SerializeObject(new
+                }
+            }),
+            Encoding.UTF8,
+            "application/json"))
+        {
+            await client.PostAsync("/api/game/submit-votes", content1);
+        }
+        using (var content2 = new StringContent(
+            JsonConvert.SerializeObject(new
+            {
+                LobbyCode = "GGG123",
+                Round = 1,
+                Votes = new[]
                 {
-                    LobbyCode = "GGG123",
-                    Round = 1,
-                    Votes = new[]
-                    {
                     new { UserId = user2.Id, Score = 10 }
-                    }
-                }),
-                Encoding.UTF8,
-                "application/json"));
-
+                }
+            }),
+            Encoding.UTF8,
+            "application/json"))
+        {
+            await client2.PostAsync("/api/game/submit-votes", content2);
+        }
         // ACT
-        var response = await client.PostAsync(
-            "/api/game/calculate-final-scores",
-            new StringContent(JsonConvert.SerializeObject("GGG123"), Encoding.UTF8, "application/json"));
+        using (var content3 = new StringContent(JsonConvert.SerializeObject("GGG123"), Encoding.UTF8, "application/json"))
+        {
+            var response = await client.PostAsync("/api/game/calculate-final-scores", content3);
+            using (var content4 = new StringContent(JsonConvert.SerializeObject("GGG123"), Encoding.UTF8, "application/json"))
+            {
+                var response2 = await client2.PostAsync("/api/game/calculate-final-scores", content4);
+                // ASSERT
+                response.EnsureSuccessStatusCode();
+                response2.EnsureSuccessStatusCode();
+                var body = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<CalculateFinalScoresResponse>(body)!;
+                Assert.Equal(2, result.Scores.Count);
+                var score1 = result.Scores.Single(s => s.UserId == user1.Id);
+                var score2 = result.Scores.Single(s => s.UserId == user2.Id);
+                db.Dispose();
+                var dbAfter = _factory.CreateDbContext();
+                var winnerFromDb = await dbAfter.Users
+                    .SingleAsync(u => u.Id == user2.Id);
 
-        var response2 = await client2.PostAsync(
-            "/api/game/calculate-final-scores",
-            new StringContent(JsonConvert.SerializeObject("GGG123"), Encoding.UTF8, "application/json"));
 
-
-        // ASSERT
-        response.EnsureSuccessStatusCode();
-        response2.EnsureSuccessStatusCode();
-
-        var body = await response.Content.ReadAsStringAsync();
-        var result = JsonConvert.DeserializeObject<CalculateFinalScoresResponse>(body)!;
-
-        Assert.Equal(2, result.Scores.Count);
-
-        var score1 = result.Scores.Single(s => s.UserId == user1.Id);
-        var score2 = result.Scores.Single(s => s.UserId == user2.Id);
-
-        db.Dispose();
-
-        var dbAfter = _factory.CreateDbContext();
-
-        var winnerFromDb = await dbAfter.Users
-            .SingleAsync(u => u.Id == user2.Id);
-
-        Assert.Equal(5, score1.TotalScore);
-        Assert.Equal(10, score2.TotalScore);
-
-        Assert.Equal(5, score1.RoundScores[1].Score);
-        Assert.Equal(10, score2.RoundScores[1].Score);
-
-        Assert.Equal(user2.Id, result.Winner.Id);
-        Assert.Equal(result.Winner.Id, winnerFromDb.Id);
-        Assert.Equal(1, winnerFromDb.TotalWins);
+                Assert.Equal(5, score1.TotalScore);
+                Assert.Equal(10, score2.TotalScore);
+                Assert.Equal(5, score1.RoundScores[1].Score);
+                Assert.Equal(10, score2.RoundScores[1].Score);
+                Assert.Equal(user2.Id, result.Winner.Id);
+                Assert.Equal(result.Winner.Id, winnerFromDb.Id);
+                Assert.Equal(1, winnerFromDb.TotalWins);
+            }
+        }
     }
 
 }

@@ -1,10 +1,12 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 #nullable disable
 
 namespace Integrations.Migrations
 {
+    [ExcludeFromCodeCoverage]
     /// <inheritdoc />
     public partial class InitialCreate : Migration
     {
