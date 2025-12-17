@@ -1,17 +1,20 @@
 using System.Text;
+using Amazon.S3;
 using Integrations.Data.Entities;
-using Services.Hubs;
-using Services.Stores;
+using Integrations.WhisperService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Integrations.WhisperService;
-using Services.RecordingService;
-using Services.AuthService;
-using Services.LobbyService;
-using Services.SongService;
+using Microsoft.IdentityModel.Tokens;
 using Services.AiScoringService;
+using Services.AuthService;
+using Services.CloudStorage;
+using Services.Hubs;
+using Services.LobbyService;
+using Services.RecordingService;
+using Services.SongService;
+using Services.Stores;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,8 +32,33 @@ builder.Services.AddCors(options =>
     });
 });
 
+
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+var awsAccessKey = builder.Configuration["AWS:AccessKey"];
+var awsSecretKey = builder.Configuration["AWS:SecretKey"];
+var awsRegion = builder.Configuration["AWS:Region"] ?? "eu-north-1";
+
+if (!string.IsNullOrEmpty(awsAccessKey) && !string.IsNullOrEmpty(awsSecretKey))
+{
+    builder.Services.AddSingleton<IAmazonS3>(provider =>
+    {
+        var config = new AmazonS3Config
+        {
+            RegionEndpoint = Amazon.RegionEndpoint.GetBySystemName(awsRegion)
+        };
+        return new AmazonS3Client(awsAccessKey, awsSecretKey, config);
+    });
+
+    builder.Services.AddSingleton<ICloudStorageService>(provider =>
+    {
+        var s3Client = provider.GetRequiredService<IAmazonS3>();
+        return new AwsS3StorageService(s3Client, awsRegion);
+    });
+}
 
 builder.Services.AddScoped<IAIScoringService, AIScoringService>();
 builder.Services.AddSingleton<WhisperService>();
@@ -67,16 +95,7 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-var servicesRoot = Path.Combine(Directory.GetCurrentDirectory(), "..", "Services");
-var recordingsFolder = Path.Combine(servicesRoot, "recordings");
-Directory.CreateDirectory(recordingsFolder);
 
-// Serve recordings as static files
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(recordingsFolder),
-    RequestPath = "/Services/recordings"
-});
 
 await SongStore.InitializeAsync();
 
