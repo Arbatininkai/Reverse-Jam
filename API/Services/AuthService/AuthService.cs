@@ -116,6 +116,18 @@ namespace Services.AuthService
                 TotalWins = entity.TotalWins
             };
         }
+        
+        public async Task<bool> UpdateUserProfileAsync(int userId, string? name, string? emoji)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return false;
+
+            user.Name = name;
+            user.Emoji = emoji;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }
 

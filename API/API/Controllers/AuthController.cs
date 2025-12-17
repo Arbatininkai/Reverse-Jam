@@ -59,4 +59,22 @@ public class AuthController : ControllerBase
         var email = User.FindFirstValue(ClaimTypes.Email);
         return Ok(new { userId, email });
     }
+    
+    [Authorize]
+    [HttpPost("change-name")]
+    public async Task<IActionResult> ChangeName([FromBody] ChangeNameRequest? options)
+    {
+        if (options == null) return BadRequest(new { message = "Options required" });
+
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!int.TryParse(userIdStr, out var userId)) return Unauthorized(new { message = "Invalid user ID" });
+
+        var result = await _authService.UpdateUserProfileAsync(userId, options.Name, options.Emoji);
+        if (!result) return Unauthorized(new { message = "User authentication failed" });
+
+
+
+
+        return Ok();
+    }
 }
