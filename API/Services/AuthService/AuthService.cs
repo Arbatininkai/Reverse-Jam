@@ -57,7 +57,8 @@ namespace Services.AuthService
                     Email = email,
                     Name = name,
                     PhotoUrl = photoUrl,
-                    Emoji = "1F600"
+                    Emoji = "1F600",
+                    TotalWins = 0
                 };
 
                 _context.Users.Add(user);
@@ -69,7 +70,8 @@ namespace Services.AuthService
                 Name = user.Name ?? string.Empty,
                 Email = user.Email ?? string.Empty,
                 PhotoUrl = user.PhotoUrl ?? string.Empty,
-                Emoji = user.Emoji ?? string.Empty
+                Emoji = user.Emoji ?? string.Empty,
+                TotalWins = user.TotalWins
             };
 
             return new AuthResponse
@@ -110,7 +112,8 @@ namespace Services.AuthService
                 Name = entity.Name ?? string.Empty,
                 Email = entity.Email ?? string.Empty,
                 PhotoUrl = entity.PhotoUrl ?? string.Empty,
-                Emoji = entity.Emoji ?? string.Empty
+                Emoji = entity.Emoji ?? string.Empty,
+                TotalWins = entity.TotalWins
             };
         }
     }

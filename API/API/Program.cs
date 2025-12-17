@@ -46,6 +46,10 @@ builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<ILobbyService, LobbyService>();
 builder.Services.AddScoped<ISongService, SongService>();
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.SetMinimumLevel(LogLevel.Information);
+
 // JWT configuration
 var key = Encoding.ASCII.GetBytes("tavo_labai_slaptas_raktas_turi_buti_ilgesnis_32_bytes!");
 builder.Services.AddAuthentication(options =>
