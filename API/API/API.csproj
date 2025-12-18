@@ -11,9 +11,13 @@
 
   <ItemGroup>
     <Compile Remove="recordings\**" />
+    <Compile Remove="Tests\TestAudioFiles\**" />
     <Content Remove="recordings\**" />
+    <Content Remove="Tests\TestAudioFiles\**" />
     <EmbeddedResource Remove="recordings\**" />
+    <EmbeddedResource Remove="Tests\TestAudioFiles\**" />
     <None Remove="recordings\**" />
+    <None Remove="Tests\TestAudioFiles\**" />
   </ItemGroup>
 
 	<ItemGroup>
@@ -74,8 +78,4 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Integrations\Integrations.csproj" />
 	  <ProjectReference Include="..\Services\Services.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Tests\TestAudioFiles\" />
 	</ItemGroup></Project>
