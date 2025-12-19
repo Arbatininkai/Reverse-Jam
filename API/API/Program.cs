@@ -30,7 +30,11 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        b => b.MigrationsAssembly("Integrations")
+    ));
+
 
 builder.Services.AddScoped<IAIScoringService, AIScoringService>();
 builder.Services.AddSingleton<WhisperService>();
@@ -91,6 +95,13 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 }
 
 app.MapHub<LobbyHub>("/lobbyHub");
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
+
 
 app.UseCors("AllowAll");
 app.UseAuthentication();

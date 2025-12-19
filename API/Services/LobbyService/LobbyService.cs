@@ -122,7 +122,6 @@ namespace Services.LobbyService
                     CurrentRound = l.CurrentRound,
                     CurrentPlayerIndex = l.CurrentPlayerIndex
                 },
-                Scores = _lobbyStore.GetLobbyScores(l.LobbyCode)
             });
         }
 

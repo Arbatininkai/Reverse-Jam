@@ -45,11 +45,5 @@ public class AppDbContext : DbContext
             .WithOne(r => r.User)
             .HasForeignKey(r => r.UserId);
 
-        // One-to-many: Lobby -> Owner (User)
-        /*modelBuilder.Entity<LobbyEntity>()
-            .HasOne(l => l.Owner)
-            .WithMany() // no navigation property on UserEntity for owned lobbies
-            .HasForeignKey(l => l.OwnerId)
-            .OnDelete(DeleteBehavior.Restrict);*/
     }
 }
