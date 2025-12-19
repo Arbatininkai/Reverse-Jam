@@ -35,7 +35,11 @@ builder.Services.AddCors(options =>
 
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        b => b.MigrationsAssembly("Integrations")
+    ));
+
 
 
 var awsAccessKey = builder.Configuration["AWS:AccessKey"];
@@ -74,6 +78,10 @@ builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<ILobbyService, LobbyService>();
 builder.Services.AddScoped<ISongService, SongService>();
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.SetMinimumLevel(LogLevel.Information);
+
 // JWT configuration
 var key = Encoding.ASCII.GetBytes("tavo_labai_slaptas_raktas_turi_buti_ilgesnis_32_bytes!");
 builder.Services.AddAuthentication(options =>
@@ -106,6 +114,13 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 }
 
 app.MapHub<LobbyHub>("/lobbyHub");
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
+
 
 app.UseCors("AllowAll");
 app.UseAuthentication();

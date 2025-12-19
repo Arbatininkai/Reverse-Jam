@@ -7,4 +7,5 @@ public class UserDto
     public string Name { get; set; } = default!;
     public string PhotoUrl { get; set; } = default!;
     public string Emoji { get; set; } = default!;
+    public int TotalWins { get; set; } = 0;
 }

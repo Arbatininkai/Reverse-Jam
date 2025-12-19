@@ -5,13 +5,19 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>63bcbc52-6433-4063-a113-fa2666468f4f</UserSecretsId>
+
+
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="recordings\**" />
+    <Compile Remove="Tests\TestAudioFiles\**" />
     <Content Remove="recordings\**" />
+    <Content Remove="Tests\TestAudioFiles\**" />
     <EmbeddedResource Remove="recordings\**" />
+    <EmbeddedResource Remove="Tests\TestAudioFiles\**" />
     <None Remove="recordings\**" />
+    <None Remove="Tests\TestAudioFiles\**" />
   </ItemGroup>
 
 	<ItemGroup>
@@ -72,8 +78,4 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Integrations\Integrations.csproj" />
 	  <ProjectReference Include="..\Services\Services.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Tests\TestAudioFiles\" />
 	</ItemGroup></Project>

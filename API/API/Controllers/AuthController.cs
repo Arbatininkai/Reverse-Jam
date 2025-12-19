@@ -3,6 +3,7 @@ using API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace API.Controllers;
 
@@ -11,10 +12,12 @@ namespace API.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
+    private readonly ILogger<AuthController> _logger;
 
-    public AuthController(IAuthService authService)
+    public AuthController(IAuthService authService, ILogger<AuthController> logger)
     {
         _authService = authService;
+        _logger = logger;
     }
 
     [HttpPost("google-signin")]
@@ -25,10 +28,12 @@ public class AuthController : ControllerBase
             var authResult = await _authService.GoogleSignInAsync(idToken);
             var user = authResult.User;
             var token = authResult.Token;
+            _logger.LogInformation("Result: {user}, {token}", user, token);
             return Ok(new { user, token });
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Error in GoogleSignIn");
             return BadRequest(new { message = "Invalid Google token: " + ex.Message });
         }
     }
@@ -54,7 +59,7 @@ public class AuthController : ControllerBase
         var email = User.FindFirstValue(ClaimTypes.Email);
         return Ok(new { userId, email });
     }
-
+    
     [Authorize]
     [HttpPost("change-name")]
     public async Task<IActionResult> ChangeName([FromBody] ChangeNameRequest? options)
@@ -66,9 +71,6 @@ public class AuthController : ControllerBase
 
         var result = await _authService.UpdateUserProfileAsync(userId, options.Name, options.Emoji);
         if (!result) return Unauthorized(new { message = "User authentication failed" });
-
-
-        
 
         return Ok();
     }

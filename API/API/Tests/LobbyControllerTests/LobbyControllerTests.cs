@@ -1,14 +1,15 @@
+using API.Models;
+using Integrations.Data.Entities;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Services.LobbyService;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Xunit;
-using Newtonsoft.Json;
-using System.Net.Http.Headers;
-using Microsoft.EntityFrameworkCore;
-using API.Models;
-using Integrations.Data.Entities;
 
 [Collection(nameof(DatabaseTestCollection))] 
 public class LobbyControllerTests : IAsyncLifetime
@@ -148,4 +149,121 @@ public class LobbyControllerTests : IAsyncLifetime
         var lobbyExistsInDb = await db.Lobbies.FirstOrDefaultAsync(l => l.Id == lobby.Id);
         Assert.Null(lobbyExistsInDb);
     }
+
+    [Fact]
+    public async Task GetUserLobbies_ValidRequest_ReturnsUserLobbies()
+    {
+        // ARRANGE
+        var db = _factory.CreateDbContext();
+
+        var user = new UserEntity { Email = "user@test.com", Name = "User" };
+        var otherUser = new UserEntity { Email = "other@test.com", Name = "Other" };
+
+        db.Users.AddRange(user, otherUser);
+        await db.SaveChangesAsync();
+
+        var lobby1 = new LobbyEntity
+        {
+            LobbyCode = "ABC123",
+            OwnerId = user.Id
+        };
+        lobby1.Players.Add(user);
+
+        var lobby2 = new LobbyEntity
+        {
+            LobbyCode = "XYZ999",
+            OwnerId = otherUser.Id
+        };
+        lobby2.Players.Add(otherUser);
+
+        db.Lobbies.AddRange(lobby1, lobby2);
+        await db.SaveChangesAsync();
+
+        var jwt = GenerateFakeJwt(user.Id, user.Email);
+        var client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", jwt);
+
+        // ACT
+        var response = await client.GetAsync("/api/lobby/user?page=1&pageSize=3");
+
+        // ASSERT
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var content = await response.Content.ReadAsStringAsync();
+        var result = JsonConvert.DeserializeObject<List<LobbyWithScoresDto>>(content);
+
+        Assert.NotNull(result);
+        Assert.Single(result);
+        Assert.Equal("ABC123", result.First().Lobby.LobbyCode);
+    }
+
+    [Fact]
+    public async Task GetUserLobbies_WithRecording_ReturnsLobbyWithRecording()
+    {
+        // ARRANGE
+        var db = _factory.CreateDbContext();
+
+        var user = new UserEntity
+        {
+            Email = "user@test.com",
+            Name = "User"
+        };
+
+        db.Users.Add(user);
+        await db.SaveChangesAsync();
+
+        var lobby = new LobbyEntity
+        {
+            LobbyCode = "REC123",
+            OwnerId = user.Id,
+            TotalRounds = 3,
+            CurrentRound = 1
+        };
+
+        lobby.Players.Add(user);
+
+        var recording = new RecordingEntity
+        {
+            Url = "https://test.com/recording.mp3",
+            FileName = "recording.mp3",
+            UserId = user.Id,
+            Round = 1,
+            AiScore = 2.14
+        };
+
+        lobby.Recordings.Add(recording);
+
+        db.Lobbies.Add(lobby);
+        await db.SaveChangesAsync();
+
+        var jwt = GenerateFakeJwt(user.Id, user.Email);
+        var client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", jwt);
+
+        // ACT
+        var response = await client.GetAsync("/api/lobby/user?page=1&pageSize=3");
+
+        // ASSERT
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var content = await response.Content.ReadAsStringAsync();
+        var result = JsonConvert.DeserializeObject<List<LobbyWithScoresDto>>(content);
+
+        Assert.NotNull(result);
+        Assert.Single(result);
+
+        var returnedLobby = result.First().Lobby;
+        Assert.Equal("REC123", returnedLobby.LobbyCode);
+        Assert.NotEmpty(returnedLobby.Recordings);
+
+        var returnedRecording = returnedLobby.Recordings.First();
+        Assert.Equal("recording.mp3", returnedRecording.FileName);
+        Assert.Equal(user.Id, returnedRecording.UserId);
+        Assert.Equal(1, returnedRecording.Round);
+        Assert.Equal(2.14, returnedRecording.AiScore);
+    }
+
+
 }

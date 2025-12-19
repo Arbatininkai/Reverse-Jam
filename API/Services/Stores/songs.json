@@ -121,7 +121,7 @@
   },
   {
     "Name": "Counting Stars",
-    "Url": "https://song.blob.core.windows.net/songs/songs/OneRepublic - Counting Stars.mp3",
+    "Url": "https://song.blob.core.windows.net/songs/OneRepublic - Counting Stars.mp3",
     "OriginalUrl": "https://song.blob.core.windows.net/original/OneRepublic - Counting Stars.mp3",
     "Artist": "One Republic",
     "CoverUrl": "https://song.blob.core.windows.net/covers/counting stars.jpg",
@@ -129,7 +129,7 @@
   },
   {
     "Name": "Let Her Go",
-    "Url": "https://song.blob.core.windows.net/songs/songs/Passenger  Let Her Go.mp3",
+    "Url": "https://song.blob.core.windows.net/songs/Passenger  Let Her Go.mp3",
     "OriginalUrl": "https://song.blob.core.windows.net/original/Passenger  Let Her Go.mp3",
     "Artist": "Passenger",
     "CoverUrl": "https://song.blob.core.windows.net/covers/let her go.jpg",
@@ -137,7 +137,7 @@
   },
   {
     "Name": "Sunflower",
-    "Url": "https://song.blob.core.windows.net/songs/songs/Post Malone - Sunflower.mp3",
+    "Url": "https://song.blob.core.windows.net/songs/Post Malone - Sunflower.mp3",
     "OriginalUrl": "https://song.blob.core.windows.net/original/Post Malone, Swae Lee - Sunflower.mp3",
     "Artist": "Post Malone",
     "CoverUrl": "https://song.blob.core.windows.net/covers/sunflower.jpg",
@@ -145,7 +145,7 @@
   },
   {
     "Name": "Someone like you",
-    "Url": "https://song.blob.core.windows.net/songs/songs/Someone Like You - Adele.mp3",
+    "Url": "https://song.blob.core.windows.net/songs/Someone Like You - Adele.mp3",
     "OriginalUrl": "https://song.blob.core.windows.net/original/Someone Like You - Adele.mp3",
     "Artist": "Adele",
     "CoverUrl": "https://song.blob.core.windows.net/covers/someone like you.jpg",
@@ -153,7 +153,7 @@
   },
   {
     "Name": "Blank Space",
-    "Url": "https://song.blob.core.windows.net/songs/songs/Taylor Swift - Blank Space.mp3",
+    "Url": "https://song.blob.core.windows.net/songs/Taylor Swift - Blank Space.mp3",
     "OriginalUrl": "https://song.blob.core.windows.net/original/Taylor Swift - Blank Space.mp3",
     "Artist": "Taylor Swift",
     "CoverUrl": "https://song.blob.core.windows.net/covers/blank space.jpg",
@@ -161,10 +161,10 @@
   },
   {
     "Name": "Blinding lights",
-    "Url": "https://song.blob.core.windows.net/songs/songs/The weekend - Blinding Lights.mp3",
+    "Url": "https://song.blob.core.windows.net/songs/The Weeknd - Blinding Lights.mp3",
     "OriginalUrl": "https://song.blob.core.windows.net/original/The Weeknd - Blinding Lights.mp3",
     "Artist": "The weekend",
     "CoverUrl": "https://song.blob.core.windows.net/covers/blinding lights.jpg",
-    "Lyrics": "Oh And i said ohh i'm blinded by the lights"
+    "Lyrics": "Oh And I said ohh I'm blinded by the lights"
   }
 ]
