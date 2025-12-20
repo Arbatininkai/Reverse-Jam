@@ -22,12 +22,12 @@ namespace Services.CloudStorage
                 BucketName = bucketName,
                 Key = fileName,
                 FilePath = filePath,
-                ContentType = "audio/mpeg",
-                CannedACL = S3CannedACL.PublicRead
+                ContentType = "audio/mpeg"
             };
 
             await _s3Client.PutObjectAsync(request);
-            return GetFileUrl(bucketName, fileName);
+           
+            return GetPreSignedUrl(bucketName, fileName, TimeSpan.FromHours(24));
         }
 
         public async Task<string> UploadFileAsync(IFormFile file, string bucketName, string fileName)
@@ -37,12 +37,13 @@ namespace Services.CloudStorage
                 BucketName = bucketName,
                 Key = fileName,
                 InputStream = file.OpenReadStream(),
-                ContentType = file.ContentType,
-                CannedACL = S3CannedACL.PublicRead
+                ContentType = file.ContentType
+             
             };
 
             await _s3Client.PutObjectAsync(request);
-            return GetFileUrl(bucketName, fileName);
+           
+            return GetPreSignedUrl(bucketName, fileName, TimeSpan.FromHours(24));
         }
 
         public async Task<bool> DeleteFileAsync(string bucketName, string fileName)
@@ -61,6 +62,19 @@ namespace Services.CloudStorage
         public string GetFileUrl(string bucketName, string fileName)
         {
             return $"https://{bucketName}.s3.{_region}.amazonaws.com/{fileName}";
+        }
+
+        public string GetPreSignedUrl(string bucketName, string fileName, TimeSpan expiration)
+        {
+            var request = new GetPreSignedUrlRequest
+            {
+                BucketName = bucketName,
+                Key = fileName,
+                Verb = HttpVerb.GET,
+                Expires = DateTime.UtcNow.Add(expiration)
+            };
+
+            return _s3Client.GetPreSignedURL(request);
         }
     }
 }
