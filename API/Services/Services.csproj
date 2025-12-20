@@ -14,7 +14,7 @@
 
 
 	<ItemGroup>
-
+		<PackageReference Include="AWSSDK.S3" Version="3.7.307.25" />
 		<PackageReference Include="coverlet.collector" Version="6.0.4">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>

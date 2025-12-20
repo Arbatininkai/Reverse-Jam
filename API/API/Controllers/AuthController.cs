@@ -72,9 +72,6 @@ public class AuthController : ControllerBase
         var result = await _authService.UpdateUserProfileAsync(userId, options.Name, options.Emoji);
         if (!result) return Unauthorized(new { message = "User authentication failed" });
 
-
-
-
         return Ok();
     }
 }

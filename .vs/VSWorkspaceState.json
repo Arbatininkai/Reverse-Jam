@@ -1,6 +1,16 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\API",
+    "\\API\\API",
+    "\\API\\API\\Properties",
+    "\\API\\API\\Properties\\ServiceDependencies",
+    "\\API\\API\\Properties\\ServiceDependencies\\Reverse-Jam",
+    "\\API\\Integrations",
+    "\\API\\Integrations\\WhisperAi",
+    "\\API\\Services",
+    "\\API\\Services\\RecordingService"
   ],
+  "SelectedNode": "\\API\\Integrations\\WhisperAi\\WhisperService.cs",
   "PreviewInSolutionExplorer": false
 }
