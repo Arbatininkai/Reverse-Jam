@@ -3,10 +3,14 @@
     "",
     "\\API",
     "\\API\\API",
-    "\\API\\API\\Controllers",
-    "\\API\\API\\Hubs",
-    "\\API\\API\\Models"
+    "\\API\\API\\Properties",
+    "\\API\\API\\Properties\\ServiceDependencies",
+    "\\API\\API\\Properties\\ServiceDependencies\\Reverse-Jam",
+    "\\API\\Integrations",
+    "\\API\\Integrations\\WhisperAi",
+    "\\API\\Services",
+    "\\API\\Services\\RecordingService"
   ],
-  "SelectedNode": "\\API\\API\\Controllers\\LobbyController.cs",
+  "SelectedNode": "\\API\\Integrations\\WhisperAi\\WhisperService.cs",
   "PreviewInSolutionExplorer": false
 }

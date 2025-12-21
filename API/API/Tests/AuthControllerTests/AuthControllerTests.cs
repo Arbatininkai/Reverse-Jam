@@ -1,12 +1,13 @@
+using API.Models;
+using Integrations.Data.Entities;
+using Newtonsoft.Json;
+using Services.Models;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Xunit;
-using Integrations.Data.Entities;
-using API.Models;
-using Services.Models;
 
 [Collection(nameof(DatabaseTestCollection))]
 public class AuthControllerTests : IAsyncLifetime
@@ -75,7 +76,54 @@ public class AuthControllerTests : IAsyncLifetime
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
-    
+    [Fact]
+    public async Task ChangeName_ValidRequest_UpdatesUserProfile()
+    {
+        // ARRANGE
+        var db = _factory.CreateDbContext();
+
+        var user = new UserEntity
+        {
+            Email = "user@test.com",
+            Name = "OldName",
+            Emoji = "1F978"
+        };
+
+        db.Users.Add(user);
+        await db.SaveChangesAsync();
+
+        var jwt = GenerateFakeJwt(user.Id, user.Email);
+        var client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", jwt);
+
+        var payload = new
+        {
+            Name = "NewName",
+            Emoji = "1F9D0"
+        };
+
+        var content = new StringContent(
+            JsonConvert.SerializeObject(payload),
+            Encoding.UTF8,
+            "application/json"
+        );
+
+        // ACT
+        var response = await client.PostAsync("/api/auth/change-name", content);
+
+        // ASSERT
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        db.ChangeTracker.Clear();
+        var updatedUser = await db.Users.FindAsync(user.Id);
+
+        Assert.Equal("NewName", updatedUser!.Name);
+        Assert.Equal("1F9D0", updatedUser.Emoji);
+    }
+
+
+
     private string GenerateFakeJwt(int id, string email)
     {
         var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();

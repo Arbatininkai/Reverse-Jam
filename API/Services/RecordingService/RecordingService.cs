@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Services.AiScoringService;
+using Services.CloudStorage;
 using Services.Hubs;
 using Services.Models;
 using Services.Stores;
@@ -15,15 +17,21 @@ public class RecordingService : IRecordingService
     private readonly IHubContext<LobbyHub> _hubContext;
     private readonly AppDbContext _db;
     private readonly IAIScoringService _scoringService;
+    private readonly ICloudStorageService _cloudStorage;
+    private readonly IConfiguration _configuration;
 
     public RecordingService(
         IHubContext<LobbyHub> hubContext,
         AppDbContext db,
-        IAIScoringService scoringService)
+        IAIScoringService scoringService,
+        ICloudStorageService cloudStorage,
+        IConfiguration configuration)
     {
         _hubContext = hubContext;
         _db = db;
         _scoringService = scoringService;
+        _cloudStorage = cloudStorage;
+        _configuration = configuration;
     }
 
     public async Task<RecordingDto> UploadRecordingAsync(int lobbyId, int roundIndex, int userId, RecordingUploadRequest request, string baseUrl)
@@ -47,100 +55,108 @@ public class RecordingService : IRecordingService
         if (!lobby.Players.Any(p => p.Id == user.Id))
             throw new UnauthorizedAccessException("User is not a participant");
 
-        var servicesRoot = Path.Combine(Directory.GetCurrentDirectory(), "..", "Services");
-        var folder = Path.Combine(servicesRoot, "recordings", lobby.LobbyCode);
-        Directory.CreateDirectory(folder);
-
+        var tempDir = Path.GetTempPath();
         var extension = Path.GetExtension(request.File.FileName);
-        var filename = $"{user.Id}_{Guid.NewGuid()}{extension}";
-        var path = Path.Combine(folder, filename);
+        var tempFileName = $"{user.Id}_{Guid.NewGuid()}{extension}";
+        var tempFilePath = Path.Combine(tempDir, tempFileName);
 
-        await using (var stream = new FileStream(path, FileMode.Create))
+        await using (var stream = new FileStream(tempFilePath, FileMode.Create))
             await request.File.CopyToAsync(stream);
 
+        string cloudUrl;
         try
         {
-            await ReverseAudioFileAsync(path);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Audio reversal failed: {ex.Message}");
-        }
-
-        var url = $"{baseUrl}/Services/recordings/{lobby.LobbyCode}/{filename}";
-
-        var recordingEntity = new RecordingEntity
-        {
-            UserId = user.Id,
-            User = user,
-            FileName = filename,
-            Url = url,
-            UploadedAt = DateTime.UtcNow,
-            Round = roundIndex + 1,
-            LobbyId = lobby.Id,
-        };
-
-        if (lobby.AiRate)
-        {
-         
-            var response = await _scoringService.ScoreRecordingAsync(request.OriginalSongLyrics ?? "", path);
-            recordingEntity.AiScore = response.SimilarityScore;
-            recordingEntity.StatusMessage = response.TranscribedText;
            
+            await ReverseAudioFileAsync(tempFilePath);
+
+          
+            var bucketName = _configuration["AWS:S3BucketName"] ?? "reverse-jam-recording";
+            var s3FileName = $"{lobby.LobbyCode}/{user.Id}_{Guid.NewGuid()}{extension}";
+            cloudUrl = await _cloudStorage.UploadFileAsync(tempFilePath, bucketName, s3FileName);
+
+            var recordingEntity = new RecordingEntity
+            {
+                UserId = user.Id,
+                User = user,
+                FileName = s3FileName,
+                Url = cloudUrl,
+                UploadedAt = DateTime.UtcNow,
+                Round = roundIndex + 1,
+                LobbyId = lobby.Id,
+            };
+
+            if (lobby.AiRate)
+            {
+                var response = await _scoringService.ScoreRecordingAsync(request.OriginalSongLyrics ?? "", tempFilePath);
+                recordingEntity.AiScore = response.SimilarityScore;
+                recordingEntity.StatusMessage = response.TranscribedText;
+            }
+
+            lobby.Recordings.Add(recordingEntity);
+            _db.Recordings.Add(recordingEntity);
+            await _db.SaveChangesAsync();
+
+            var lobbyDto = new LobbyDto
+            {
+                Id = lobby.Id,
+                LobbyCode = lobby.LobbyCode,
+                AiRate = lobby.AiRate,
+                HumanRate = lobby.HumanRate,
+                MaxPlayers = lobby.MaxPlayers,
+                TotalRounds = lobby.TotalRounds,
+                OwnerId = lobby.OwnerId,
+                HasGameStarted = lobby.HasGameStarted,
+                CurrentRound = lobby.CurrentRound,
+                CurrentPlayerIndex = lobby.CurrentPlayerIndex,
+                Recordings = lobby.Recordings.Select(r => new RecordingDto
+                {
+                    Id = r.Id,
+                    Url = r.Url,
+                    UserId = r.UserId,
+                    FileName = r.FileName,
+                    UploadedAt = r.UploadedAt,
+                    Round = r.Round,
+                    AiScore = r.AiScore,
+                    StatusMessage = r.StatusMessage
+                }).ToList(),
+                Players = lobby.Players.Select(p => new UserDto
+                {
+                    Id = p.Id,
+                    Name = p.Name ?? "user",
+                    Email = p.Email ?? "user@gmail.com",
+                    PhotoUrl = p.PhotoUrl ?? "",
+                    Emoji = p.Emoji ?? ""
+                }).ToList()
+            };
+
+            await _hubContext.Clients.Group(lobby.LobbyCode).SendAsync("LobbyUpdated", lobbyDto);
+
+            return new RecordingDto
+            {
+                Id = recordingEntity.Id,
+                Url = recordingEntity.Url,
+                UserId = recordingEntity.UserId,
+                FileName = recordingEntity.FileName,
+                UploadedAt = recordingEntity.UploadedAt,
+                Round = recordingEntity.Round,
+                LobbyId = recordingEntity.LobbyId,
+                AiScore = recordingEntity.AiScore,
+                StatusMessage = recordingEntity.StatusMessage
+            };
         }
-
-        lobby.Recordings.Add(recordingEntity);
-        _db.Recordings.Add(recordingEntity);
-        await _db.SaveChangesAsync();
-
-        var lobbyDto = new LobbyDto
+        finally
         {
-            Id = lobby.Id,
-            LobbyCode = lobby.LobbyCode,
-            AiRate = lobby.AiRate,
-            HumanRate = lobby.HumanRate,
-            MaxPlayers = lobby.MaxPlayers,
-            TotalRounds = lobby.TotalRounds,
-            OwnerId = lobby.OwnerId,
-            HasGameStarted = lobby.HasGameStarted,
-            CurrentRound = lobby.CurrentRound,
-            CurrentPlayerIndex = lobby.CurrentPlayerIndex,
-            Recordings = lobby.Recordings.Select(r => new RecordingDto
+       
+            try
             {
-                Id = r.Id,
-                Url = r.Url,
-                UserId = r.UserId,
-                FileName = r.FileName,
-                UploadedAt = r.UploadedAt,
-                Round = r.Round,
-                AiScore = r.AiScore,
-                StatusMessage = r.StatusMessage
-            }).ToList(),
-            Players = lobby.Players.Select(p => new UserDto
+                if (File.Exists(tempFilePath))
+                    File.Delete(tempFilePath);
+            }
+            catch (Exception ex)
             {
-                Id = p.Id,
-                Name = p.Name ?? "user",
-                Email = p.Email ?? "user@gmail.com",
-                PhotoUrl = p.PhotoUrl ?? "",
-                Emoji = p.Emoji ?? ""
-            }).ToList()
-        };
-
-        await _hubContext.Clients.Group(lobby.LobbyCode).SendAsync("LobbyUpdated", lobbyDto);
-
-
-        return new RecordingDto
-        {
-            Id = recordingEntity.Id,
-            Url = recordingEntity.Url,
-            UserId = recordingEntity.UserId,
-            FileName = recordingEntity.FileName,
-            UploadedAt = recordingEntity.UploadedAt,
-            Round = recordingEntity.Round,
-            LobbyId = recordingEntity.LobbyId,
-            AiScore = recordingEntity.AiScore,
-            StatusMessage = recordingEntity.StatusMessage
-        };
+                Console.WriteLine($"Failed to clean up temp file: {ex.Message}");
+            }
+        }
     }
 
     public async Task<IEnumerable<RecordingDto>> GetRecordingsAsync(string lobbyCode, int userId)
@@ -169,7 +185,6 @@ public class RecordingService : IRecordingService
                 LobbyId = r.LobbyId,
             });
     }
-
 
     private async Task ReverseAudioFileAsync(string inputPath)
     {

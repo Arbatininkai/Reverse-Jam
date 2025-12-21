@@ -1,61 +1,61 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\",
+  "WorkspaceRootPath": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\PlayerScore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\PlayerScore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Models\\PlayerScore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\LobbyScores.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\LobbyScores.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Models\\LobbyScores.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\PlayRequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\PlayRequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Models\\PlayRequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\Recording.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\Recording.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Models\\Recording.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\RecordingUploadRequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\RecordingUploadRequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Models\\RecordingUploadRequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\ScoreEntry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\ScoreEntry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Models\\ScoreEntry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\Lobby.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\Lobby.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Models\\Lobby.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\EndRoundRequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\EndRoundRequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Models\\EndRoundRequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Hubs\\LobbyHub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Hubs\\LobbyHub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Hubs\\LobbyHub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\AuthController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Controllers\\AuthController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Controllers\\AuthController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\LobbyController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Controllers\\LobbyController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Controllers\\LobbyController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\GameController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Controllers\\GameController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Controllers\\GameController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\RecordingController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Controllers\\RecordingController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\Controllers\\RecordingController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:API\\API\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
@@ -66,28 +66,306 @@
       "DocumentGroups": [
         {
           "DockedWidth": 266,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PlayerScore.cs",
+              "DocumentMoniker": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\PlayerScore.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\PlayerScore.cs",
+              "ToolTip": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\PlayerScore.cs",
+              "RelativeToolTip": "API\\API\\Models\\PlayerScore.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T11:33:54.966Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "apis1.arm.json",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Properties\\ServiceDependencies\\Reverse-Jam\\apis1.arm.json",
+              "RelativeDocumentMoniker": "API\\API\\Properties\\ServiceDependencies\\Reverse-Jam\\apis1.arm.json",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Properties\\ServiceDependencies\\Reverse-Jam\\apis1.arm.json",
+              "RelativeToolTip": "API\\API\\Properties\\ServiceDependencies\\Reverse-Jam\\apis1.arm.json",
+              "ViewState": "AgIAADYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-17T11:32:53.158Z"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "Recording.cs",
-              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\Recording.cs",
+              "DocumentMoniker": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\Recording.cs",
               "RelativeDocumentMoniker": "API\\API\\Models\\Recording.cs",
-              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\Recording.cs",
+              "ToolTip": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\Recording.cs",
               "RelativeToolTip": "API\\API\\Models\\Recording.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-18T11:34:06.316Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-18T11:34:06.316Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
+              "Title": "RecordingUploadRequest.cs",
+              "DocumentMoniker": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\RecordingUploadRequest.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\RecordingUploadRequest.cs",
+              "ToolTip": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\RecordingUploadRequest.cs",
+              "RelativeToolTip": "API\\API\\Models\\RecordingUploadRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-17T11:32:30.998Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PlayRequest.cs",
+              "DocumentMoniker": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\PlayRequest.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\PlayRequest.cs",
+              "ToolTip": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\PlayRequest.cs",
+              "RelativeToolTip": "API\\API\\Models\\PlayRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-17T11:32:11.158Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "API\\API\\Properties\\launchSettings.json",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Properties\\launchSettings.json",
+              "RelativeToolTip": "API\\API\\Properties\\launchSettings.json",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-17T11:32:09.969Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "LobbyScores.cs",
+              "DocumentMoniker": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\LobbyScores.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\LobbyScores.cs",
+              "ToolTip": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\LobbyScores.cs",
+              "RelativeToolTip": "API\\API\\Models\\LobbyScores.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACkAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T11:31:23.71Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ScoreEntry.cs",
+              "DocumentMoniker": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\ScoreEntry.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\ScoreEntry.cs",
+              "ToolTip": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\ScoreEntry.cs",
+              "RelativeToolTip": "API\\API\\Models\\ScoreEntry.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-17T11:31:29.318Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Integrations.csproj",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Integrations\\Integrations.csproj",
+              "RelativeDocumentMoniker": "API\\Integrations\\Integrations.csproj",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Integrations\\Integrations.csproj",
+              "RelativeToolTip": "API\\Integrations\\Integrations.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-12-17T11:30:54.088Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "songs.json",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Services\\Stores\\songs.json",
+              "RelativeDocumentMoniker": "API\\Services\\Stores\\songs.json",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Services\\Stores\\songs.json",
+              "RelativeToolTip": "API\\Services\\Stores\\songs.json",
+              "ViewState": "AgIAACcAAAAAAAAAAAAAADMAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-17T11:26:39.971Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "README.md",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\README.md",
+              "RelativeDocumentMoniker": "API\\README.md",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\README.md",
+              "RelativeToolTip": "API\\README.md",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2025-12-17T11:26:31.744Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "WhisperService.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Integrations\\WhisperAi\\WhisperService.cs",
+              "RelativeDocumentMoniker": "API\\Integrations\\WhisperAi\\WhisperService.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Integrations\\WhisperAi\\WhisperService.cs",
+              "RelativeToolTip": "API\\Integrations\\WhisperAi\\WhisperService.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T17:43:50.482Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AppDbContextModelSnapshot.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Integrations\\Migrations\\AppDbContextModelSnapshot.cs",
+              "RelativeDocumentMoniker": "API\\Integrations\\Migrations\\AppDbContextModelSnapshot.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Integrations\\Migrations\\AppDbContextModelSnapshot.cs",
+              "RelativeToolTip": "API\\Integrations\\Migrations\\AppDbContextModelSnapshot.cs",
+              "ViewState": "AgIAAEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T17:34:04.466Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "20251214113759_InitialCreate.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Integrations\\Migrations\\20251214113759_InitialCreate.Designer.cs",
+              "RelativeDocumentMoniker": "API\\Integrations\\Migrations\\20251214113759_InitialCreate.Designer.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Integrations\\Migrations\\20251214113759_InitialCreate.Designer.cs",
+              "RelativeToolTip": "API\\Integrations\\Migrations\\20251214113759_InitialCreate.Designer.cs",
+              "ViewState": "AgIAAF0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T17:34:10.266Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": ".gitignore",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\.gitignore",
+              "RelativeDocumentMoniker": "API\\.gitignore",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\.gitignore",
+              "RelativeToolTip": "API\\.gitignore",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-12-17T11:26:30.678Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "API\\API\\appsettings.Development.json",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\appsettings.Development.json",
+              "RelativeToolTip": "API\\API\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-17T11:26:21.696Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "EndRoundRequest.cs",
+              "DocumentMoniker": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\EndRoundRequest.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\EndRoundRequest.cs",
+              "ToolTip": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\EndRoundRequest.cs",
+              "RelativeToolTip": "API\\API\\Models\\EndRoundRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T11:33:42.633Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Lobby.cs",
+              "DocumentMoniker": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\Lobby.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\Lobby.cs",
+              "ToolTip": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Models\\Lobby.cs",
+              "RelativeToolTip": "API\\API\\Models\\Lobby.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T17:36:36.206Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Program.cs",
+              "RelativeDocumentMoniker": "API\\API\\Program.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Program.cs",
+              "RelativeToolTip": "API\\API\\Program.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAIAwwCsAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T17:36:54.196Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "GameController.cs",
+              "DocumentMoniker": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Controllers\\GameController.cs",
+              "RelativeDocumentMoniker": "API\\API\\Controllers\\GameController.cs",
+              "ToolTip": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Controllers\\GameController.cs",
+              "RelativeToolTip": "API\\API\\Controllers\\GameController.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T17:34:36.34Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "RecordingController.cs",
+              "DocumentMoniker": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Controllers\\RecordingController.cs",
+              "RelativeDocumentMoniker": "API\\API\\Controllers\\RecordingController.cs",
+              "ToolTip": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Controllers\\RecordingController.cs",
+              "RelativeToolTip": "API\\API\\Controllers\\RecordingController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T17:40:36.369Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "API\\API\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "API\\API\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-11T08:48:22.397Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "API.csproj",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\API.csproj",
+              "RelativeDocumentMoniker": "API\\API\\API.csproj",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\API.csproj",
+              "RelativeToolTip": "API\\API\\API.csproj",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABEAAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-12-16T17:33:49.107Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "ISongService.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Services\\SongService\\ISongService.cs",
+              "RelativeDocumentMoniker": "API\\Services\\SongService\\ISongService.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Services\\SongService\\ISongService.cs",
+              "RelativeToolTip": "API\\Services\\SongService\\ISongService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T18:51:35.912Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
               "Title": "RecordingUploadRequest.cs",
               "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\RecordingUploadRequest.cs",
               "RelativeDocumentMoniker": "API\\API\\Models\\RecordingUploadRequest.cs",
@@ -95,102 +373,35 @@
               "RelativeToolTip": "API\\API\\Models\\RecordingUploadRequest.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-18T11:33:58.826Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-18T11:33:58.826Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "PlayRequest.cs",
-              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\PlayRequest.cs",
-              "RelativeDocumentMoniker": "API\\API\\Models\\PlayRequest.cs",
-              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\PlayRequest.cs",
-              "RelativeToolTip": "API\\API\\Models\\PlayRequest.cs",
+              "DocumentIndex": 26,
+              "Title": "LobbyController.cs",
+              "DocumentMoniker": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Controllers\\LobbyController.cs",
+              "RelativeDocumentMoniker": "API\\API\\Controllers\\LobbyController.cs",
+              "ToolTip": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Controllers\\LobbyController.cs",
+              "RelativeToolTip": "API\\API\\Controllers\\LobbyController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-10T14:21:50.982Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Program.Partial.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Program.Partial.cs",
+              "RelativeDocumentMoniker": "API\\API\\Program.Partial.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Program.Partial.cs",
+              "RelativeToolTip": "API\\API\\Program.Partial.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-18T11:33:55.973Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-16T17:36:51.682Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "PlayerScore.cs",
-              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\PlayerScore.cs",
-              "RelativeDocumentMoniker": "API\\API\\Models\\PlayerScore.cs",
-              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\PlayerScore.cs",
-              "RelativeToolTip": "API\\API\\Models\\PlayerScore.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAAAB0AAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-18T11:33:54.966Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "LobbyScores.cs",
-              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\LobbyScores.cs",
-              "RelativeDocumentMoniker": "API\\API\\Models\\LobbyScores.cs",
-              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\LobbyScores.cs",
-              "RelativeToolTip": "API\\API\\Models\\LobbyScores.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACkAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-18T11:31:23.71Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ScoreEntry.cs",
-              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\ScoreEntry.cs",
-              "RelativeDocumentMoniker": "API\\API\\Models\\ScoreEntry.cs",
-              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\ScoreEntry.cs",
-              "RelativeToolTip": "API\\API\\Models\\ScoreEntry.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-18T11:33:56.96Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "EndRoundRequest.cs",
-              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\EndRoundRequest.cs",
-              "RelativeDocumentMoniker": "API\\API\\Models\\EndRoundRequest.cs",
-              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\EndRoundRequest.cs",
-              "RelativeToolTip": "API\\API\\Models\\EndRoundRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-18T11:33:42.633Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Lobby.cs",
-              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\Lobby.cs",
-              "RelativeDocumentMoniker": "API\\API\\Models\\Lobby.cs",
-              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\Lobby.cs",
-              "RelativeToolTip": "API\\API\\Models\\Lobby.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-18T11:30:25.185Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "GameController.cs",
-              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\GameController.cs",
-              "RelativeDocumentMoniker": "API\\API\\Controllers\\GameController.cs",
-              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\GameController.cs",
-              "RelativeToolTip": "API\\API\\Controllers\\GameController.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-12T19:16:30.573Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 27,
               "Title": "RecordingController.cs",
               "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\RecordingController.cs",
               "RelativeDocumentMoniker": "API\\API\\Controllers\\RecordingController.cs",
@@ -202,53 +413,208 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "API\\API\\Controllers\\AuthController.cs",
-              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "API\\API\\Controllers\\AuthController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAJAAAAAAAAAA==",
+              "DocumentIndex": 28,
+              "Title": "GameController.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\GameController.cs",
+              "RelativeDocumentMoniker": "API\\API\\Controllers\\GameController.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\GameController.cs",
+              "RelativeToolTip": "API\\API\\Controllers\\GameController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-11T08:48:22.397Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-12T19:16:30.573Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "LobbyController.cs",
-              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\LobbyController.cs",
-              "RelativeDocumentMoniker": "API\\API\\Controllers\\LobbyController.cs",
-              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Controllers\\LobbyController.cs",
-              "RelativeToolTip": "API\\API\\Controllers\\LobbyController.cs",
-              "ViewState": "AgIAAIEAAAAAAAAAAAAAAIkAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 29,
+              "Title": "IAuthService.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Services\\AuthService\\IAuthService.cs",
+              "RelativeDocumentMoniker": "API\\Services\\AuthService\\IAuthService.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Services\\AuthService\\IAuthService.cs",
+              "RelativeToolTip": "API\\Services\\AuthService\\IAuthService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-10T14:21:50.982Z"
+              "WhenOpened": "2025-12-16T17:40:37.152Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 31,
+              "Title": "UserEntity.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Integrations\\Data\\Entities\\UserEntity.cs",
+              "RelativeDocumentMoniker": "API\\Integrations\\Data\\Entities\\UserEntity.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Integrations\\Data\\Entities\\UserEntity.cs",
+              "RelativeToolTip": "API\\Integrations\\Data\\Entities\\UserEntity.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T17:40:14.778Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "LobbyEntitycs.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Integrations\\Data\\Entities\\LobbyEntitycs.cs",
+              "RelativeDocumentMoniker": "API\\Integrations\\Data\\Entities\\LobbyEntitycs.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Integrations\\Data\\Entities\\LobbyEntitycs.cs",
+              "RelativeToolTip": "API\\Integrations\\Data\\Entities\\LobbyEntitycs.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T17:40:13.702Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "RecordingEntity.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Integrations\\Data\\Entities\\RecordingEntity.cs",
+              "RelativeDocumentMoniker": "API\\Integrations\\Data\\Entities\\RecordingEntity.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Integrations\\Data\\Entities\\RecordingEntity.cs",
+              "RelativeToolTip": "API\\Integrations\\Data\\Entities\\RecordingEntity.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T17:40:09.864Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "20251214113759_InitialCreate.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Integrations\\Migrations\\20251214113759_InitialCreate.cs",
+              "RelativeDocumentMoniker": "API\\Integrations\\Migrations\\20251214113759_InitialCreate.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Integrations\\Migrations\\20251214113759_InitialCreate.cs",
+              "RelativeToolTip": "API\\Integrations\\Migrations\\20251214113759_InitialCreate.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T17:34:03.455Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Integrations\\Data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "API\\Integrations\\Data\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Integrations\\Data\\AppDbContext.cs",
+              "RelativeToolTip": "API\\Integrations\\Data\\AppDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T17:40:06.571Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "AIScoringService.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Services\\AiScoringService\\AIScoringService.cs",
+              "RelativeDocumentMoniker": "API\\Services\\AiScoringService\\AIScoringService.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Services\\AiScoringService\\AIScoringService.cs",
+              "RelativeToolTip": "API\\Services\\AiScoringService\\AIScoringService.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T17:34:19.033Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "IAIScoringService.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Services\\AiScoringService\\IAIScoringService.cs",
+              "RelativeDocumentMoniker": "API\\Services\\AiScoringService\\IAIScoringService.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\Services\\AiScoringService\\IAIScoringService.cs",
+              "RelativeToolTip": "API\\Services\\AiScoringService\\IAIScoringService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T17:34:21.738Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "PlayerScore.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\PlayerScore.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\PlayerScore.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\PlayerScore.cs",
+              "RelativeToolTip": "API\\API\\Models\\PlayerScore.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T11:33:54.966Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "ScoreEntry.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\ScoreEntry.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\ScoreEntry.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\ScoreEntry.cs",
+              "RelativeToolTip": "API\\API\\Models\\ScoreEntry.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T11:33:56.96Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "Recording.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\Recording.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\Recording.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\Recording.cs",
+              "RelativeToolTip": "API\\API\\Models\\Recording.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T11:34:06.316Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "LobbyScores.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\LobbyScores.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\LobbyScores.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\LobbyScores.cs",
+              "RelativeToolTip": "API\\API\\Models\\LobbyScores.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T11:31:23.71Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "PlayRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\PlayRequest.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\PlayRequest.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\PlayRequest.cs",
+              "RelativeToolTip": "API\\API\\Models\\PlayRequest.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T11:33:55.973Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 42,
+              "Title": "Lobby.cs",
+              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\Lobby.cs",
+              "RelativeDocumentMoniker": "API\\API\\Models\\Lobby.cs",
+              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Models\\Lobby.cs",
+              "RelativeToolTip": "API\\API\\Models\\Lobby.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-18T11:30:25.185Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
               "Title": "LobbyHub.cs",
-              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Hubs\\LobbyHub.cs",
+              "DocumentMoniker": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Hubs\\LobbyHub.cs",
               "RelativeDocumentMoniker": "API\\API\\Hubs\\LobbyHub.cs",
-              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\Hubs\\LobbyHub.cs",
+              "ToolTip": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\Hubs\\LobbyHub.cs",
               "RelativeToolTip": "API\\API\\Hubs\\LobbyHub.cs",
-              "ViewState": "AgIAAK8AAAAAAAAAAAAuwLgAAABZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-12T19:27:44.57Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-12T19:27:44.57Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 13,
               "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\appsettings.json",
+              "DocumentMoniker": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\appsettings.json",
               "RelativeDocumentMoniker": "API\\API\\appsettings.json",
-              "ToolTip": "C:\\Users\\Vartotojas\\projects\\ReverseJam\\Reverse-Jam\\API\\API\\appsettings.json",
+              "ToolTip": "C:\\Users\\kalvi\\source\\repos\\Reverse-Jam\\API\\API\\appsettings.json",
               "RelativeToolTip": "API\\API\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2025-11-10T14:21:57.606Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
             }
           ]
         },
