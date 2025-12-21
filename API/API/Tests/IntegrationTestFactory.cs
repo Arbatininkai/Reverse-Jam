@@ -1,10 +1,13 @@
-﻿using Integrations.Data.Entities;
+﻿using Amazon.S3;
+using Integrations.Data.Entities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Respawn;
+using Services.CloudStorage;
 using Testcontainers.MsSql;
 using Xunit;
 
@@ -62,20 +65,24 @@ public class IntegrationTestFactory
     {
         builder.ConfigureTestServices(services =>
         {
-            // Remove old DbContext
+            services.RemoveAll<ICloudStorageService>();
+            services.RemoveAll<IAmazonS3>();
+
+            services.AddSingleton<ICloudStorageService, FakeCloudStorageService>();
+
             var descriptor = services.SingleOrDefault(
                 d => d.ServiceType == typeof(DbContextOptions<AppDbContext>)
             );
             if (descriptor != null)
                 services.Remove(descriptor);
 
-            // Add SQL Server DbContext
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(_dbContainer.GetConnectionString()));
         });
 
         builder.UseEnvironment("Testing");
     }
+
 
     public async Task ResetDatabaseAsync()
     {
